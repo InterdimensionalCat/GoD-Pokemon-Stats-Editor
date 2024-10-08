@@ -408,4 +408,5 @@ OpenCover/
 /CmakeBuild
 /html
 CMakeSettings.json
-/Dependancies/include
+Resources/Fonts/MonoLisa-Medium.ttf
+Resources/Fonts/MonoLisa-Regular.ttf
