@@ -29,19 +29,6 @@ void FontSettings::Init(const nlohmann::json* FontSettings)
 		};
 
 		builder.AddRanges(ranges);
-
-		// Female symbol.
-		builder.AddChar(0xE2);
-		builder.AddChar(0x99);
-		builder.AddChar(0x80);
-		//builder.AddChar((ImWchar)u8"\u2640");
-
-		// Male symbol.
-		builder.AddChar(0xE2);
-		builder.AddChar(0x99);
-		builder.AddChar(0x82);
-		//builder.AddChar((ImWchar)u8"\u2642");
-
 		builder.BuildRanges(&MaleFemaleRanges);
 
 		std::filesystem::path FontDirectory = std::filesystem::current_path();
@@ -88,8 +75,63 @@ void FontSettings::Init(const nlohmann::json* FontSettings)
 		else
 		{
 			// Otherwise attempt to load the startup font from settings.
-			const std::string StartupFont = (*FontSettings)["Startup Font"];
-			int32_t StartupFontSize = (*FontSettings)["Startup Font Size"];
+			// Try to load each setting, but if any fail keep reading in case other settings are intact
+			std::string StartupFont = "Default";
+			int32_t StartupFontSize = 13;
+			ImColor StartupFontColor = ImColor(220, 220, 220, 255);
+			try
+			{
+
+				if (FontSettings->find("Startup Font") == FontSettings->end()) {
+					throw std::exception("Startup Font json object does not exist");
+				}
+
+				StartupFont = (*FontSettings)["Startup Font"];
+			}
+			catch (const std::exception& e)
+			{
+				auto ErrorMsg = std::format("Failed to find Setting: Startup Font, falling back to default: {}", e.what());
+				PushFontSettingsErrorMsg("Font setting not found", ErrorMsg);
+			}
+
+			try
+			{
+				if (FontSettings->find("Startup Font Size") == FontSettings->end()) {
+					throw std::exception("Startup Font Size json object does not exist");
+				}
+
+				StartupFontSize = (*FontSettings)["Startup Font Size"];
+			}
+			catch (const std::exception& e)
+			{
+				auto ErrorMsg = std::format("Failed to find Setting: Startup Font Size, falling back to default: {}", e.what());
+				PushFontSettingsErrorMsg("Font setting not found", ErrorMsg);
+			}
+
+			try
+			{
+				if (FontSettings->find("Startup Font Color") == FontSettings->end()) {
+					throw std::exception("Startup Font Color json object does not exist");
+				}
+
+				if ((*FontSettings)["Startup Font Color"].find("R") == (*FontSettings)["Startup Font Color"].end() ||
+					(*FontSettings)["Startup Font Color"].find("G") == (*FontSettings)["Startup Font Color"].end() ||
+					(*FontSettings)["Startup Font Color"].find("B") == (*FontSettings)["Startup Font Color"].end())
+				{
+					throw std::exception("Startup Font Color json object not formatted correctly");
+				}
+
+				const float FontR = (*FontSettings)["Startup Font Color"]["R"];
+				const float FontG = (*FontSettings)["Startup Font Color"]["G"];
+				const float FontB = (*FontSettings)["Startup Font Color"]["B"];
+				const float FontA = (*FontSettings)["Startup Font Color"]["A"];
+				StartupFontColor = ImColor(FontR, FontG, FontB, FontA);
+			}
+			catch (const std::exception& e)
+			{
+				auto ErrorMsg = std::format("Failed to find Setting: Startup Font Color, falling back to default: {}", e.what());
+				PushFontSettingsErrorMsg("Font setting not found", ErrorMsg);
+			}
 
 			StartupFontSize = std::clamp(StartupFontSize, MinFontSize, MaxFontSize);
 			if (std::find(AvailableFonts.begin(), AvailableFonts.end(), StartupFont) == AvailableFonts.end())
@@ -98,6 +140,7 @@ void FontSettings::Init(const nlohmann::json* FontSettings)
 			}
 
 			SetActiveFont(FontKey(StartupFont, StartupFontSize));
+			FontColor = StartupFontColor;
 		}
 	}
 	catch (const std::exception& e)
@@ -249,6 +292,7 @@ ImFont* FontSettings::TryLoadFont(const std::filesystem::path& Directory, const 
 void FontSettings::ResetFontSettings(const bool ReloadElements)
 {
 	ActiveFont = FontKey("Default", 13);
+	ImColor StartupFontColor = ImColor(220, 220, 220, 255);
 
 	if (ReloadElements)
 	{
@@ -269,6 +313,11 @@ void FontSettings::SaveFontSettings(nlohmann::json& FontSettings)
 {
 	FontSettings["Startup Font"] = ActiveFont.first;
 	FontSettings["Startup Font Size"] = ActiveFont.second;
+
+	FontSettings["Startup Font Color"]["R"] = FontColor.Value.x;
+	FontSettings["Startup Font Color"]["G"] = FontColor.Value.y;
+	FontSettings["Startup Font Color"]["B"] = FontColor.Value.z;
+	FontSettings["Startup Font Color"]["A"] = FontColor.Value.w;
 }
 
 void FontSettings::PushFontSettingsErrorMsg(const std::string& ErrorTitle, const std::string& ErrorMsg)
@@ -292,5 +341,7 @@ bool FontSettings::GetFontChanged() const
 
 ImColor FontSettings::GetFontColor() const
 {
+	// TODO: add current font color as a saved setting
+	// Allow settings to be loaded from an imcomplete list (IE if some settings present but not others load the present settings)
 	return FontColor;
 }

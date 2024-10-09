@@ -85,9 +85,39 @@ void LayoutSettings::Init(const nlohmann::json* LayoutSettings)
 			return;
 		}
 
-		const bool bReloadPreset = (*LayoutSettings)["Load Preset On Startup"];
-		const bool bPresetCustom = (*LayoutSettings)["Current Preset Custom"];
-		const std::string CurrentPreset = (*LayoutSettings)["Current Preset Layout"];
+		// Attempt to load each layout setting
+		bool bReloadPreset = false;
+		bool bPresetCustom = false;
+		std::string CurrentPreset = "Default.ini";
+
+		try
+		{
+			if (LayoutSettings->find("Load Preset On Startup") == LayoutSettings->end()) {
+				throw std::exception("Load Preset On Startup json object does not exist");
+			}
+			bReloadPreset = (*LayoutSettings)["Load Preset On Startup"];
+		}
+		catch (const std::exception& e)
+		{
+			auto ErrorMsg = std::format("Failed to find Setting: Load Preset On Startup, falling back to default: {}", e.what());
+			PushLayoutSettingsErrorMsg("Layout setting not found", ErrorMsg);
+		}
+
+		// Load these two settings together, since if one isn't loaded correctly the other will be incorrect.
+		try
+		{
+			if (LayoutSettings->find("Current Preset Custom") == LayoutSettings->end() ||
+				LayoutSettings->find("Current Preset Layout") == LayoutSettings->end()) {
+				throw std::exception("Current Preset Layout json object does not exist");
+			}
+			bool bPresetCustom = (*LayoutSettings)["Current Preset Custom"];
+			std::string CurrentPreset = (*LayoutSettings)["Current Preset Layout"];
+		}
+		catch (const std::exception& e)
+		{
+			auto ErrorMsg = std::format("Failed to find Setting: Current Preset Layout, falling back to default: {}", e.what());
+			PushLayoutSettingsErrorMsg("Layout setting not found", ErrorMsg);
+		}
 
 		if (!bReloadPreset)
 		{
