@@ -8,12 +8,14 @@ An editor for Pokemon XD: Gale of Darkness's Pokemon Stats.csv table. Intended t
 2. Extract the ZIP file and all its contents.
 3. Run GoD-Pokemon-Stats-Editor.exe.
 
+You can also build the project yourself with cmake.
+
 ## Usage
 
 This tool is intended to be used with StarsMMD's GoD tool.
 
 1. Navigate to File>Set Root Folder
-2. In the open file dialogue, select the top level folder that the GoD tool creates (It should be the folder named "[your ROM's file name] GoD Tool", and will contain the "Game Files" and "Reference" folders)
+2. In the open file dialogue, select the top level folder that the GoD tool creates (It should be the folder named "[your ROM's file name] GoD Tool", and will contain the "Game Files" and "Reference" folders
    -  Note that in order for the tool to load correctly the following CSV files must be encoded via the GoD tool:
       -  Pokemon Stats.csv
       -  Types.csv
