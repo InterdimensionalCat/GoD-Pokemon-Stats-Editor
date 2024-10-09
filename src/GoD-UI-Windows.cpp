@@ -118,6 +118,8 @@ void GoDUIWindowsInstance::Tick()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
+
+	ImGui::PushStyleColor(ImGuiCol_Text, CurrentSettings->GetFontSettings()->GetFontColor().Value);
 	ImGui::PushFont(CurrentSettings->GetFontSettings()->GetCurrentFont());
 
 	// Tick the unsaved progress blocker modal first
@@ -233,6 +235,7 @@ void GoDUIWindowsInstance::Tick()
 		}
 	}
 
+	ImGui::PopStyleColor();
 	ImGui::PopFont();
 }
 

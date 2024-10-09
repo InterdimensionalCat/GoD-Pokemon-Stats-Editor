@@ -5,8 +5,10 @@
 #include <queue>
 #include <filesystem>
 #include "nlohmann/json.hpp"
+#include "imgui.h"
 
-class ImFont;
+struct ImFont;
+
 
 using FontKey = std::pair<std::string, int32_t>;
 
@@ -39,6 +41,8 @@ public:
 
 	bool GetFontChanged() const;
 
+	ImColor GetFontColor() const;
+
 	const int32_t MinFontSize = 10;
 	const int32_t MaxFontSize = 18;
 
@@ -49,7 +53,11 @@ private:
 
 	std::map<FontKey, ImFont*> LoadedFonts;
 
+	ImVector<ImWchar> MaleFemaleRanges;
+
 	FontKey ActiveFont;
+
+	ImColor FontColor = ImColor(220, 220, 220, 255);
 
 	bool bFontChanged = false;
 };

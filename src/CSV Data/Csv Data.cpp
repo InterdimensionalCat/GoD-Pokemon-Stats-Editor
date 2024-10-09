@@ -38,7 +38,7 @@ bool CSVData::Init()
 			ProcessRow(row);
 		}
 	}
-	catch (std::runtime_error e)
+	catch (const std::runtime_error& e)
 	{
 		std::cout << "Error reading Csv file: " << e.what() << "\n";
 		return false;
@@ -96,6 +96,15 @@ void CSVData::ProcessRow(CSVRow& row)
 				std::cout << "Quote with comma(s) fixed: " << PotentialQuoteData << "\n";
 			}
 
+			// Check if this is Nidoran M/F
+			if (PotentialQuoteData.find("NIDORAN") != std::string::npos)
+			{
+				std::stringstream Stream;
+				Stream.imbue(std::locale("en_US.UTF-8"));
+				Stream << PotentialQuoteData;
+				Stream >> PotentialQuoteData;
+			}
+
 			(*NextRow)[(std::string)HeaderArray.at(currentField)] = PotentialQuoteData;
 			currentField++;
 		}
@@ -103,6 +112,16 @@ void CSVData::ProcessRow(CSVRow& row)
 	else {
 		for (CSVField& field : row)
 		{
+			std::string FieldData = field.get<>();
+			// Check if this is Nidoran M/F
+			if (FieldData.find("NIDORAN") != std::string::npos)
+			{
+				std::stringstream Stream;
+				Stream.imbue(std::locale("en_US.UTF-8"));
+				Stream << FieldData;
+				Stream >> FieldData;
+			}
+
 			(*NextRow)[(std::string)HeaderArray.at(currentField)] = field.get<>();
 			currentField++;
 		}

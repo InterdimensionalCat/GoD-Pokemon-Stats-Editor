@@ -77,7 +77,7 @@ void PokemonList::UpdateElement()
 
     if (ImGui::BeginListBox("##Current Pokemon-box", ImVec2(0,-FLT_MIN)))
     {
-
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(Style.ItemSpacing.x, Style.ItemSpacing.y + 2.f));
         if (std::find(FilteredItemsArr.begin(), FilteredItemsArr.end(), CurrentlySelectedItem) == FilteredItemsArr.end() && FilteredItemsArr.size() != 0)
         {
             // Set the top result as the new selected item if the previous top result was removed from the search.
@@ -117,6 +117,7 @@ void PokemonList::UpdateElement()
             if (bIsSelected)
                 ImGui::SetItemDefaultFocus();
         }
+        ImGui::PopStyleVar();
         ImGui::EndListBox();
     }
     else

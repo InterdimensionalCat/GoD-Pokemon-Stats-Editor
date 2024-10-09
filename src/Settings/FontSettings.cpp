@@ -16,6 +16,34 @@ void FontSettings::Init(const nlohmann::json* FontSettings)
 	// Attempt to load font from font settings
 	try
 	{
+		// Build glyph ranges for Male/Female symbol.
+		ImGuiIO& io = ImGui::GetIO();
+		ImFontGlyphRangesBuilder builder;
+		builder.AddRanges(io.Fonts->GetGlyphRangesDefault());
+		//builder.AddRanges(io.Fonts->GetGlyphRangesJapanese());
+
+		static const ImWchar ranges[] =
+		{
+	    0x2640, 0x2642, // glyph range for male/female symbol
+		0,
+		};
+
+		builder.AddRanges(ranges);
+
+		// Female symbol.
+		builder.AddChar(0xE2);
+		builder.AddChar(0x99);
+		builder.AddChar(0x80);
+		//builder.AddChar((ImWchar)u8"\u2640");
+
+		// Male symbol.
+		builder.AddChar(0xE2);
+		builder.AddChar(0x99);
+		builder.AddChar(0x82);
+		//builder.AddChar((ImWchar)u8"\u2642");
+
+		builder.BuildRanges(&MaleFemaleRanges);
+
 		std::filesystem::path FontDirectory = std::filesystem::current_path();
 		FontDirectory /= "Resources";
 		FontDirectory /= "Fonts";
@@ -52,7 +80,9 @@ void FontSettings::Init(const nlohmann::json* FontSettings)
 		{
 			ResetFontSettings(false);
 			ImGuiIO& io = ImGui::GetIO();
-			LoadedFonts.emplace(FontKey("Default", 13), io.Fonts->AddFontDefault());
+			ImFontConfig Config = ImFontConfig();
+			Config.GlyphRanges = MaleFemaleRanges.Data;
+			LoadedFonts.emplace(FontKey("Default", 13), io.Fonts->AddFontDefault(&Config));
 			return;
 		}
 		else
@@ -115,6 +145,21 @@ void FontSettings::DisplayFontMenu()
 	{
 		SetActiveFont(FontKey(ActiveFont.first, ActiveFont.second - 1));
 	}
+
+	if (ImGui::BeginMenu("Change Font Color"))
+	{
+		ImGuiColorEditFlags Flags = (ImGuiColorEditFlags)0;
+		Flags |= ImGuiColorEditFlags_DisplayRGB;
+		Flags |= ImGuiColorEditFlags_InputRGB;
+
+		float RGB[3] = { FontColor.Value.x, FontColor.Value.y, FontColor.Value.z };
+
+		if (ImGui::ColorEdit3("Font Color", RGB, Flags))
+		{
+			FontColor = ImColor(RGB[0], RGB[1], RGB[2]);
+		}
+		ImGui::EndMenu();
+	}
 }
 
 void FontSettings::SetActiveFont(const FontKey& NewFont)
@@ -163,10 +208,14 @@ ImFont* FontSettings::TryLoadFont(const std::filesystem::path& Directory, const 
 	try
 	{
 		ImGuiIO& io = ImGui::GetIO();
+		ImFontConfig Config = ImFontConfig();
+		Config.GlyphRanges = MaleFemaleRanges.Data;
 
 		if (FontFileName == "Default")
 		{
-			return io.Fonts->AddFontDefault();
+			auto RetVal = io.Fonts->AddFontDefault(&Config);
+			io.Fonts->Build();
+			return RetVal;
 		}
 		else
 		{
@@ -178,7 +227,7 @@ ImFont* FontSettings::TryLoadFont(const std::filesystem::path& Directory, const 
 				throw std::exception(ErrorMsg.c_str());
 			}
 
-			ImFont* TryLoadFont = io.Fonts->AddFontFromFileTTF(FontFilePath.string().c_str(), FontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+			ImFont* TryLoadFont = io.Fonts->AddFontFromFileTTF(FontFilePath.string().c_str(), FontSize, NULL, Config.GlyphRanges);
 
 			if (TryLoadFont == nullptr)
 			{
@@ -239,4 +288,9 @@ void FontSettings::SetFontChanged(const bool InChanged)
 bool FontSettings::GetFontChanged() const
 {
 	return bFontChanged;
+}
+
+ImColor FontSettings::GetFontColor() const
+{
+	return FontColor;
 }
