@@ -2,6 +2,8 @@
 
 An editor for Pokemon XD: Gale of Darkness's Pokemon Stats.csv table. Intended to be used with StarsMMD's GoD tool: https://github.com/PekanMmd/Pokemon-XD-Code
 
+![Alt text](Screenshots/Default-Layout.png?raw=true "Title")
+
 ## Download
 
 1. No installation is required to use this tool. Download the latest release from the releases page on github:
@@ -13,6 +15,8 @@ You can also build the project yourself with cmake.
 ## Usage
 
 This tool is intended to be used with StarsMMD's GoD tool.
+
+![Alt text](Screenshots/Usage-Guide.gif?raw=true "Title")
 
 1. Navigate to File>Set Root Folder
 2. In the open file dialogue, select the top level folder that the GoD tool creates (It should be the folder named "[your ROM's file name] GoD Tool", and will contain the "Game Files" and "Reference" folders
@@ -28,9 +32,20 @@ This tool is intended to be used with StarsMMD's GoD tool.
 ## Features
 
 - Edit species data, Base Stats, Moves, and Evolution data for any Pokmeon
+
+![Alt text](Screenshots/Beedrill-Example.png?raw=true "Title")
+
 - Works with custom items, abilities, moves, and types
+
+![Alt text](Screenshots/Custom-Moves.png?raw=true "Title")
+
 - Customizable UI layouts and fonts
+
+![Alt text](Screenshots/Customizable-Layouts-and-Fonts.gif?raw=true "Title")
+
 - Dropdown menus are searchable
+
+![Alt text](Screenshots/Filterable-Combo-Boxes.gif?raw=true "Title")
 
 ## Limitations
 
