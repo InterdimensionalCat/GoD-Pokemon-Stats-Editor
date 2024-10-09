@@ -39,9 +39,9 @@ private:
 	void HandlePokefaceLoadingException(const int32_t index, const std::exception& e);
 
 	// Using a deque because memory addresses do not get invalidated when a deque is resized.
-	std::deque<GLuint> PokefaceData;
+	static std::deque<GLuint> PokefaceData;
 
-	GLuint CurrentPokefaceData;
+	GLuint CurrentPokefaceData = 0;
 
 	float PokefaceImageSize = 100.f;
 

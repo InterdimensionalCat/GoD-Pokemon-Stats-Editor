@@ -16,6 +16,7 @@
 #include "backends/ImGuiNotify.hpp"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
+std::deque<GLuint> SpeciesInfo::PokefaceData;
 
 SpeciesInfo::SpeciesInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : UiSection(InWindowName, InPos, InSize)
 {
@@ -49,6 +50,12 @@ SpeciesInfo::SpeciesInfo(const std::string& InWindowName, const ImVec2& InPos, c
 	{
 		LargestSubsectionLabelSize = std::max(LargestSubsectionLabelSize, Subsection->CalculateLargestLabelLength());
 		MinSubsectionFieldSize = std::max(MinSubsectionFieldSize, Subsection->CalculateLargestElementLength());
+	}
+
+	if (PokefaceData.size() == 0)
+	{
+		auto PokemonList = GoDUIWindowsInstance::instance.StatsCSV->GetPokemonList();
+		PokefaceData = std::deque<GLuint>(PokemonList.size(), 0);
 	}
 
 	InitPokefaceData();
@@ -199,10 +206,14 @@ void SpeciesInfo::InitPokefaceData()
 		}
 
 		auto PokemonList = GoDUIWindowsInstance::instance.StatsCSV->GetPokemonList();
-		PokefaceData = std::deque<GLuint>(PokemonList.size(), 0);
+		//PokefaceData = std::deque<GLuint>(PokemonList.size(), 0);
 
 		for (int32_t i = 0; i < PokemonList.size(); i++)
 		{
+			if (PokefaceData.at(i) != 0)
+			{
+				continue;
+			}
 			try
 			{
 				const std::string& Filename = std::format("face_{:03}.png", i);
