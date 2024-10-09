@@ -6,7 +6,7 @@ An editor for Pokemon XD: Gale of Darkness's Pokemon Stats.csv table. Intended t
 
 ## Download
 
-1. No installation is required to use this tool. Download the latest release from the releases page on github:
+1. No installation is required to use this tool. Download the latest release from the releases page on github: https://github.com/InterdimensionalCat/GoD-Pokemon-Stats-Editor/releases/tag/Stats-Editor-v1.0.0
 2. Extract the ZIP file and all its contents.
 3. Run GoD-Pokemon-Stats-Editor.exe.
 
