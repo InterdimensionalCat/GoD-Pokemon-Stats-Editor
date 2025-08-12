@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <array>
 #include <bitset>
+#include <chrono>
 #include <deque>
 #include <exception>
 #include <filesystem>
@@ -30,10 +31,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <thread>
 #include <tuple>
 #include <variant>
 #include <vector>
-
 
 namespace fs = std::filesystem;
 
@@ -88,3 +89,18 @@ using json = nlohmann::json;
  * csv-parser is a csv parsing library.
  */
 #include <csv.hpp>
+
+/**
+ * spdlog includes.
+ * spdlog is a logging library.
+ */
+#include "spdlog/spdlog.h"
+
+/**
+ * Project includes.
+ * Some project headers, like Logger.h,
+ * are used so frequently that they might as well
+ * be included here
+ */
+#include "Logging/Logger.h"
+#include "MainEditor/DataEditorInstance.h"

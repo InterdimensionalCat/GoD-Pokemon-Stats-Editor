@@ -20,8 +20,10 @@
 #include "UiSections/SpeciesInfo.h"
 #include "UiSections/LearnedMoves.h"
 
-#include "Settings/FontSettings.h"
+#include "Settings/SettingsSection/FontSettings.h"
 #include "Settings/LayoutSettings.h"
+
+#include "Logging/Logger.h"
 
 // Hide console on windows release
 #if IC_DEBUG
@@ -82,29 +84,29 @@ void GoDUIWindowsInstance::Tick()
 		}
 	}
 
-	auto FontSettings = CurrentSettings->GetFontSettings();
-	auto ActiveFont = FontSettings->GetActiveFontKey();
+	//auto FontSettings = CurrentSettings->GetFontSettings();
+	//auto ActiveFont = FontSettings->GetActiveFontKey();
 
-	bool bIncreaseEnabled = (ActiveFont.second < FontSettings->MaxFontSize) && ActiveFont.first != "Default";
-	bool bDecreaseEnabled = (ActiveFont.second > FontSettings->MinFontSize) && ActiveFont.first != "Default";
+	//bool bIncreaseEnabled = (ActiveFont.second < FontSettings->MaxFontSize) && ActiveFont.first != "Default";
+	//bool bDecreaseEnabled = (ActiveFont.second > FontSettings->MinFontSize) && ActiveFont.first != "Default";
 
-	// Increase Font Size (Ctrl+=)
-	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Equal, false) && (ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
-	{
-		if (bIncreaseEnabled)
-		{
-			FontSettings->SetActiveFont(FontKey(ActiveFont.first, ActiveFont.second + 1));
-		}
-	}
+	//// Increase Font Size (Ctrl+=)
+	//if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Equal, false) && (ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
+	//{
+	//	if (bIncreaseEnabled)
+	//	{
+	//		FontSettings->SetActiveFont(FontKey(ActiveFont.first, ActiveFont.second + 1));
+	//	}
+	//}
 
-	// Redo shortcut (Ctrl+-)
-	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Minus, false) && (ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
-	{
-		if (bDecreaseEnabled)
-		{
-			FontSettings->SetActiveFont(FontKey(ActiveFont.first, ActiveFont.second - 1));
-		}
-	}
+	//// Redo shortcut (Ctrl+-)
+	//if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Minus, false) && (ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
+	//{
+	//	if (bDecreaseEnabled)
+	//	{
+	//		FontSettings->SetActiveFont(FontKey(ActiveFont.first, ActiveFont.second - 1));
+	//	}
+	//}
 
 	auto LayoutSettings = CurrentSettings->GetLayoutSettings();
 
@@ -118,8 +120,8 @@ void GoDUIWindowsInstance::Tick()
 	ImGui::NewFrame();
 
 
-	ImGui::PushStyleColor(ImGuiCol_Text, CurrentSettings->GetFontSettings()->GetFontColor().Value);
-	ImGui::PushFont(CurrentSettings->GetFontSettings()->GetCurrentFont());
+	//ImGui::PushStyleColor(ImGuiCol_Text, CurrentSettings->GetFontSettings()->GetFontColor().Value);
+	//ImGui::PushFont(CurrentSettings->GetFontSettings()->GetCurrentFont());
 
 	// Tick the unsaved progress blocker modal first
 	UnsavedProgressBlocker->Tick();
@@ -131,11 +133,11 @@ void GoDUIWindowsInstance::Tick()
 	}
 
 
-	if (FontSettings->GetFontChanged())
-	{
-		OnFontChanged();
-		FontSettings->SetFontChanged(false);
-	}
+	//if (FontSettings->GetFontChanged())
+	//{
+	//	OnFontChanged();
+	//	FontSettings->SetFontChanged(false);
+	//}
 
 	//ImGui::ShowDemoWindow(); // Show demo window! :)
 	//ImGui::ShowExampleDockSpace()
@@ -176,7 +178,7 @@ void GoDUIWindowsInstance::Tick()
 
 		if (ImGui::BeginMenu("View"))
 		{
-			CurrentSettings->GetFontSettings()->DisplayFontMenu();
+			//CurrentSettings->GetFontSettings()->DisplayFontMenu();
 			CurrentSettings->GetLayoutSettings()->DisplayLayoutMenu();
 			ImGui::EndMenu();
 		}
@@ -482,7 +484,8 @@ void GoDUIWindowsInstance::OnProjectRootPathSet()
 
 		// set up the inital UI state for each element, but do not update the underlying json data
 		OnCurrentPokemonUpdated(0, false);
-		CurrentSettings->GetFontSettings()->SetFontChanged(true);
+		
+		//CurrentSettings->GetFontSettings()->SetFontChanged(true);
 	}
 	catch (std::exception e)
 	{
@@ -624,19 +627,28 @@ std::filesystem::path GoDUIWindowsInstance::GetProjectRootPath()
 	return ProjectRootPath;
 }
 
-int main()
-{
-	// Set the Game Files path
-	//GoDUIWindowsInstance::instance.SetProjectRootPath();
-
-	// init all needed contexts
-	GoDUIWindowsInstance::instance.Init();
-
-	// Main loop
-	GoDUIWindowsInstance::instance.ApplicationLoop();
-
-	// Exit upon window being closed
-	GoDUIWindowsInstance::instance.Exit();
-
-	return 0;
-}
+//int main()
+//{
+//	//ICLogger::InitLogger();
+//	//ICLogger::Trace("Hello from spdlog {}.", "aaa");
+//	//ICLogger::Debug("Hello from spdlog with arg {}.", 2);
+//	//ICLogger::Info("Hello from spdlog {}.", "bbb");
+//	//ICLogger::Warn("Hello from spdlog {}.", "ccc");
+//	//ICLogger::Error("Hello from spdlog {}.", "ddd");
+//	//ICLogger::Critical("Hello from spdlog {}.", "eee");
+//	//ICLogger::ExitLogger();
+//
+//	// Set the Game Files path
+//	//GoDUIWindowsInstance::instance.SetProjectRootPath();
+//
+//	// init all needed contexts
+//	GoDUIWindowsInstance::instance.Init();
+//
+//	// Main loop
+//	GoDUIWindowsInstance::instance.ApplicationLoop();
+//
+//	// Exit upon window being closed
+//	GoDUIWindowsInstance::instance.Exit();
+//
+//	return 0;
+//}

@@ -1,8 +1,6 @@
 ﻿// GoD-UI-Windows.h : Include file for standard system include files,
 // or project specific include files.
-
 #pragma once
-#include "include.h"
 
 #include "CSVData/PokemonStats.h"
 #include "CSVData/Types.h"
@@ -10,7 +8,7 @@
 #include "CSVData/Items.h"
 #include "CSVData/Moves.h"
 #include "Command/Command.h"
-#include "Settings/Settings.h"
+#include "Settings/AppSettings.h"
 #include "Util/UnsavedProgressModal.h"
 
 class PokemonList;

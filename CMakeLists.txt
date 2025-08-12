@@ -12,6 +12,8 @@ endif()
 
 # Remove wchar nonsense
 add_compile_options(/Zc:wchar_t-)
+
+# Force UTF-8 interpretation
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 # Set project name
