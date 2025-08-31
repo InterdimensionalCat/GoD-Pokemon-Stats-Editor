@@ -17,7 +17,4 @@ public:
 private:
 
 	std::shared_ptr<FontManager> MainFontManager;
-
-	std::shared_ptr<FontSettings> MainFontSettings;
-
 };

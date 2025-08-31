@@ -11,9 +11,11 @@
  * STL includes.
  */
 #include <algorithm>
+#include <any>
 #include <array>
 #include <bitset>
 #include <chrono>
+#include <concepts>
 #include <deque>
 #include <exception>
 #include <filesystem>
@@ -49,10 +51,14 @@ using json = nlohmann::json;
 /**
  * GLFW includes.
  * GLFW is a cross platform API for creating and managing windows, and handling input.
+ * 
+ * NOTE: these should no longer be included in the PCH as we are trying to contain
+ * backend code to Context objects in case a backend change is needed in the future.
+ * See WindowContext.h/cpp for more info
  */
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
+//#define GLFW_INCLUDE_NONE
+//#include <GLFW/glfw3.h>
+//#include <glad/glad.h>
 
 /**
  * imgui includes
@@ -63,6 +69,12 @@ using json = nlohmann::json;
 #endif // IMGUI_DEFINE_MATH_OPERATORS
 
 #include "imgui.h"
+
+/**
+ * TODO: Ideally these includes should only be needed in the Window/Gui context cpp files.
+ * However, there is some linking issue that occurs if they are not included here, I suspect
+ * its due to some of the imgui includes below needing access to these backends.
+ */
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
@@ -104,3 +116,14 @@ using json = nlohmann::json;
  */
 #include "Logging/Logger.h"
 #include "MainEditor/DataEditorInstance.h"
+
+/**
+ * Changes to dependancies:
+ * 
+ * csv_writer.hpp, line 318:
+ * IC_CHANGE: disable quoting when writing to a CSV
+ * 
+ * ImGuiNotify.hpp, line 474:
+ * IC_CHANGE: Insert notifications at the front of the array
+ * so they are rendered most to least recent.
+ */

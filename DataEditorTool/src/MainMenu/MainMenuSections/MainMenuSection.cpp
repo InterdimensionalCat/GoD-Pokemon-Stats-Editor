@@ -1,5 +1,6 @@
 #include "include.h"
 #include "MainMenu/MainMenuSections/MainMenuSection.h"
+#include "MainEditor/ProjectRoot.h"
 
 MainMenuSection::MainMenuSection(const std::string& InSectionName, const uint32_t InSectionPriority) : 
 	SectionName(InSectionName), SectionPriority(InSectionPriority)
@@ -29,5 +30,5 @@ uint32_t MainMenuSection::GetSectionPriority() const
 
 bool MainMenuSection::IsProjectRootPathSet() const
 {
-	return false;
+	return ProjectRoot::Get()->IsProjectRootSet();
 }

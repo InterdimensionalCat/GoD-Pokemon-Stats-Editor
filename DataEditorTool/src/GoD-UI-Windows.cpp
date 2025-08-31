@@ -20,10 +20,14 @@
 #include "UiSections/SpeciesInfo.h"
 #include "UiSections/LearnedMoves.h"
 
-#include "Settings/SettingsSection/FontSettings.h"
+#include "Font/FontSettings.h"
 #include "Settings/LayoutSettings.h"
 
 #include "Logging/Logger.h"
+
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 // Hide console on windows release
 #if IC_DEBUG

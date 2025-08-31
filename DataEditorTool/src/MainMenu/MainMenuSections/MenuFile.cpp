@@ -1,6 +1,13 @@
 #include "include.h"
 #include "MainMenu/MainMenuSections/MenuFile.h"
 
+#include "MainEditor/MainEditorWindow.h"
+#include "MainEditor/ProjectRoot.h"
+#include "Modal/ModalManager.h"
+#include "Modal/Modal.h"
+#include "Modal/BlockUnsavedProgress.h"
+#include "CSV/CSVDatabase.h"
+
 MenuFile::MenuFile() : MainMenuSection("File", 0)
 {
 
@@ -8,13 +15,20 @@ MenuFile::MenuFile() : MainMenuSection("File", 0)
 
 void MenuFile::Tick()
 {
+
+	const bool AreCSVFilesModified = GoDCSV::CSVDatabase::Get()->AreAnyCSVFilesModified();
+
 	if (ImGui::MenuItem("Set Root Folder", "Ctrl+O"))
 	{
 		SetProjectRootPath();
 	}
-	if (ImGui::MenuItem("Save Stats.CSV", "Ctrl+S", nullptr, IsProjectRootPathSet()))
+	if (ImGui::MenuItem("Save All", "Ctrl+S", nullptr, IsProjectRootPathSet() && AreCSVFilesModified))
 	{
-		Save();
+		SaveAll();
+	}
+	if (ImGui::MenuItem("Save Selected", "", nullptr, IsProjectRootPathSet() && AreCSVFilesModified))
+	{
+		SaveSelected();
 	}
 	if (ImGui::MenuItem("Close Current Root", "", nullptr, IsProjectRootPathSet()))
 	{
@@ -24,6 +38,8 @@ void MenuFile::Tick()
 
 void MenuFile::CheckShortcuts()
 {
+	const bool AreCSVFilesModified = GoDCSV::CSVDatabase::Get()->AreAnyCSVFilesModified();
+
 	// Set Project Root shortcut (Ctrl+O)
 	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_O, false) && 
 		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
@@ -37,24 +53,56 @@ void MenuFile::CheckShortcuts()
 		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
 			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
 	{
-		if (IsProjectRootPathSet())
+		if (IsProjectRootPathSet() && AreCSVFilesModified)
 		{
-			Save();
+			SaveAll();
 		}
 	}
 }
 
 void MenuFile::SetProjectRootPath()
 {
+	// If CSV files have been modified, block setting a new root and show
+	// the unsaved progress modal, otherwise allow user to set a new root.
+	if (GoDCSV::CSVDatabase::Get()->AreAnyCSVFilesModified())
+	{
+		auto ModalManager = MainEditorWindow::Get()->GetModalManager();
 
+		std::shared_ptr<BlockUnsavedProgress> Modal =
+			std::make_shared<BlockUnsavedProgress>("Save progress before switching projects?", std::bind(&ProjectRoot::SetProjectRootPath, ProjectRoot::Get()));
+
+		ModalManager->SetCurrentlyActiveModal(Modal);
+	}
+	else
+	{
+		ProjectRoot::Get()->SetProjectRootPath();
+	}
 }
 
-void MenuFile::Save()
+void MenuFile::SaveAll()
 {
+	auto CSVDatabase = GoDCSV::CSVDatabase::Get();
 
+	if (CSVDatabase->AreAnyCSVFilesModified())
+	{
+		CSVDatabase->SaveAllModifiedCSVFiles();
+	}
 }
 
 void MenuFile::CloseCurrentRoot()
 {
+	ProjectRoot::Get()->CloseCurrentRoot();
+}
 
+void MenuFile::SaveSelected()
+{
+	if (GoDCSV::CSVDatabase::Get()->AreAnyCSVFilesModified())
+	{
+		auto ModalManager = MainEditorWindow::Get()->GetModalManager();
+
+		std::shared_ptr<BlockUnsavedProgress> Modal =
+			std::make_shared<BlockUnsavedProgress>("Select CSV files to save", nullptr);
+
+		ModalManager->SetCurrentlyActiveModal(Modal);
+	}
 }

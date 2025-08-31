@@ -16,7 +16,10 @@ private:
 
 	void SetProjectRootPath();
 
-	void Save();
+	void SaveAll();
+
+	void SaveSelected();
 
 	void CloseCurrentRoot();
+
 };

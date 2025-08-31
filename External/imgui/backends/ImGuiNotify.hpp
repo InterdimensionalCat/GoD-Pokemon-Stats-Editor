@@ -471,7 +471,13 @@ namespace ImGui
      */
     inline void InsertNotification(const ImGuiToast& toast)
     {
-        notifications.push_back(toast);
+        // IC_CHANGE: Insert notifications at the front of the array
+        // so they are rendered most to least recent
+
+        // notifications.push_back(toast);
+
+        notifications.insert(notifications.begin(), toast);
+        // IC_CHANGE END
     }
 
     /**

@@ -1,7 +1,8 @@
 #include "include.h"
 #include "MainEditor/DataEditorInstance.h"
-
 #include "MainEditor/MainEditorWindow.h"
+#include "MainEditor/ProjectRoot.h"
+#include "CSV/CSVDatabase.h"
 
 std::shared_ptr<DataEditorInstance> DataEditorInstance::Instance = nullptr;
 
@@ -22,10 +23,18 @@ std::shared_ptr<DataEditorInstance> DataEditorInstance::Get()
 
 void DataEditorInstance::Init()
 {
+	// Start the tool.
+	Running = true;
+
+	// Initialize a new Editor Window.
 	EditorWindow = std::make_shared<MainEditorWindow>();
 	EditorWindow->Init();
 
-	Running = true;
+	// Create the ProjectRoot object
+	CurrentProjectRoot = std::make_shared<ProjectRoot>();
+	
+	// Create the CSV database object
+	EditorCSVDatabase = std::make_shared<GoDCSV::CSVDatabase>();
 }
 
 void DataEditorInstance::Stop()
@@ -80,15 +89,19 @@ std::shared_ptr<MainEditorWindow> DataEditorInstance::GetMainEditorWindow()
 	return EditorWindow;
 }
 
+std::shared_ptr<ProjectRoot> DataEditorInstance::GetProjectRoot()
+{
+	return CurrentProjectRoot;
+}
+
+std::shared_ptr<GoDCSV::CSVDatabase> DataEditorInstance::GetCSVDatabase()
+{
+	return EditorCSVDatabase;
+}
+
 //void GoDUIWindowsInstance::Tick()
 //{
 //	// Keyboard Shortcuts
-//
-//	auto FontSettings = CurrentSettings->GetFontSettings();
-//	auto ActiveFont = FontSettings->GetActiveFontKey();
-//
-//	bool bIncreaseEnabled = (ActiveFont.second < FontSettings->MaxFontSize) && ActiveFont.first != "Default";
-//	bool bDecreaseEnabled = (ActiveFont.second > FontSettings->MinFontSize) && ActiveFont.first != "Default";
 //
 //	auto LayoutSettings = CurrentSettings->GetLayoutSettings();
 //
@@ -109,16 +122,6 @@ std::shared_ptr<MainEditorWindow> DataEditorInstance::GetMainEditorWindow()
 //	{
 //		CurrentSettings->GetLayoutSettings()->ShowSaveModal();
 //	}
-//
-//	// Font Settings
-//
-//	if (FontSettings->GetFontChanged())
-//	{
-//		OnFontChanged();
-//		FontSettings->SetFontChanged(false);
-//	}
-//
-//	// End Font Settings
 //
 //	//ImGui::ShowDemoWindow(); // Show demo window! :)
 //	//ImGui::ShowExampleDockSpace()
@@ -340,21 +343,10 @@ std::shared_ptr<MainEditorWindow> DataEditorInstance::GetMainEditorWindow()
 //	glfwMaximizeWindow(window);
 //}
 //
-//void GoDUIWindowsInstance::OnFontChanged()
-//{
-//	for (auto& UiElement : UiElements)
-//	{
-//		UiElement->OnFontUpdated();
-//	}
-//}
-//
 //void GoDUIWindowsInstance::Exit()
 //{
 //	// Clear undo/redo command queue.
 //	Command::ClearCommandQueue();
-//
-//	// Save settings
-//	CurrentSettings->Exit();
 //}
 //
 //bool GoDUIWindowsInstance::Save()

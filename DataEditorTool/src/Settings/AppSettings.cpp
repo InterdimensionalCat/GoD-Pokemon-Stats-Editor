@@ -2,7 +2,7 @@
 #include "Settings/AppSettings.h"
 
 #include "Settings/SettingsSection/SettingsSection.h"
-#include "Settings/SettingsSection/FontSettings.h"
+#include "Font/FontSettings.h"
 
 AppSettings::AppSettings()
 {
@@ -22,7 +22,7 @@ void AppSettings::Init()
 
 		if (!std::filesystem::is_directory(SettingsDirectory))
 		{
-			ICLogger::Info("Settings directory not found, creating one now...");
+			ICLogger::Warn("Settings directory not found, creating one now...");
 			if (!std::filesystem::create_directory(SettingsDirectory))
 			{
 				throw std::exception("Settings directory creation failed, is the folder read only?");
@@ -35,7 +35,7 @@ void AppSettings::Init()
 		if (!std::filesystem::exists(SettingsFilePath))
 		{
 			// Settings file not found, load default settings.
-			ICLogger::PushInfoNotification("Settings not found", 3000, "Settings file not found, loaded default settings instead");
+			ICLogger::PushWarnNotification("Settings not found", 5000, "Settings file not found, loaded default settings instead");
 			InitSettingsFromDefaults();
 		}
 		else

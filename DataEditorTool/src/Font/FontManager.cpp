@@ -1,5 +1,7 @@
 #include "include.h"
 #include "Font/FontManager.h"
+#include "Font/FontLoader.h"
+#include "Font/FontSettings.h"
 
 #include "Settings/AppSettings.h"
 #include "MainEditor/DataEditorInstance.h"
@@ -19,6 +21,13 @@ void FontManager::Init()
 	MainFontLoader = std::make_shared<FontLoader>();
 
 	FindAvailableFonts();
+
+	// Set font params based on the loaded font settings.
+	SetCurrentENFont(MainFontSettings->GetENFont());
+	SetCurrentJPFont(MainFontSettings->GetJPFont());
+	SetCurrentFontSize(MainFontSettings->GetFontSize());
+	SetCurrentJPFontSizeMultiplier(MainFontSettings->GetJPFontSizeMultiplier());
+	SetCurrentFontColor(MainFontSettings->GetFontColor());
 }
 
 void FontManager::FindAvailableFonts()
@@ -73,46 +82,40 @@ void FontManager::FindAvailableFonts()
 
 void FontManager::CheckForFontChanged()
 {
-	// If either of the font names missmatch the current setting,
-	// Or of the font size mismatches, we need to reload and rebuild
-	// the merged font.
-	const std::string ENFontName = MainFontSettings->GetCurrentENFont();
-	const std::string JPFontName = MainFontSettings->GetCurrentJPFont();
-	const int32_t FontSize = MainFontSettings->GetFontSize();
-
-	if (
-		ENFontName != CurrentlyLoadedFont.ENFontName ||
-		JPFontName != CurrentlyLoadedFont.JPFontName ||
-		FontSize != CurrentlyLoadedFont.FontSize
-		)
+	if (bShouldReloadFont)
 	{
-		CurrentlyLoadedFont = MainFontLoader->TryLoadFont(ENFontName, JPFontName, FontSize);
+		ICLogger::Debug("bShouldReloadFont set, attempting to load font: {}", CurrentlyLoadedFont.ToString());
 
-		// Ensure that fonts get built here
-		//ImFontAtlas* FontAtlas = ImGui::GetIO().Fonts;
-		//FontAtlas->Build();
-		//if (FontAtlas->IsBuilt())
-		//{
-		//	ICLogger::Debug("Font Atlas built after changing fonts.");
-		//}
+		// TryLoadFont will supply CurrentlyLoadedFont with a new ImFont pointer to the
+		// Newly created font.
+		if (!MainFontLoader->TryLoadFont(CurrentlyLoadedFont))
+		{
+			ICLogger::Warn("Failed to load font: {}", CurrentlyLoadedFont.ToString());
+		}
 
+		bShouldReloadFont = false;
 	}
-
-	// Update the current font color as well.
-	CurrentFontColor = MainFontSettings->GetFontColor();
 }
 
 void FontManager::SetupFontForFrame()
 {
-	ImGui::PushStyleColor(ImGuiCol_Text, CurrentFontColor.Value);
-	ImGui::PushFont(CurrentlyLoadedFont.MergedFontData);
-	// ImGui::PushFontSize()
+	ImGui::PushStyleColor(ImGuiCol_Text, CurrentlyLoadedFont.FontColor.Value);
+	ImGui::PushFont(CurrentlyLoadedFont.MergedFontData, CurrentlyLoadedFont.FontSize);
 }
 
 void FontManager::EndFontForFrame()
 {
 	ImGui::PopStyleColor(); // Font color
 	ImGui::PopFont(); // Font style
+}
+
+void FontManager::SaveCurrentFontToFontSettings()
+{
+	MainFontSettings->SetENFont(CurrentlyLoadedFont.ENFontName);
+	MainFontSettings->SetJPFont(CurrentlyLoadedFont.JPFontName);
+	MainFontSettings->SetFontSize(CurrentlyLoadedFont.FontSize);
+	MainFontSettings->SetJPFontSizeMultiplier(CurrentlyLoadedFont.JPFontSizeMultiplier);
+	MainFontSettings->SetFontColor(CurrentlyLoadedFont.FontColor);
 }
 
 const std::vector<std::string>& FontManager::GetAvailableENFonts() const
@@ -140,7 +143,59 @@ int32_t FontManager::GetMaxFontSize() const
 	return MaxFontSize;
 }
 
-const ImColor& FontManager::GetCurrentFontColor() const
+void FontManager::SetCurrentENFont(const std::string& NewFontName)
 {
-	return CurrentFontColor;
+	CurrentlyLoadedFont.ENFontName = NewFontName;
+	bShouldReloadFont = true;
+
+	ICLogger::PushInfoNotification(
+		"EN Font Changed",
+		2000,
+		"EN Font Changed to {}",
+		NewFontName
+	);
+}
+
+void FontManager::SetCurrentJPFont(const std::string& NewFontName)
+{
+	CurrentlyLoadedFont.JPFontName = NewFontName;
+	bShouldReloadFont = true;
+
+	ICLogger::PushInfoNotification(
+		"JP Font Changed",
+		2000,
+		"JP Font Changed to {}",
+		NewFontName
+	);
+}
+
+void FontManager::SetCurrentFontSize(const int32_t NewFontSize)
+{
+	// Font size is dynamic so we don't need to reload the font.
+	CurrentlyLoadedFont.FontSize = NewFontSize;
+
+	ICLogger::PushInfoNotification(
+		"Font Size Changed",
+		2000,
+		"Font Size Changed to {}",
+		NewFontSize
+	);
+}
+
+void FontManager::SetCurrentJPFontSizeMultiplier(const float NewFontSizeMultiplier)
+{
+	CurrentlyLoadedFont.JPFontSizeMultiplier = NewFontSizeMultiplier;
+	bShouldReloadFont = true;
+
+	ICLogger::PushInfoNotification(
+		"JP Font Size Multiplier Changed",
+		2000,
+		"JP Font Size Multiplier Changed to {}",
+		NewFontSizeMultiplier
+	);
+}
+
+void FontManager::SetCurrentFontColor(const ImColor& NewColor)
+{
+	CurrentlyLoadedFont.FontColor = NewColor;
 }

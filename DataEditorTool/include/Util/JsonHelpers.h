@@ -7,9 +7,9 @@ namespace nlohmann
     template<>
     struct adl_serializer<ImColor, void> {
 
-        static void to_json(json& j, const ImColor& Color);
+        static void to_json(ordered_json& j, const ImColor& Color);
 
-        static void from_json(const json& j, ImColor& Color);
+        static void from_json(const ordered_json& j, ImColor& Color);
     };
 }
 #endif //IC_JSON_HELPERS

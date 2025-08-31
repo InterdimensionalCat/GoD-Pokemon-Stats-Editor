@@ -1,10 +1,9 @@
 #pragma once
 #include "Font/MergedFont.h"
-#include "Font/FontLoader.h"
-#include "Settings/SettingsSection/FontSettings.h"
 
-//class FontLoader;
-//class MergedFont;
+
+class FontLoader;
+class FontSettings;
 
 class FontManager
 {
@@ -23,33 +22,40 @@ public:
 
 	void EndFontForFrame();
 
-	const std::vector<std::string>& GetAvailableENFonts() const;
-
-	const std::vector<std::string>& GetAvailableJPFonts() const;
+	void SaveCurrentFontToFontSettings();
 
 	const MergedFont& GetCurrentlyLoadedFont() const;
-
+	const std::vector<std::string>& GetAvailableENFonts() const;
+	const std::vector<std::string>& GetAvailableJPFonts() const;
 	int32_t GetMinFontSize() const;
-
 	int32_t GetMaxFontSize() const;
 
-	const ImColor& GetCurrentFontColor() const;
+	void SetCurrentENFont(const std::string& NewFontName);
+	void SetCurrentJPFont(const std::string& NewFontName);
+	void SetCurrentFontSize(const int32_t NewFontSize);
+	void SetCurrentJPFontSizeMultiplier(const float NewFontSizeMultiplier);
+	void SetCurrentFontColor(const ImColor& NewColor);
 
 private:
+
+	bool bShouldReloadFont = false;
 
 	std::shared_ptr<FontSettings> MainFontSettings;
 
 	std::shared_ptr<FontLoader> MainFontLoader;
 
-	MergedFont CurrentlyLoadedFont;
-
-	ImColor CurrentFontColor = ImColor(217, 217, 217, 255);
-
 	std::vector<std::string> AvailableENFonts;
 
 	std::vector<std::string> AvailableJPFonts;
 
-	const int32_t MinFontSize = 10;
+	/** Current font info */
 
-	const int32_t MaxFontSize = 18;
+	/** Contains the EN and JP font names, the current font size, and the JP font modifier. */
+	MergedFont CurrentlyLoadedFont;
+
+	/** Minimum allowed font size */
+	const int32_t MinFontSize = 8;
+
+	/** Maximum allowed font size */
+	const int32_t MaxFontSize = 32;
 };

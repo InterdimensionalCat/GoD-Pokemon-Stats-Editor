@@ -22,6 +22,12 @@
 //class PokemonList;
 
 class MainEditorWindow;
+class ProjectRoot;
+
+namespace GoDCSV
+{
+	class CSVDatabase;
+}
 
 class DataEditorInstance
 {
@@ -52,9 +58,17 @@ public:
 
 	std::shared_ptr<MainEditorWindow> GetMainEditorWindow();
 
+	std::shared_ptr<ProjectRoot> GetProjectRoot();
+
+	std::shared_ptr<GoDCSV::CSVDatabase> GetCSVDatabase();
+
 private:
 
 	std::shared_ptr<MainEditorWindow> EditorWindow;
+
+	std::shared_ptr<ProjectRoot> CurrentProjectRoot;
+
+	std::shared_ptr<GoDCSV::CSVDatabase> EditorCSVDatabase;
 
 	static std::shared_ptr<DataEditorInstance> Instance;
 

@@ -44,7 +44,7 @@ private:
 	 * Contains the saved values for all settings sections.
 	 * Individual JSON objects are passed into each section for saving/loading.
 	 */
-	nlohmann::json SettingsJson;
+	nlohmann::ordered_json SettingsJson;
 
 	std::map<std::string, std::shared_ptr<SettingsSection>> SettingsSections;
 };

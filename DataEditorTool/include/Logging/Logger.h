@@ -72,7 +72,26 @@ public:
 		std::shared_ptr<ImGuiToast> toast = std::make_shared<ImGuiToast>(ImGuiToastType::Info, NotificationDuration);
 		toast->setTitle(NotificationTitle.c_str());
 
-		// const std::string MessageContent = std::format(FormatString, std::forward<Args>(FormatArgs)...);
+		toast->setContent("%s", MessageContent.c_str());
+		ImGui::InsertNotification(*toast);
+	}
+
+	template <typename... Args>
+	inline static void PushWarnNotification(
+		const std::string& NotificationTitle,
+		const uint32_t NotificationDuration,
+		const std::format_string<Args...> FormatString,
+		Args &&...FormatArgs)
+	{
+		const std::string MessageContent = std::format(FormatString, std::forward<Args>(FormatArgs)...);
+
+		// First log the message.
+		spdlog::warn(MessageContent);
+
+		// Then push the notification.
+		std::shared_ptr<ImGuiToast> toast = std::make_shared<ImGuiToast>(ImGuiToastType::Warning, NotificationDuration);
+		toast->setTitle(NotificationTitle.c_str());
+
 		toast->setContent("%s", MessageContent.c_str());
 		ImGui::InsertNotification(*toast);
 	}
@@ -105,5 +124,5 @@ private:
 
 	static std::shared_ptr<ICLogger> Instance;
 
-	const uint32_t MaxLogFiles = 3;
+	const uint32_t MaxLogFiles = 10;
 };

@@ -3,6 +3,10 @@
 #include "Util/UnsavedProgressModal.h"
 #include "GoD-UI-Windows.h"
 
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+
 UnsavedProgressModal::UnsavedProgressModal(const bool InCloseWindow, const std::string& InPopupMsg) : bCloseWindow(InCloseWindow), PopupMsg(InPopupMsg)
 {
 

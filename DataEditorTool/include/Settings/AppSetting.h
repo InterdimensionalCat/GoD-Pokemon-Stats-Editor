@@ -25,7 +25,7 @@ public:
 		LoadedValue = DefaultValue;
 	}
 
-	virtual bool LoadFromJsonOrUseDefault(const nlohmann::json& SettingSectionJson)
+	virtual bool LoadFromJsonOrUseDefault(const nlohmann::ordered_json& SettingSectionJson)
 	{
 		const auto FoundSetting = SettingSectionJson.find(Name);
 		if (FoundSetting == SettingSectionJson.end())
@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	virtual void SaveToJson(nlohmann::json& SettingSectionJson) const
+	virtual void SaveToJson(nlohmann::ordered_json& SettingSectionJson) const
 	{
 		SettingSectionJson[GetName()] = LoadedValue;
 	}

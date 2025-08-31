@@ -4,78 +4,27 @@
 #include "MainMenu/MainMenu.h"
 #include "Settings/AppSettings.h"
 #include "Font/FontManager.h"
+#include "Modal/ModalManager.h"
+#include "Modal/BlockUnsavedProgress.h"
+#include "CSV/CSVDatabase.h"
+#include "Contexts/WindowContext.h"
+#include "Contexts/GuiContext.h"
 
 void MainEditorWindow::Init()
 {
-    // Try init GLFW.
     try
     {
-        if (!glfwInit())
-        {
-            // Initialization failed, throw error.
-            throw std::exception("GLFW Initialization failed!");
-        }
-        else
-        {
-            GLFWInitialized = true;
-        }
+        MainWindowContext = std::make_shared<WindowContext>();
 
-        // Start with a hidden window so we can draw over it and spawn the window without a white flash
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        // Try to init the Window context (currently GLFW + GLAD openGL)
+        // This will throw if initalization fails.
+        MainWindowContext->Init();
 
-        // Create the Main window
-        Window.reset(glfwCreateWindow(1600, 900, "GoD Data Editor Tool", NULL, NULL), &glfwDestroyWindow);
-        if (Window == nullptr)
-        {
-            throw std::exception("Main window creation failed.");
-        }
+        MainGuiContext = std::make_shared<GuiContext>();
 
-        // Maximize the window
-        // glfwSetWindowAttrib(window, GLFW_MAXIMIZED, GLFW_TRUE);
-
-        // Make window context current
-        glfwMakeContextCurrent(Window.get());
-
-        // Load GLAD
-        if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
-        {
-            throw std::exception("GLAD loading failed.");
-        }
-        else
-
-        glfwSetWindowCloseCallback(Window.get(), MainEditorWindow::OnAttemptWindowClose);
-
-        // Setup Dear ImGui context.
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-
-        // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
-
-        // Setup Platform/Renderer backends for ImGUI
-        // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-        if (!ImGui_ImplGlfw_InitForOpenGL(Window.get(), true))
-        {
-            throw std::exception("ImGui GLFW impl initiailzation failed.");
-        }
-        else
-        {
-            ImGuiGLFWInitialized = true;
-        }
-
-        if (!ImGui_ImplOpenGL3_Init())
-        {
-            throw std::exception("ImGui OpenGL impl initialization failed.");
-        }
-        else
-        {
-            ImGuiOpenGLInitialized = true;
-        }
-
+        // Try to init the Gui context (currently ImGui with GLFW and OpenGL 3)
+        // This requires a valid WindowContext and will throw if initalization fails.
+        MainGuiContext->Init(MainWindowContext);
     }
     catch (const std::exception& e)
     {
@@ -91,6 +40,9 @@ void MainEditorWindow::Init()
     MainFontManager = std::make_shared<FontManager>();
     MainFontManager->Init();
 
+    // Init Modal Manager
+    MainModalManager = std::make_shared<ModalManager>();
+
     // Init main menu.
     EditorMainMenu = std::make_shared<MainMenu>();
 
@@ -104,92 +56,56 @@ void MainEditorWindow::Init()
     // TilesetEditorWindowElement = std::make_shared<TilesetEditorTab>(EditorTabsDockspace);
 
     // EditorTabs.push_back(TilesetEditorWindowElement);
-
-    // Render 2 clear frames before showing the window to prevent a white flash when the program starts.
-    // 2 frames are needed to clear both buffers.
-
-    for (uint32_t i = 0; i < 2; i++)
-    {
-        // Set the screen color to the Clear Color
-        glClearColor(
-            ClearColor.Value.x,
-            ClearColor.Value.y,
-            ClearColor.Value.z,
-            ClearColor.Value.w
-        );
-
-        // Swap buffers
-        glfwSwapBuffers(Window.get());
-    }
-
-    // Center the window before we show it.
-    CenterWindow();
-
-    // Show the window.
-    glfwShowWindow(Window.get());
 }
 
 void MainEditorWindow::Exit()
 {
+    // Update font settings with our current font settings so
+    // The same font is displayed the next time we start the program
+    MainFontManager->SaveCurrentFontToFontSettings();
+
     // Shutdown settings, this will save our current settings to a file.
     MainAppSettings->Exit();
 
-    // Shutdown ImGui and its backend/platform
-    if (ImGuiOpenGLInitialized)
-    {
-        ImGui_ImplOpenGL3_Shutdown();
-    }
 
-    if (ImGuiGLFWInitialized)
-    {
-        ImGui_ImplGlfw_Shutdown();
-    }
 
-    // Destory ImGUI context
-    if (ImGuiGLFWInitialized)
+    // Terminate the window context and close the window
+    if (MainWindowContext != nullptr)
     {
-        ImGui::DestroyContext();
-    }
-
-    // Destroy GLFW window
-    Window.reset();
-
-    // Exit GLFW
-    if (GLFWInitialized)
-    {
-        glfwTerminate();
+        MainWindowContext->Exit();
     }
 }
 
 void MainEditorWindow::PollEvents()
 {
-    // Poll GLFW events.
-    glfwPollEvents();
+    // Events are handled by the Window context.
+    MainWindowContext->PollEvents();
 }
 
 void MainEditorWindow::Tick()
 {
     // Pause ticks for 10 ms if the window is minimized.
-    if (glfwGetWindowAttrib(Window.get(), GLFW_ICONIFIED))
+    if (MainWindowContext->IsWindowIconified())
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
         return;
     }
+    
+    // Tick the window context. This is only needed to determine if we need to
+    // Show the window for the first time.
+    MainWindowContext->Tick();
 
     // Check if the font settings have changed since last frame, and if they have
     // load the new current font into memory. This must happen before we begin the
     // new ImGui frame.
     MainFontManager->CheckForFontChanged();
 
-    // Start new ImGui frame.
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    // Start new ImGui frame. Any ImGui updates run this frame must
+    // run after this function.
+    MainGuiContext->BeginTick();
 
     // Set font
     MainFontManager->SetupFontForFrame();
-
-    // TODO: tick blocking modals...
 
     // Tick Main Menu, this will display the menu sections at the top of the window.
     // This will also check for keyboard shortcuts corresponding to active menu section options.
@@ -211,6 +127,9 @@ void MainEditorWindow::Tick()
     ImGui::PopStyleVar(2); // Notification style vars
     ImGui::PopStyleColor(1); // Notification bg color
 
+    // Tick the modal manager, this will tick the active blocking modal if there is any.
+    MainModalManager->Tick();
+
     // Tick all UiWindows directly after this code to ensure they are all in the top level dockspace.
     ImGui::DockSpaceOverViewport(0U, NULL, ImGuiDockNodeFlags_None, MainWindowDockspace.get());
 
@@ -220,35 +139,32 @@ void MainEditorWindow::Tick()
     //}
 
     MainFontManager->EndFontForFrame();
-    ImGui::EndFrame();
+
+    // End the ImGui frame.
+    MainGuiContext->EndTick();
 }
 
 void MainEditorWindow::Render()
 {
+    MainWindowContext->BeginRender();
 
-    // Clear framebuffer
-    glClearColor(
-        ClearColor.Value.x,
-        ClearColor.Value.y,
-        ClearColor.Value.z,
-        ClearColor.Value.w
-    );
-
-    // Imgui Rendering
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+    // Render the updated ImGui graphics to the screen.
+    MainGuiContext->Render();
 
     // Tabs do not handle their own rendering, all the logic for rendering them
     // is set up during the tick function.
 
-    // Swap buffers
-    glfwSwapBuffers(Window.get());
+    MainWindowContext->EndRender();
 }
 
-std::shared_ptr<GLFWwindow> MainEditorWindow::GetWindow()
+//std::shared_ptr<GLFWwindow> MainEditorWindow::GetWindow()
+//{
+//    return MainWindowContext->GetManagedWindow();
+//}
+
+std::shared_ptr<GuiContext> MainEditorWindow::GetGuiContext()
 {
-    return Window;
+    return MainGuiContext;
 }
 
 std::shared_ptr<AppSettings> MainEditorWindow::GetSettings()
@@ -261,58 +177,33 @@ std::shared_ptr<FontManager> MainEditorWindow::GetFontManager()
     return MainFontManager;
 }
 
-void MainEditorWindow::CenterWindow()
+std::shared_ptr<ModalManager> MainEditorWindow::GetModalManager()
 {
-    int WindowWidth = 0;
-    int WindowHeight = 0;
-    glfwGetWindowSize(Window.get(), &WindowWidth, &WindowHeight);
-
-    GLFWmonitor* CurrentMonitor = glfwGetWindowMonitor(Window.get());
-
-    if (CurrentMonitor == nullptr) {
-        CurrentMonitor = glfwGetPrimaryMonitor();
-    }
-
-    int MonitorPosX = 0;
-    int MonitorPosY = 0;
-    int MonitorWidth = 0;
-    int MonitorHeight = 0;
-
-    glfwGetMonitorWorkarea(CurrentMonitor, &MonitorPosX, &MonitorPosY, &MonitorWidth, &MonitorHeight);
-
-    int CenterX = MonitorPosX + (MonitorWidth  -  WindowWidth) / 2;
-    int CenterY = MonitorPosY + (MonitorHeight - WindowHeight) / 2;
-
-    glfwSetWindowPos(Window.get(), CenterX, CenterY);
+    return MainModalManager;
 }
 
-void MainEditorWindow::OnAttemptWindowClose(GLFWwindow* window)
+std::shared_ptr<MainEditorWindow> MainEditorWindow::Get()
 {
-    // Right now, just close the window, later an unsaved progress modal will block
-    // Window close unless we hit don't save
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
-    DataEditorInstance::Get()->Stop();
+    return DataEditorInstance::Get()->GetMainEditorWindow();
+}
 
+void MainEditorWindow::OnAttemptWindowClose()
+{
+    // If we have unsaved progress, block window close and show
+    // the unsaved progress modal, otherwise just close the window.
+	if (GoDCSV::CSVDatabase::Get()->AreAnyCSVFilesModified())
+	{
+        auto ModalManager = MainEditorWindow::Get()->GetModalManager();
 
-    //auto& instance = GoDUIWindowsInstance::instance;
+        std::shared_ptr<BlockUnsavedProgress> Modal = std::make_shared<BlockUnsavedProgress>(
+                "Save progress before closing?", 
+                std::bind(&WindowContext::CloseWindow, MainEditorWindow::Get()->MainWindowContext)
+            );
 
-    //bool bUnsavedProgress = false;
-
-    //for (auto& section : instance.UiElements)
-    //{
-    //    if (section->GetUnsavedProgress())
-    //    {
-    //        bUnsavedProgress = true;
-    //    }
-    //}
-
-    //if (bUnsavedProgress && !instance.UnsavedProgressBlocker->GetBypassModal())
-    //{
-    //    instance.UnsavedProgressBlocker->SetEnabled(true);
-    //    glfwSetWindowShouldClose(window, GLFW_FALSE);
-    //}
-    //else
-    //{
-    //    instance.UnsavedProgressBlocker->SetBypassModal(false);
-    //}
+        ModalManager->SetCurrentlyActiveModal(Modal);
+	}
+    else
+    {
+        MainEditorWindow::Get()->MainWindowContext->CloseWindow();
+    }
 }

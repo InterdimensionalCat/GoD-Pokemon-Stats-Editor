@@ -13,25 +13,25 @@ ICLogger::ICLogger()
 {
 
 	auto ConsoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-	ConsoleSink->set_level(spdlog::level::trace);
+	ConsoleSink->set_level(spdlog::level::debug);
 	ConsoleSink->set_pattern("[%H:%M:%S.%e] [%^%=8l%$]: %v");
 
 	auto DailyFileSink = std::make_shared<spdlog::sinks::daily_file_format_sink_mt>("Logs/Log_%Y-%m-%d_%H.%M.%S.log", 0, 0, false, 0);
-	DailyFileSink->set_level(spdlog::level::trace);
+	DailyFileSink->set_level(spdlog::level::debug);
 	DailyFileSink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%=8l%$]: %v");
 
 	fs::path LatestPath = fs::current_path() / "Logs" / "Latest.log";
 
 	auto LatestSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(LatestPath.make_preferred().string(), true);
-	LatestSink->set_level(spdlog::level::trace);
+	LatestSink->set_level(spdlog::level::debug);
 	LatestSink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%=8l%$]: %v");
 
 	ConsoleAndFileLog = std::make_shared<spdlog::logger>("ConsoleAndFileLog", SinkList{ ConsoleSink, DailyFileSink, LatestSink });
-	ConsoleAndFileLog->set_level(spdlog::level::trace);
+	ConsoleAndFileLog->set_level(spdlog::level::debug);
 	spdlog::register_logger(ConsoleAndFileLog);
 
 	spdlog::set_default_logger(ConsoleAndFileLog);
-	spdlog::flush_on(spdlog::level::trace);
+	spdlog::flush_on(spdlog::level::debug);
 }
 
 void ICLogger::CleanUpOldLogs()
@@ -80,4 +80,5 @@ void ICLogger::InitLogger()
 void ICLogger::ExitLogger()
 {
 	Instance->CleanUpOldLogs();
+	spdlog::shutdown();
 }

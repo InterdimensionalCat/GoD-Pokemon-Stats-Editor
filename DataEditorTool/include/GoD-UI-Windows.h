@@ -12,6 +12,7 @@
 #include "Util/UnsavedProgressModal.h"
 
 class PokemonList;
+class GLFWwindow;
 
 class GoDUIWindowsInstance
 {

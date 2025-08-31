@@ -1,7 +1,7 @@
 #include "include.h"
 #include "Util/JsonHelpers.h"
 
-void nlohmann::adl_serializer<ImColor, void>::to_json(json& j, const ImColor& Color)
+void nlohmann::adl_serializer<ImColor, void>::to_json(ordered_json& j, const ImColor& Color)
 {
     json ColorObj;
     ColorObj["R"] = Color.Value.x;
@@ -12,7 +12,7 @@ void nlohmann::adl_serializer<ImColor, void>::to_json(json& j, const ImColor& Co
     j = ColorObj;
 }
 
-void nlohmann::adl_serializer<ImColor, void>::from_json(const json& j, ImColor& Color) {
+void nlohmann::adl_serializer<ImColor, void>::from_json(const ordered_json& j, ImColor& Color) {
     Color.Value.x = j["R"];
     Color.Value.y = j["G"];
     Color.Value.z = j["B"];

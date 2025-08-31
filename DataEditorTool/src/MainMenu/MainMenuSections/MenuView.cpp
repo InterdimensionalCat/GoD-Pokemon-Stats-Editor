@@ -4,30 +4,35 @@
 #include "MainEditor/MainEditorWindow.h"
 #include "Font/FontManager.h"
 #include "Settings/AppSettings.h"
-#include "Settings/SettingsSection/FontSettings.h"
+#include "Font/FontSettings.h"
 
 MenuView::MenuView() : MainMenuSection("View", 2)
 {
 	MainFontManager = DataEditorInstance::Get()->GetMainEditorWindow()->GetFontManager();
-	MainFontSettings = DataEditorInstance::Get()->GetMainEditorWindow()->GetSettings()->GetFontSettings();
 }
 
 void MenuView::Tick()
 {
 	//CurrentSettings->GetLayoutSettings()->DisplayLayoutMenu();
 
+	const MergedFont& CurrentFont = MainFontManager->GetCurrentlyLoadedFont();
+	const int32_t MaxFontSize = MainFontManager->GetMaxFontSize();
+	const int32_t MinFontSize = MainFontManager->GetMinFontSize();
+	const int32_t CurrentFontSize = CurrentFont.FontSize;
+	const ImColor FontColor = CurrentFont.FontColor;
+
 	// English font settings menu
-	ImGui::SeparatorText("English Font Settings");
+	ImGui::SeparatorText("Font Settings");
 	
 	// First option is a selector for the current EN font
-	if (ImGui::BeginMenu("Current Font##EN"))
+	if (ImGui::BeginMenu("Current EN Font"))
 	{
 		for (const std::string& AvailableFont : MainFontManager->GetAvailableENFonts())
 		{
 			const bool bSelected = AvailableFont == MainFontManager->GetCurrentlyLoadedFont().ENFontName;
 			if (ImGui::MenuItem(AvailableFont.c_str(), nullptr, bSelected, !bSelected))
 			{
-				MainFontSettings->SetCurrentENFont(AvailableFont);
+				MainFontManager->SetCurrentENFont(AvailableFont);
 			}
 		}
 
@@ -35,14 +40,14 @@ void MenuView::Tick()
 	}
 
 	// Next we need a font selector for the current JP font.
-	if (ImGui::BeginMenu("Current Font (日本語)"))
+	if (ImGui::BeginMenu("Current JP Font (日本語) (♂/♀)"))
 	{
 		for (const std::string& AvailableFont : MainFontManager->GetAvailableJPFonts())
 		{
 			const bool bSelected = AvailableFont == MainFontManager->GetCurrentlyLoadedFont().JPFontName;
 			if (ImGui::MenuItem(AvailableFont.c_str(), nullptr, bSelected, !bSelected))
 			{
-				MainFontSettings->SetCurrentJPFont(AvailableFont);
+				MainFontManager->SetCurrentJPFont(AvailableFont);
 			}
 		}
 
@@ -50,29 +55,39 @@ void MenuView::Tick()
 	}
 
 	// After that, render the font size increase/decrease options.
-	const MergedFont& CurrentFont = MainFontManager->GetCurrentlyLoadedFont();
-	const int32_t MaxFontSize = MainFontManager->GetMaxFontSize();
-	const int32_t MinFontSize = MainFontManager->GetMinFontSize();
 
-	// Font sizing is not allowed if we are using the default font, otherwise
-	// Allow it only if we are not at the max/min font size, respectively.
-	const bool bFontIncreaseEnabled = (CurrentFont.FontSize < MaxFontSize) &&
-		CurrentFont.ENFontName != "Default";
+	// Allow font increase/decrease if we are not at the max/min font size, respectively.
+	const bool bFontIncreaseEnabled = CurrentFontSize < MaxFontSize;
 
 	if (ImGui::MenuItem("Increase Font Size", "Ctrl+=", nullptr, bFontIncreaseEnabled))
 	{
-		MainFontSettings->SetFontSize(CurrentFont.FontSize + 1);
+		MainFontManager->SetCurrentFontSize(CurrentFontSize + 1);
 	}
 
-	const bool bFontDecreaseEnabled = (CurrentFont.FontSize > MinFontSize) &&
-		CurrentFont.ENFontName != "Default";
+	// Allow font increase/decrease if we are not at the max/min font size, respectively.
+	const bool bFontDecreaseEnabled = CurrentFontSize > MinFontSize;
 
 	if (ImGui::MenuItem("Decrease Font Size", "Ctrl+-", nullptr, bFontDecreaseEnabled))
 	{
-		MainFontSettings->SetFontSize(CurrentFont.FontSize - 1);
+		MainFontManager->SetCurrentFontSize(CurrentFontSize - 1);
 	}
 
-	const ImColor FontColor = MainFontManager->GetCurrentFontColor();
+	// After that, render the float entry for the JP font size multiplier.
+	if (ImGui::BeginMenu("Change JP Font Size Multiplier"))
+	{
+		float NewJPFontSizeMultiplier = CurrentFont.JPFontSizeMultiplier;
+		if (ImGui::InputFloat("JP Font Size Multiplier", &NewJPFontSizeMultiplier, 0.f, 0.f, "%.1f"))
+		{
+			// We only want to update the settings when we commit the text, so do nothing here
+		}
+
+		if (ImGui::IsItemDeactivatedAfterEdit())
+		{
+			MainFontManager->SetCurrentJPFontSizeMultiplier(NewJPFontSizeMultiplier);
+		}
+
+		ImGui::EndMenu();
+	}
 
 	// Finally, we have the font color selector.
 	if (ImGui::BeginMenu("Change Font Color"))
@@ -85,7 +100,7 @@ void MenuView::Tick()
 
 		if (ImGui::ColorEdit3("Font Color", RGB, Flags))
 		{
-			MainFontSettings->SetFontColor(ImColor(RGB[0], RGB[1], RGB[2]));
+			MainFontManager->SetCurrentFontColor(ImColor(RGB[0], RGB[1], RGB[2]));
 		}
 		ImGui::EndMenu();
 	}
@@ -97,6 +112,7 @@ void MenuView::CheckShortcuts()
 	const MergedFont& CurrentFont = MainFontManager->GetCurrentlyLoadedFont();
 	const int32_t MaxFontSize = MainFontManager->GetMaxFontSize();
 	const int32_t MinFontSize = MainFontManager->GetMinFontSize();
+	const int32_t CurrentFontSize = CurrentFont.FontSize;
 
 	// Increase Font Size (Ctrl+=)
 	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Equal, false) && 
@@ -104,14 +120,12 @@ void MenuView::CheckShortcuts()
 			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
 	{
 
-		// Font sizing is not allowed if we are using the default font, otherwise
-		// Allow it only if we are not at the max/min font size, respectively.
-		const bool bFontIncreaseEnabled = (CurrentFont.FontSize < MaxFontSize) &&
-			CurrentFont.ENFontName != "Default";
+		// Allow font increase/decrease if we are not at the max/min font size, respectively.
+		const bool bFontIncreaseEnabled = CurrentFontSize < MaxFontSize;
 
 		if (bFontIncreaseEnabled)
 		{
-			MainFontSettings->SetFontSize(CurrentFont.FontSize + 1);
+			MainFontManager->SetCurrentFontSize(CurrentFontSize + 1);
 		}
 	}
 
@@ -120,15 +134,12 @@ void MenuView::CheckShortcuts()
 		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
 			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
 	{
-
-		// Font sizing is not allowed if we are using the default font, otherwise
-		// Allow it only if we are not at the max/min font size, respectively.
-		const bool bFontDecreaseEnabled = (CurrentFont.FontSize > MinFontSize) &&
-			CurrentFont.ENFontName != "Default";
+		// Allow font increase/decrease if we are not at the max/min font size, respectively.
+		const bool bFontDecreaseEnabled = CurrentFontSize > MinFontSize;
 
 		if (bFontDecreaseEnabled)
 		{
-			MainFontSettings->SetFontSize(CurrentFont.FontSize - 1);
+			MainFontManager->SetCurrentFontSize(CurrentFontSize - 1);
 		}
 	}
 }
