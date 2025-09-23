@@ -8,7 +8,17 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include "Util/TextureLoader.h"
 
+ImageAndPixelData::ImageAndPixelData(
+    std::shared_ptr<GLFWimage> InImageData, 
+    unsigned char* InPixelData
+) :
+    ImageData(InImageData),
+    PixelData(std::shared_ptr<unsigned char[]>(InPixelData, stbi_image_free))
+{
+
+}
 
 // Simple helper function to load an image into a OpenGL texture with common settings
 bool LoadTextureFromMemory(const void* data, size_t data_size, GLuint* out_texture, int* out_width, int* out_height)
@@ -41,6 +51,24 @@ bool LoadTextureFromMemory(const void* data, size_t data_size, GLuint* out_textu
     return true;
 }
 
+std::shared_ptr<ImageAndPixelData> LoadImageFromMemory(const void* data, size_t data_size)
+{
+    // Load from file
+    int image_width = 0;
+    int image_height = 0;
+    unsigned char* image_data = stbi_load_from_memory((const unsigned char*)data, (int)data_size, &image_width, &image_height, NULL, 4);
+    if (image_data == NULL)
+        return nullptr;
+
+    // Create a OpenGL texture identifier
+    std::shared_ptr<GLFWimage> OutImage = std::make_shared<GLFWimage>();
+    OutImage->pixels = image_data;
+    OutImage->width = image_width;
+    OutImage->height = image_height;
+
+    return std::make_shared<ImageAndPixelData>(OutImage, image_data);
+}
+
 // Open and read a file, then forward to LoadTextureFromMemory()
 bool LoadTextureFromFile(const char* file_name, GLuint* out_texture, int* out_width, int* out_height)
 {
@@ -55,6 +83,23 @@ bool LoadTextureFromFile(const char* file_name, GLuint* out_texture, int* out_wi
     void* file_data = IM_ALLOC(file_size);
     fread(file_data, 1, file_size, f);
     bool ret = LoadTextureFromMemory(file_data, file_size, out_texture, out_width, out_height);
+    IM_FREE(file_data);
+    return ret;
+}
+
+std::shared_ptr<ImageAndPixelData> LoadImageFromFile(const char* file_name)
+{
+    FILE* f = fopen(file_name, "rb");
+    if (f == NULL)
+        return nullptr;
+    fseek(f, 0, SEEK_END);
+    size_t file_size = (size_t)ftell(f);
+    if (file_size == -1)
+        return nullptr;
+    fseek(f, 0, SEEK_SET);
+    void* file_data = IM_ALLOC(file_size);
+    fread(file_data, 1, file_size, f);
+    auto ret = LoadImageFromMemory(file_data, file_size);
     IM_FREE(file_data);
     return ret;
 }

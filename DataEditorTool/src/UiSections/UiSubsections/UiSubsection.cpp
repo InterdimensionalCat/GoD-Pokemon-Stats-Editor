@@ -4,7 +4,7 @@
 #include "UiSections/UiSection.h"
 #include "GoD-UI-Windows.h"
 
-UiSubsection::UiSubsection(UiSection* InParent, const std::string& InSubsectionName) : Parent(InParent), SubsectionName(InSubsectionName)
+UiSubsection::UiSubsection(OldUiSection* InParent, const std::string& InSubsectionName) : Parent(InParent), SubsectionName(InSubsectionName)
 {
 
 }

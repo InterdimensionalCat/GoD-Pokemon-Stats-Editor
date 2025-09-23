@@ -3,7 +3,7 @@
 #include "Command/SwitchActivePokemon.h"
 #include "UiSections/PokemonList.h"
 
-SwitchActivePokemon::SwitchActivePokemon(std::string InPrevActivePokemon, std::string InNextActivePokemon, std::shared_ptr<PokemonList> InModifiedSection) : Command(std::static_pointer_cast<UiSection>(InModifiedSection)), PrevActivePokemon(InPrevActivePokemon), NextActivePokemon(InNextActivePokemon), ModifiedPokemonList(InModifiedSection)
+SwitchActivePokemon::SwitchActivePokemon(std::string InPrevActivePokemon, std::string InNextActivePokemon, std::shared_ptr<PokemonList> InModifiedSection) : Command(std::static_pointer_cast<OldUiSection>(InModifiedSection)), PrevActivePokemon(InPrevActivePokemon), NextActivePokemon(InNextActivePokemon), ModifiedPokemonList(InModifiedSection)
 {
 
 }

@@ -4,7 +4,7 @@
 
 class WildItemInfo : public UiSubsection {
 public:
-	WildItemInfo(UiSection* InParent, const std::string& InSubsectionName);
+	WildItemInfo(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	void UpdateElement() override;
 

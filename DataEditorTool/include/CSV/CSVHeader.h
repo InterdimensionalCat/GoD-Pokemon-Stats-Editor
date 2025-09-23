@@ -19,7 +19,7 @@ namespace GoDCSV
 
 		int32_t GetIndexOfColumn(const std::string& ColumnName) const;
 
-		const std::vector<std::string>& GetColumnNamesArray();
+		const std::vector<std::string>& GetColumnNamesArray() const;
 
 	private:
 

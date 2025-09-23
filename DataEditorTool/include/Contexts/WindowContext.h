@@ -1,6 +1,8 @@
 #pragma once
 
 class GLFWwindow;
+class ImageAndPixelData;
+struct GLFWimage;
 
 class WindowContext
 {
@@ -23,6 +25,8 @@ public:
 
 	void ShowWindow();
 
+	void MaximizeWindow();
+
 	void CenterWindow();
 
 	void CloseWindow();
@@ -36,6 +40,10 @@ public:
 	static void WindowCloseCallback(GLFWwindow* Window);
 
 private:
+
+	void TrySetWindowIcon();
+
+	std::shared_ptr<ImageAndPixelData> IconImage;
 
 	/** Context init check. */
 	bool bInitialized = false;

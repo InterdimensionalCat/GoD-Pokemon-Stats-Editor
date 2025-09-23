@@ -1,34 +1,12 @@
 #include "include.h"
 #include "MainEditor/ProjectRoot.h"
 #include "MainEditor/DataEditorInstance.h"
+#include "MainEditor/MainEditorWindow.h"
 #include "CSV/NewCSVData.h"
 #include "CSV/CSVDatabase.h"
 
 void ProjectRoot::SetProjectRootPath()
 {
-	// Prevent setting a new project root
-	// If we have currently unsaved progress
-
-	//bool bUnsavedProgress = false;
-
-	//for (auto& section : UiElements)
-	//{
-	//	if (section->GetUnsavedProgress())
-	//	{
-	//		bUnsavedProgress = true;
-	//	}
-	//}
-
-	//if (bUnsavedProgress && !SwitchRootBlocker->GetBypassModal())
-	//{
-	//	SwitchRootBlocker->SetEnabled(true);
-	//	return;
-	//}
-	//else
-	//{
-	//	SwitchRootBlocker->SetBypassModal(false);
-	//}
-
 	// Use NFD to open a folder selection dialogue box.
 	NFD_Init();
 
@@ -82,31 +60,24 @@ void ProjectRoot::OnProjectRootPathSet()
 {
 	// TODO: Copy implementation from GoD-UI-Windows.cpp
 
-	// Test CSV loading/Saving
-	//std::shared_ptr<GoDCSV::NewCSVData> PokemonStats = std::make_shared<GoDCSV::NewCSVData>("Pokemon Stats");
-
-	//PokemonStats->Init();
-
-	//if (PokemonStats->IsCSVFileLoaded())
-	//{
-	//	PokemonStats->SetField("Name ID", 0, "\"Blubbysaur,\" (0x3E9)");
-	//}
-
-	//PokemonStats->Save();
+	// Clear command queue once it is re-implemented
+	// Command::ClearCommandQueue();
 
 	auto CSVDatabase = GoDCSV::CSVDatabase::Get();
 
 	CSVDatabase->OnProjectRootPathSet();
 
-	CSVDatabase->LoadAllCSVFiles();
+	/** TODO: don't load every CSV file on project root being set. */
+	// CSVDatabase->LoadAllCSVFiles();
+	// CSVDatabase->LoadCSVFile("Pokemon Stats");
 
-	for (auto& [Key, CSVFile] : CSVDatabase->GetDatabaseMap())
-	{
-		CSVFile->SetField("Entry Name", 0, "\"hehe\" - 69");
-	}
+	//for (auto& [Key, CSVFile] : CSVDatabase->GetDatabaseMap())
+	//{
+	//	CSVFile->SetField("Entry Name", 0, "\"hehe\" - 69");
+	//}
 
-	// CSVDatabase->SaveAllCSVFiles();
-
+	auto EditorWindow = MainEditorWindow::Get();
+	EditorWindow->OnProjectRootPathSet();
 }
 
 std::filesystem::path ProjectRoot::GetProjectRootPath()

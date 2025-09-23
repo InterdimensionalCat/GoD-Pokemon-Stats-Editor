@@ -5,7 +5,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-TypeInfo::TypeInfo(UiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
+TypeInfo::TypeInfo(OldUiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
 {
     TypesListItems = GoDUIWindowsInstance::instance.TypesCSV->GetTypesList();
 

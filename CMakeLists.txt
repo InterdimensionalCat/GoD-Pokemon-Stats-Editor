@@ -10,6 +10,12 @@ if (MSVC)
     set_target_properties(${BUILD_TARGET} PROPERTIES LINK_FLAGS "/PROFILE")
 endif()
 
+    # Enable resource file support on windows, this
+    # lets us set an icon for the executable
+    if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+        enable_language(RC)
+    endif()
+
 # Remove wchar nonsense
 add_compile_options(/Zc:wchar_t-)
 

@@ -96,11 +96,23 @@ std::string NewCSVData::Save()
 
 std::shared_ptr<const CSVRow> NewCSVData::GetRowAtIndex(const uint32_t RowIndex)
 {
+	if (!bLoaded)
+	{
+		ICLogger::Warn("{}.csv {} called on an unloaded CSV file, null row will be returned.", GetName(), "GetRowAtIndex");
+		return nullptr;
+	}
+
 	return DataRows.at(RowIndex);
 }
 
 std::shared_ptr<const CSVRow> NewCSVData::GetRowByName(const std::string& RowName)
 {
+	if (!bLoaded)
+	{
+		ICLogger::Warn("{}.csv {} called on an unloaded CSV file, null row will be returned.", GetName(), "GetRowByName");
+		return nullptr;
+	}
+
 	auto FoundIt = std::find_if(
 		DataRows.begin(), 
 		DataRows.end(), 
@@ -120,8 +132,19 @@ std::shared_ptr<const CSVRow> NewCSVData::GetRowByName(const std::string& RowNam
 	return *FoundIt;
 }
 
+std::shared_ptr<const CSVHeader> GoDCSV::NewCSVData::GetHeaderRow() const
+{
+	return HeaderRow;
+}
+
 std::vector<bool> NewCSVData::GetBoolColumn(const std::string& ColumnName)
 {
+	if (!bLoaded)
+	{
+		ICLogger::Warn("{}.csv {} called on an unloaded CSV file, no results will be returned.", GetName(), "GetBoolColumn");
+		return std::vector<bool>();
+	}
+
 	std::vector<bool> BoolsInColumn;
 	BoolsInColumn.reserve(DataRows.size());
 	for (const auto& Row : DataRows)
@@ -133,6 +156,12 @@ std::vector<bool> NewCSVData::GetBoolColumn(const std::string& ColumnName)
 
 std::vector<float> NewCSVData::GetFloatColumn(const std::string& ColumnName)
 {
+	if (!bLoaded)
+	{
+		ICLogger::Warn("{}.csv {} called on an unloaded CSV file, no results will be returned.", GetName(), "GetFloatColumn");
+		return std::vector<float>();
+	}
+
 	std::vector<float> FloatsInColumn;
 	FloatsInColumn.reserve(DataRows.size());
 	for (const auto& Row : DataRows)
@@ -144,6 +173,12 @@ std::vector<float> NewCSVData::GetFloatColumn(const std::string& ColumnName)
 
 std::vector<int32_t> NewCSVData::GetIntColumn(const std::string& ColumnName)
 {
+	if (!bLoaded)
+	{
+		ICLogger::Warn("{}.csv {} called on an unloaded CSV file, no results will be returned.", GetName(), "GetIntColumn");
+		return std::vector<int32_t>();
+	}
+
 	std::vector<int32_t> IntsInColumn;
 	IntsInColumn.reserve(DataRows.size());
 	for (const auto& Row : DataRows)
@@ -155,6 +190,12 @@ std::vector<int32_t> NewCSVData::GetIntColumn(const std::string& ColumnName)
 
 std::vector<std::string> NewCSVData::GetStringColumn(const std::string& ColumnName)
 {
+	if (!bLoaded)
+	{
+		ICLogger::Warn("{}.csv {} called on an unloaded CSV file, no results will be returned.", GetName(), "GetStringColumn");
+		return std::vector<std::string>();
+	}
+
 	std::vector<std::string> StringsInColumn;
 	StringsInColumn.reserve(DataRows.size());
 	for (const auto& Row : DataRows)
@@ -175,6 +216,12 @@ void NewCSVData::SetField(
 	const std::variant<bool, float, int32_t, std::string> NewValue
 )
 {
+	if (!bLoaded)
+	{
+		ICLogger::Warn("{}.csv {} called on an unloaded CSV file, no operation will be performed.", GetName(), "SetField");
+		return;
+	}
+
 	if (std::holds_alternative<bool>(NewValue))
 	{
 		// Bool field value passed in.

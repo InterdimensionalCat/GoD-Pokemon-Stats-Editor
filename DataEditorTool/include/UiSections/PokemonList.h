@@ -2,7 +2,7 @@
 #include "UiSection.h"
 //#include <vector>
 
-class PokemonList : public UiSection
+class PokemonList : public OldUiSection
 {
 public:
 	PokemonList(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize);

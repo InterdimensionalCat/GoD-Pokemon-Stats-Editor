@@ -2,6 +2,7 @@
 #include "Contexts/WindowContext.h"
 
 #include "MainEditor/MainEditorWindow.h"
+#include "Util/TextureLoader.h"
 
 // GLFW backend includes. Ideally these should not be included outside of
 // Context cpp files.
@@ -44,7 +45,15 @@ void WindowContext::Init()
         }
 
         // Maximize the window
+        // This now happens when we set a project root
         // glfwSetWindowAttrib(window, GLFW_MAXIMIZED, GLFW_TRUE);
+
+        // Set the window icon if it can be found
+        // This is still needed because the cmake
+        // code that sets the executables icon
+        // does not cause it to show up in
+        // the banner/toolbar
+        TrySetWindowIcon();
 
         // Make window context current
         glfwMakeContextCurrent(ManagedWindow.get());
@@ -141,6 +150,13 @@ void WindowContext::ShowWindow()
     glfwShowWindow(ManagedWindow.get());
 }
 
+void WindowContext::MaximizeWindow()
+{
+    // Maximize the window
+    glfwMaximizeWindow(ManagedWindow.get());
+    //glfwSetWindowAttrib(ManagedWindow.get(), GLFW_MAXIMIZED, GLFW_TRUE);
+}
+
 void WindowContext::CenterWindow()
 {
     int WindowWidth = 0;
@@ -195,4 +211,60 @@ std::shared_ptr<GLFWwindow> WindowContext::GetManagedWindow()
 void WindowContext::WindowCloseCallback(GLFWwindow* Window)
 {
     MainEditorWindow::Get()->OnAttemptWindowClose();
+}
+
+void WindowContext::TrySetWindowIcon()
+{
+    // TODO: set the exe's icon during building using cmake
+    try
+    {
+        ICLogger::Debug("Attempting to load window icon.");
+        // Attempt to find the Pokeface resource dir, which should be at
+        // "{ToolPath}/Resources/PokeFace/"
+        std::filesystem::path BasePath = std::filesystem::current_path();
+        BasePath /= "Resources";
+
+        if (!std::filesystem::is_directory(BasePath))
+        {
+            // If the Pokeface directory is not found throw an error
+            std::string ErrorMessage = std::format("{} is not a directory", BasePath.string());
+            throw std::exception(ErrorMessage.c_str());
+            return;
+        }
+
+        // Icon file name.
+        const std::string IconName = "Icon.png";
+
+
+        std::filesystem::path PathToIcon = BasePath / IconName;
+        if (!std::filesystem::exists(PathToIcon))
+        {
+            // If the Icon file doesn't exist, throw an error and stop loading
+            std::string ErrorMessage = std::format("Icon file {} not found", IconName);
+            throw std::exception(ErrorMessage.c_str());
+            return;
+        }
+
+        // Attempt to load the icon image file, its Width/Height will be stored in the supplied
+        // Width and height variables.
+        IconImage = LoadImageFromFile(PathToIcon.string().c_str());
+        if (IconImage != nullptr)
+        {
+            ICLogger::Debug("Successfully loaded Icon {}", IconName);
+        }
+        else
+        {
+            std::string ErrorMessage = std::format("Error loading icon image {}, is this a valid image file?", IconName);
+            throw std::exception(ErrorMessage.c_str());
+            return;
+        }
+
+        glfwSetWindowIcon(ManagedWindow.get(), 1, IconImage.get()->ImageData.get());
+        ICLogger::Info("Successfully loaded window icon!");
+    }
+    catch (const std::exception& e)
+    {
+        IconImage.reset();
+        ICLogger::Error("Window icon loading failed: {}", e.what());
+    }
 }

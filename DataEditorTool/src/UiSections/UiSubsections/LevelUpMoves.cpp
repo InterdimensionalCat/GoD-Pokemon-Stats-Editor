@@ -7,7 +7,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-LevelUpMovesInfo::LevelUpMovesInfo(UiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
+LevelUpMovesInfo::LevelUpMovesInfo(OldUiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
 {
     MoveItems = GoDUIWindowsInstance::instance.MovesCSV->GetMovesList();
 

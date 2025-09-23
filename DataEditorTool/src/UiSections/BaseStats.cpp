@@ -5,7 +5,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-BaseStatsInfo::BaseStatsInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : UiSection(InWindowName, InPos, InSize)
+BaseStatsInfo::BaseStatsInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : OldUiSection(InWindowName, InPos, InSize)
 {
 	MinNeededLength = CalculateMinNeededLineLength();
 
@@ -57,7 +57,7 @@ void BaseStatsInfo::UpdateElement()
 
 void BaseStatsInfo::CurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool ShouldSave)
 {
-	UiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
+	OldUiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
 	*BaseHP = GoDUIWindowsInstance::instance.StatsCSV->GetIntAtKeyAndIndex(NewPokemonIndex, "Base Stats HP");
 	*BaseAttack = GoDUIWindowsInstance::instance.StatsCSV->GetIntAtKeyAndIndex(NewPokemonIndex, "Base Stats Attack");
 	*BaseDefense = GoDUIWindowsInstance::instance.StatsCSV->GetIntAtKeyAndIndex(NewPokemonIndex, "Base Stats Defense");
@@ -260,7 +260,7 @@ float BaseStatsInfo::CalculateLargestElementLength() const
 
 void BaseStatsInfo::OnFontUpdated()
 {
-	UiSection::OnFontUpdated();
+	OldUiSection::OnFontUpdated();
 	MinNeededLength = CalculateMinNeededLineLength();
 
 	LargestLabelLength = CalculateLargestLabelLength();

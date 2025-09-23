@@ -7,7 +7,7 @@
 #include "GoD-UI-Windows.h"
 
 
-LearnedMovesInfo::LearnedMovesInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : UiSection(InWindowName, InPos, InSize)
+LearnedMovesInfo::LearnedMovesInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : OldUiSection(InWindowName, InPos, InSize)
 {
 	// Combination of:
 	// Level up moves
@@ -43,19 +43,19 @@ void LearnedMovesInfo::UpdateElement()
 
 	//ImGui::PushItemWidth(SubsectionTextBoxWidth);
 
-	UiSection::UpdateElement();
+	OldUiSection::UpdateElement();
 
 	//ImGui::PopItemWidth();
 }
 
 void LearnedMovesInfo::CurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool ShouldSave)
 {
-	UiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
+	OldUiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
 }
 
 void LearnedMovesInfo::SaveToPokemonStatsJson(std::shared_ptr<nlohmann::json> PokemonStatsJson)
 {
-	UiSection::SaveToPokemonStatsJson(PokemonStatsJson);
+	OldUiSection::SaveToPokemonStatsJson(PokemonStatsJson);
 }
 
 float LearnedMovesInfo::CalculateMinNeededLineLength() const
@@ -94,7 +94,7 @@ float LearnedMovesInfo::CalculateLargestElementLength() const
 
 void LearnedMovesInfo::OnFontUpdated()
 {
-	UiSection::OnFontUpdated();
+	OldUiSection::OnFontUpdated();
 	MinNeededLength = CalculateMinNeededLineLength();
 
 	LargestLabelLength = CalculateLargestLabelLength();

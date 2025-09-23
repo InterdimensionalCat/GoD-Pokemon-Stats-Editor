@@ -1,7 +1,7 @@
 #pragma once
 #include "UiSection.h"
 
-class LearnedMovesInfo : public UiSection {
+class LearnedMovesInfo : public OldUiSection {
 public:
 
 	LearnedMovesInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize);

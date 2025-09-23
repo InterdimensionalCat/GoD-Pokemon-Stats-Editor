@@ -4,7 +4,7 @@
 
 class TypeInfo : public UiSubsection {
 public:
-	TypeInfo(UiSection* InParent, const std::string& InSubsectionName);
+	TypeInfo(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	void UpdateElement() override;
 

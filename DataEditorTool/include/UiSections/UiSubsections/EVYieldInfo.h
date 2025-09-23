@@ -3,7 +3,7 @@
 
 class EVYieldInfo : public UiSubsection {
 public:
-	EVYieldInfo(UiSection* InParent, const std::string& InSubsectionName);
+	EVYieldInfo(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	void UpdateElement() override;
 

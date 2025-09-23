@@ -5,7 +5,7 @@
 std::vector<std::shared_ptr<Command>> Command::CommandQueue = std::vector<std::shared_ptr<Command>>();
 int32_t Command::CurrentCommand = -1;
 
-Command::Command(std::shared_ptr<UiSection> InModifiedSection) : ModifiedSection(InModifiedSection)
+Command::Command(std::shared_ptr<OldUiSection> InModifiedSection) : ModifiedSection(InModifiedSection)
 {
 
 }

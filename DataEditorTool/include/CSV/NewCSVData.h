@@ -31,6 +31,12 @@ namespace GoDCSV
 		 */
 		std::shared_ptr<const CSVRow> GetRowByName(const std::string& RowName);
 
+		/**
+		 * Get a read only pointer to the header row. Useful if we want to
+		 * search a CSV file for particular column names.
+		 */
+		std::shared_ptr<const CSVHeader> GetHeaderRow() const;
+
 		/** Get all fields in a column. */
 		std::vector<bool> GetBoolColumn(const std::string& ColumnName);
 		std::vector<float> GetFloatColumn(const std::string& ColumnName);

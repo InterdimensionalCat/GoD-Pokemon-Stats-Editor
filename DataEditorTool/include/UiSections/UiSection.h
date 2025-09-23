@@ -6,10 +6,10 @@
 
 class UiSubsection;
 
-class UiSection : public std::enable_shared_from_this<UiSection> {
+class OldUiSection : public std::enable_shared_from_this<OldUiSection> {
 public:
 	// Contains Name ID, species Name ID, 
-	UiSection(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize);
+	OldUiSection(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize);
 
 	virtual void Tick();
 

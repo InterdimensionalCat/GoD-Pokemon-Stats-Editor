@@ -3,7 +3,7 @@
 #include "Command/SwapMoves.h"
 #include "UiSections/UiSubsections/LevelUpMoves.h"
 
-SwapMovesCommand::SwapMovesCommand(std::shared_ptr<UiSection> InModifiedSection, std::shared_ptr<LevelUpMovesInfo> InLevelUpMoves, const int32_t InMoveOneIndex, const int32_t InMoveTwoIndex) : Command(InModifiedSection), LevelUpMoves(InLevelUpMoves), MoveOneIndex(InMoveOneIndex), MoveTwoIndex(InMoveTwoIndex)
+SwapMovesCommand::SwapMovesCommand(std::shared_ptr<OldUiSection> InModifiedSection, std::shared_ptr<LevelUpMovesInfo> InLevelUpMoves, const int32_t InMoveOneIndex, const int32_t InMoveTwoIndex) : Command(InModifiedSection), LevelUpMoves(InLevelUpMoves), MoveOneIndex(InMoveOneIndex), MoveTwoIndex(InMoveTwoIndex)
 {
 
 }

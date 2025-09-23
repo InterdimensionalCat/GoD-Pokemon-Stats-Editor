@@ -5,7 +5,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-EVYieldInfo::EVYieldInfo(UiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
+EVYieldInfo::EVYieldInfo(OldUiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
 {
 	FieldLabels.insert(std::pair("HP EV", "HP EV"));
 	FieldLabels.insert(std::pair("Attack EV", "Attack EV"));

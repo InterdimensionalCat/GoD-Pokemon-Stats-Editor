@@ -16,7 +16,7 @@
 
 std::deque<GLuint> SpeciesInfo::PokefaceData;
 
-SpeciesInfo::SpeciesInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : UiSection(InWindowName, InPos, InSize)
+SpeciesInfo::SpeciesInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : OldUiSection(InWindowName, InPos, InSize)
 {
     // Combination of:
     // Identification info
@@ -117,19 +117,19 @@ void SpeciesInfo::UpdateElement()
 
 	ImGui::PushItemWidth(SubsectionTextBoxWidth);
 
-	UiSection::UpdateElement();
+	OldUiSection::UpdateElement();
 
 	ImGui::PopItemWidth();
 }
 
 void SpeciesInfo::CurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool ShouldSave)
 {
-    UiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
+    OldUiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
 }
 
 void SpeciesInfo::SaveToPokemonStatsJson(std::shared_ptr<nlohmann::json> PokemonStatsJson)
 {
-    UiSection::SaveToPokemonStatsJson(PokemonStatsJson);
+    OldUiSection::SaveToPokemonStatsJson(PokemonStatsJson);
 }
 
 float SpeciesInfo::CalculateMinNeededLineLength() const
@@ -168,7 +168,7 @@ float SpeciesInfo::CalculateLargestElementLength() const
 
 void SpeciesInfo::OnFontUpdated()
 {
-	UiSection::OnFontUpdated();
+	OldUiSection::OnFontUpdated();
 	auto& Style = ImGui::GetStyle();
 
 	MinTextBoxSize = GetMaxTextSize(GoDUIWindowsInstance::instance.StatsCSV->GetAllEntriesOfKey("Entry Name", false)).first + (float)Style.FramePadding.x + (float)Style.ItemInnerSpacing.x;

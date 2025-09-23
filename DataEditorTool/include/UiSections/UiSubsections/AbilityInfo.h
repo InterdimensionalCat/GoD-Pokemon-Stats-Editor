@@ -4,7 +4,7 @@
 
 class AbilityInfo : public UiSubsection {
 public:
-	AbilityInfo(UiSection* InParent, const std::string& InSubsectionName);
+	AbilityInfo(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	void UpdateElement() override;
 

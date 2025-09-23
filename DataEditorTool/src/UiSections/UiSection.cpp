@@ -4,7 +4,7 @@
 #include "UiSections/UiSubsections/UiSubsection.h"
 #include "GoD-UI-Windows.h"
 
-UiSection::UiSection(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : WindowName(InWindowName), InitialPos(InPos), InitialSize(InSize), CurrentPokemonIndex(-1)
+OldUiSection::OldUiSection(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : WindowName(InWindowName), InitialPos(InPos), InitialSize(InSize), CurrentPokemonIndex(-1)
 {
     //const float FontScale = 18.f / 14.f;
     //const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
@@ -15,7 +15,7 @@ UiSection::UiSection(const std::string& InWindowName, const ImVec2& InPos, const
     InitialPos = ImVec2(MainViewport->WorkPos.x + InitialPos.x, MainViewport->WorkPos.y + InitialPos.y);
 }
 
-void UiSection::Tick()
+void OldUiSection::Tick()
 {
     const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(InitialPos, ImGuiCond_FirstUseEver);
@@ -56,7 +56,7 @@ void UiSection::Tick()
     ImGui::End();
 }
 
-void UiSection::UpdateElement()
+void OldUiSection::UpdateElement()
 {
     for (auto& Subsection : Subsections)
     {
@@ -71,7 +71,7 @@ void UiSection::UpdateElement()
     }
 }
 
-void UiSection::CurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool ShouldSave)
+void OldUiSection::CurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool ShouldSave)
 {
     if (ShouldSave)
     {
@@ -86,7 +86,7 @@ void UiSection::CurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool 
     CurrentPokemonIndex = NewPokemonIndex;
 }
 
-void UiSection::SaveToPokemonStatsJson(std::shared_ptr<nlohmann::json> PokemonStatsJson)
+void OldUiSection::SaveToPokemonStatsJson(std::shared_ptr<nlohmann::json> PokemonStatsJson)
 {
     for (auto& Subsection : Subsections)
     {
@@ -94,27 +94,27 @@ void UiSection::SaveToPokemonStatsJson(std::shared_ptr<nlohmann::json> PokemonSt
     }
 }
 
-int32_t UiSection::GetCurrentPokemonIndex() const
+int32_t OldUiSection::GetCurrentPokemonIndex() const
 {
     return CurrentPokemonIndex;
 }
 
-void UiSection::SetUnsavedProgress(const bool UnsavedProgress)
+void OldUiSection::SetUnsavedProgress(const bool UnsavedProgress)
 {
     bUnsavedProgress = UnsavedProgress;
 }
 
-bool UiSection::GetUnsavedProgress() const
+bool OldUiSection::GetUnsavedProgress() const
 {
     return bUnsavedProgress;
 }
 
-void UiSection::SetFocusedWindow()
+void OldUiSection::SetFocusedWindow()
 {
     bSetWindowFocused = true;
 }
 
-void UiSection::OnFontUpdated()
+void OldUiSection::OnFontUpdated()
 {
     for (auto& Subsection : Subsections)
     {
@@ -122,17 +122,17 @@ void UiSection::OnFontUpdated()
     }
 }
 
-float UiSection::CalculateMinNeededLineLength() const
+float OldUiSection::CalculateMinNeededLineLength() const
 {
     return -1.f;
 }
 
-float UiSection::CalculateLargestLabelLength() const
+float OldUiSection::CalculateLargestLabelLength() const
 {
     return -1.f;
 }
 
-float UiSection::CalculateLargestElementLength() const
+float OldUiSection::CalculateLargestElementLength() const
 {
     return -1.f;
 }

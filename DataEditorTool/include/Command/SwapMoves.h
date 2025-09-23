@@ -5,7 +5,7 @@ class LevelUpMovesInfo;
 
 class SwapMovesCommand : public Command {
 public:
-	SwapMovesCommand(std::shared_ptr<UiSection> InModifiedSection, std::shared_ptr<LevelUpMovesInfo> InLevelUpMoves, const int32_t InMoveOneIndex, const int32_t InMoveTwoIndex);
+	SwapMovesCommand(std::shared_ptr<OldUiSection> InModifiedSection, std::shared_ptr<LevelUpMovesInfo> InLevelUpMoves, const int32_t InMoveOneIndex, const int32_t InMoveTwoIndex);
 
 	void ExecuteCommand() override;
 

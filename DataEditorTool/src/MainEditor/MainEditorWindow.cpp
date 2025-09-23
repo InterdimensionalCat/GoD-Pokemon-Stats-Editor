@@ -9,6 +9,8 @@
 #include "CSV/CSVDatabase.h"
 #include "Contexts/WindowContext.h"
 #include "Contexts/GuiContext.h"
+#include "UI/UiTab.h"
+#include "Editors/PokemonStats/PokemonStatsEditor.h"
 
 void MainEditorWindow::Init()
 {
@@ -52,7 +54,7 @@ void MainEditorWindow::Init()
     MainWindowDockspace->ClassId = ImHashStr("IC_MainWindowDockspace");
     MainWindowDockspace->DockingAllowUnclassed = false;
 
-    // Add initial tabs?
+    // TODO: Add initial tabs?
     // TilesetEditorWindowElement = std::make_shared<TilesetEditorTab>(EditorTabsDockspace);
 
     // EditorTabs.push_back(TilesetEditorWindowElement);
@@ -133,10 +135,10 @@ void MainEditorWindow::Tick()
     // Tick all UiWindows directly after this code to ensure they are all in the top level dockspace.
     ImGui::DockSpaceOverViewport(0U, NULL, ImGuiDockNodeFlags_None, MainWindowDockspace.get());
 
-    //for (std::shared_ptr<UiTab> EditorTab : EditorTabs)
-    //{
-    //    EditorTab->Tick();
-    //}
+    for (std::shared_ptr<UiTab> EditorTab : EditorTabs)
+    {
+        EditorTab->Tick();
+    }
 
     MainFontManager->EndFontForFrame();
 
@@ -155,6 +157,27 @@ void MainEditorWindow::Render()
     // is set up during the tick function.
 
     MainWindowContext->EndRender();
+}
+
+void MainEditorWindow::OnProjectRootPathSet()
+{
+    EditorTabs.clear();
+    std::shared_ptr<PokemonStatsEditor> StatsEditor = std::make_shared<PokemonStatsEditor>(MainWindowDockspace);
+    OpenNewEditorTab(StatsEditor);
+    MainWindowContext->MaximizeWindow();
+}
+
+void MainEditorWindow::OpenNewEditorTab(std::shared_ptr<UiTab> NewTab)
+{
+    if (NewTab->LoadRequiredCSVFiles())
+    {
+        NewTab->Init();
+        EditorTabs.push_back(NewTab);
+    }
+    else
+    {
+        ICLogger::Warn("Could not open tab {}, some required CSV files could not be loaded.", NewTab->GetName());
+    }
 }
 
 //std::shared_ptr<GLFWwindow> MainEditorWindow::GetWindow()

@@ -55,7 +55,7 @@ void FontManager::FindAvailableFonts()
 		{
 			if (File.extension() == ".ttf" || File.extension() == ".otf")
 			{
-				ICLogger::Info("EN font found: {}", File.filename().string());
+				ICLogger::Trace("EN font found: {}", File.filename().string());
 				AvailableENFonts.push_back(File.filename().string());
 			}
 		}
@@ -73,7 +73,7 @@ void FontManager::FindAvailableFonts()
 		{
 			if (File.extension() == ".ttf" || File.extension() == ".otf")
 			{
-				ICLogger::Info("JP font found: {}", File.filename().string());
+				ICLogger::Trace("JP font found: {}", File.filename().string());
 				AvailableJPFonts.push_back(File.filename().string());
 			}
 		}

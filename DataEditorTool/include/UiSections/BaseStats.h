@@ -1,7 +1,7 @@
 #pragma once
 #include "UiSection.h"
 
-class BaseStatsInfo : public UiSection {
+class BaseStatsInfo : public OldUiSection {
 public:
 	BaseStatsInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize);
 

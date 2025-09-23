@@ -32,7 +32,7 @@ int32_t CSVHeader::GetIndexOfColumn(const std::string& ColumnName) const
 	}
 }
 
-const std::vector<std::string>& GoDCSV::CSVHeader::GetColumnNamesArray()
+const std::vector<std::string>& GoDCSV::CSVHeader::GetColumnNamesArray() const
 {
 	return ColumnNames;
 }

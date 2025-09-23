@@ -5,6 +5,10 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/logger.h"
 
+// TODO: Add support for file-specific log catagories (IE: LogUiTab)
+
+// TODO: Allow logger to route crash info for std::exceptions (using std::terminate) and other crashes (such as assert or segfaults)
+
 std::shared_ptr<ICLogger> ICLogger::Instance = nullptr;
 
 using SinkList = std::initializer_list<std::shared_ptr<spdlog::sinks::sink>>;

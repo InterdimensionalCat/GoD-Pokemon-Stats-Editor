@@ -4,7 +4,7 @@
 //#include <vector>
 //#include <string>
 
-class TeachableMoveInfo : public UiSection {
+class TeachableMoveInfo : public OldUiSection {
 public:
 	TeachableMoveInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize);
 

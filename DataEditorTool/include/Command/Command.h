@@ -4,9 +4,11 @@
 //#include <memory>
 //#include <string>
 
+class OldUiSection;
+
 class Command {
 public:
-	Command(std::shared_ptr<UiSection> InModifiedSection);
+	Command(std::shared_ptr<OldUiSection> InModifiedSection);
 
 	virtual void ExecuteCommand();
 
@@ -30,7 +32,7 @@ public:
 
 private:
 
-	std::shared_ptr<UiSection> ModifiedSection;
+	std::shared_ptr<OldUiSection> ModifiedSection;
 
 	static std::vector<std::shared_ptr<Command>> CommandQueue;
 	static int32_t CurrentCommand;

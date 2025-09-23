@@ -13,6 +13,7 @@ class FontManager;
 class ModalManager;
 class WindowContext;
 class GuiContext;
+class UiTab;
 
 class MainEditorWindow
 {
@@ -29,6 +30,10 @@ public:
 	void Tick();
 
 	void Render();
+
+	void OnProjectRootPathSet();
+
+	void OpenNewEditorTab(std::shared_ptr<UiTab> NewTab);
 
 	/** We should try to avoid exposing raw backend structures outside their context objects. */
 	// std::shared_ptr<GLFWwindow> GetWindow();
@@ -67,6 +72,9 @@ private:
 	bool GLFWInitialized = false;
 	bool ImGuiGLFWInitialized = false;
 	bool ImGuiOpenGLInitialized = false;
+
+	/** Currently open tabs. */
+	std::vector<std::shared_ptr<UiTab>> EditorTabs;
 
 	//IcColor ClearColor;
 

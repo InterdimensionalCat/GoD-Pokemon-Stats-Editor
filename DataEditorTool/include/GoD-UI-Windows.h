@@ -42,7 +42,7 @@ public:
 
 	std::shared_ptr<PokemonList> CurrentPokemonList;
 
-	std::vector<std::shared_ptr<UiSection>> UiElements;
+	std::vector<std::shared_ptr<OldUiSection>> UiElements;
 
 	std::filesystem::path GetProjectRootPath();
 

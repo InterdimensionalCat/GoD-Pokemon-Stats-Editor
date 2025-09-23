@@ -6,12 +6,12 @@ template<typename ValType>
 class ModifyValueCommand : public Command {
 public:
 
-	ModifyValueCommand(std::shared_ptr<UiSection> InModifiedSection, std::shared_ptr<ValType> InValue, const ValType& InPrevValue, const ValType& InNextValue) : Command(InModifiedSection), Value(InValue), PrevValue(InPrevValue), NextValue(InNextValue)
+	ModifyValueCommand(std::shared_ptr<OldUiSection> InModifiedSection, std::shared_ptr<ValType> InValue, const ValType& InPrevValue, const ValType& InNextValue) : Command(InModifiedSection), Value(InValue), PrevValue(InPrevValue), NextValue(InNextValue)
 	{
 		FilterString = nullptr;
 	}
 
-	ModifyValueCommand(std::shared_ptr<UiSection> InModifiedSection, std::shared_ptr<ValType> InValue, const ValType& InPrevValue, const ValType& InNextValue, std::shared_ptr<std::string> InFilterString) : Command(InModifiedSection), Value(InValue), PrevValue(InPrevValue), NextValue(InNextValue), FilterString(InFilterString)
+	ModifyValueCommand(std::shared_ptr<OldUiSection> InModifiedSection, std::shared_ptr<ValType> InValue, const ValType& InPrevValue, const ValType& InNextValue, std::shared_ptr<std::string> InFilterString) : Command(InModifiedSection), Value(InValue), PrevValue(InPrevValue), NextValue(InNextValue), FilterString(InFilterString)
 	{
 
 	}

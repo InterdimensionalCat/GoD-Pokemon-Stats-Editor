@@ -5,7 +5,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-IdentificationInfo::IdentificationInfo(UiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
+IdentificationInfo::IdentificationInfo(OldUiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
 {
     FieldLabels.insert(std::pair("Name", "Name ID"));
     FieldLabels.insert(std::pair("Species", "Species Name ID"));

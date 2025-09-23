@@ -4,7 +4,7 @@
 
 class LevelUpMovesInfo : public UiSubsection {
 public:
-	LevelUpMovesInfo(UiSection* InParent, const std::string& InSubsectionName);
+	LevelUpMovesInfo(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	void UpdateElement() override;
 

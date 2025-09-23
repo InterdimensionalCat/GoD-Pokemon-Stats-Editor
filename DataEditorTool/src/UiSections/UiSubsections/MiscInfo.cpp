@@ -8,7 +8,7 @@
 
 
 
-MiscInfo::MiscInfo(UiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
+MiscInfo::MiscInfo(OldUiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
 {
     // Get all unique Exp Rate values.
     ExpRateList = std::vector<std::string>(6, "---");

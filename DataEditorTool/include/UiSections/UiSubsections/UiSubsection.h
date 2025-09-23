@@ -4,12 +4,12 @@
 //#include "imgui.h"
 //#include "nlohmann/json.hpp"
 
-class UiSection;
+class OldUiSection;
 
 class UiSubsection : public std::enable_shared_from_this<UiSubsection> {
 public:
 	// Contains Name ID, species Name ID, 
-	UiSubsection(UiSection* InParent, const std::string& InSubsectionName);
+	UiSubsection(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	virtual void UpdateElement();
 
@@ -32,5 +32,5 @@ protected:
 	std::map<std::string, std::string> FieldLabels;
 
 	std::string SubsectionName;
-	UiSection* Parent;
+	OldUiSection* Parent;
 };

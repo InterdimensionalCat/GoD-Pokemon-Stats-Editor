@@ -6,7 +6,7 @@
 #include "Util/FilterableComboBox.h"
 #include "GoD-UI-Windows.h"
 
-EvolutionInfo::EvolutionInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : UiSection(InWindowName, InPos, InSize)
+EvolutionInfo::EvolutionInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : OldUiSection(InWindowName, InPos, InSize)
 {
     for (int32_t i = 0; i < 5; i++)
     {
@@ -377,7 +377,7 @@ void EvolutionInfo::SaveItemCondition(std::shared_ptr<nlohmann::json> PokemonSta
 
 void EvolutionInfo::CurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool ShouldSave)
 {
-    UiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
+    OldUiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
     for (int32_t i = 0; i < 5; i++)
     {
         std::string EvolutionMethodKey = std::format("Evolutions {} Evolution Method", i + 1);
@@ -535,7 +535,7 @@ float EvolutionInfo::CalculateLargestElementLength() const
 
 void EvolutionInfo::OnFontUpdated()
 {
-    UiSection::OnFontUpdated();
+    OldUiSection::OnFontUpdated();
 
     MaxMethodLabelLength = -1;
     MaxFormLabelLength = -1;

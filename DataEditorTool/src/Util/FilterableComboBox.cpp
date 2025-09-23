@@ -5,7 +5,7 @@
 #include "Command/ModifyValue.h"
 #include "GoD-UI-Windows.h"
 
-bool FilterableComboBox(std::shared_ptr<UiSection> CurrentSection, const std::string& ComboBoxName, std::vector<std::string> UnfilteredItemsList, std::shared_ptr<std::string> SelectedItemString, std::shared_ptr<std::string> FilterString)
+bool FilterableComboBox(std::shared_ptr<OldUiSection> CurrentSection, const std::string& ComboBoxName, std::vector<std::string> UnfilteredItemsList, std::shared_ptr<std::string> SelectedItemString, std::shared_ptr<std::string> FilterString)
 {
     // We want to filter items based on whatever the user has typed since focusing this box
     std::vector<std::string> FilteredItemsArr;

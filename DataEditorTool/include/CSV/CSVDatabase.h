@@ -10,7 +10,6 @@ namespace GoDCSV
 		std::same_as<CSVType, NewCSVData> ||
 		std::derived_from<CSVType, NewCSVData>;
 
-
 	class CSVDatabase
 	{
 
@@ -58,6 +57,12 @@ namespace GoDCSV
 		bool AreAnyCSVFilesModified();
 
 		/**
+		 * Returns true if a CSV file with the specified name is in the database,
+		 * weather loaded or not.
+		 */
+		bool IsCSVFileInDatabase(const std::string& CSVFileName) const;
+
+		/**
 		 * Save all CSV files in the supplied vector. Return any CSV file names that fail to save, along with the failure reason
 		 */
 		std::vector<std::pair<std::string, std::string>> SaveSelectedCSVFiles(const std::vector<std::string>& SelectedCSVFiles);
@@ -71,6 +76,8 @@ namespace GoDCSV
 		 * Clear the database of all CSV files, both loaded and unloaded.
 		 */
 		void ClearDatabase();
+
+		void LoadCSVFile(const std::string& CSVFileName);
 
 		/** DEBUG COMMANDS: USE FOR TESTING ONLY */
 		

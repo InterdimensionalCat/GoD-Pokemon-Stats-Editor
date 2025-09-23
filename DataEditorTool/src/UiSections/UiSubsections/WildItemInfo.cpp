@@ -5,7 +5,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-WildItemInfo::WildItemInfo(UiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
+WildItemInfo::WildItemInfo(OldUiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
 {
     WildItemsListItems = GoDUIWindowsInstance::instance.ItemsCSV->GetItemsList();
 

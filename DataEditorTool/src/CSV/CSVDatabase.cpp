@@ -2,6 +2,7 @@
 #include "CSV/CSVDatabase.h"
 #include "CSV/NewCSVData.h"
 #include "CSV/CSVLoader.h"
+#include "CSV/Databases/ColumnDatabase.h"
 
 using namespace GoDCSV;
 
@@ -32,6 +33,8 @@ void CSVDatabase::OnProjectRootPathSet()
             }
         }
     }
+
+    ColumnDatabase::LoadStaticDatabases();
 }
 
 bool CSVDatabase::RootContainsAllCSVFiles(const std::vector<std::string>& CSVFileNames) const
@@ -80,6 +83,11 @@ bool GoDCSV::CSVDatabase::AreAnyCSVFilesModified()
     return false;
 }
 
+bool GoDCSV::CSVDatabase::IsCSVFileInDatabase(const std::string& CSVFileName) const
+{
+    return CSVDatabaseMap.find(CSVFileName) != CSVDatabaseMap.end();
+}
+
 std::vector<std::pair<std::string, std::string>> GoDCSV::CSVDatabase::SaveSelectedCSVFiles(const std::vector<std::string>& SelectedCSVFiles)
 {
     std::vector<std::pair<std::string, std::string>> FailedFilesWithReasons;
@@ -126,11 +134,29 @@ void GoDCSV::CSVDatabase::ClearDatabase()
     CSVDatabaseMap.clear();
 }
 
+void GoDCSV::CSVDatabase::LoadCSVFile(const std::string& CSVFileName)
+{
+    auto CSVFile = CSVDatabaseMap.at(CSVFileName);
+
+    if (!CSVFile->IsCSVFileLoaded())
+    {
+        CSVFile->Init();
+        if (CSVFile->IsCSVFileLoaded())
+        {
+            ColumnDatabase::LoadEntryNameDatabase(std::format("{}-EntriesList", CSVFileName), CSVFileName);
+        }
+    }
+    else
+    {
+        ICLogger::Warn("Attempted to load already loaded csv file {}.csv", CSVFileName);
+    }
+}
+
 void CSVDatabase::LoadAllCSVFiles()
 {
     for (auto& [Key, CSVFile] : CSVDatabaseMap)
     {
-        CSVFile->Init();
+        LoadCSVFile(Key);
     }
 }
 

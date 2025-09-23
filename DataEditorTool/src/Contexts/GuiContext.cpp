@@ -90,6 +90,17 @@ void GuiContext::BeginTick()
 
     // Start new ImGui frame.
     ImGui::NewFrame();
+
+    static bool bShownImGuiDebugInfo = false;
+
+    if (!bShownImGuiDebugInfo)
+    {
+        const auto& Style = ImGui::GetStyle();
+        ICLogger::Debug("ImGui FramePadding:      (x: {}, y: {})", Style.FramePadding.x, Style.FramePadding.y);
+        ICLogger::Debug("ImGui ItemSpacing:       (x: {}, y: {})", Style.ItemSpacing.x, Style.ItemSpacing.y);
+        ICLogger::Debug("ImGui ItemInnerSpacing:  (x: {}, y: {})", Style.ItemInnerSpacing.x, Style.ItemInnerSpacing.y);
+        bShownImGuiDebugInfo = true;
+    }
 }
 
 void GuiContext::EndTick()

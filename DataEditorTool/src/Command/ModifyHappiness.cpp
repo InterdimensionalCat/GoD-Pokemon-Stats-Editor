@@ -4,7 +4,7 @@
 #include "Command/ModifyHappiness.h"
 
 
-ModifyHappiness::ModifyHappiness(std::shared_ptr<UiSection> InModifiedSection, std::shared_ptr<std::string> InStringVal, std::shared_ptr<int32_t> InValue, const int32_t& InPrevValue, const int32_t& InNextValue) : ModifyValueCommand(InModifiedSection, InValue, InPrevValue, InNextValue), StringVal(InStringVal)
+ModifyHappiness::ModifyHappiness(std::shared_ptr<OldUiSection> InModifiedSection, std::shared_ptr<std::string> InStringVal, std::shared_ptr<int32_t> InValue, const int32_t& InPrevValue, const int32_t& InNextValue) : ModifyValueCommand(InModifiedSection, InValue, InPrevValue, InNextValue), StringVal(InStringVal)
 {
 }
 

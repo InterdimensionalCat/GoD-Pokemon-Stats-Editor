@@ -1,0 +1,259 @@
+#include "include.h"
+#include "Editors/PokemonStats/PokemonStatsSpeciesInfo.h"
+
+#include "Editors/PokemonStats/PokemonStatsEditor.h"
+#include "UI/BasicUiElements/SectionDivider.h"
+#include "UI/BasicUiElements/CSVTextBox.h"
+#include "UI/BasicUiElements/IntHexStringBox.h"
+#include "UI/BasicUiElements/CSVIntBox.h"
+#include "UI/BasicUiElements/ImageBox.h"
+#include "UI/BasicUiElements/CSVComboBox.h"
+#include "UI/BasicUiElements/CSVIntSlider.h"
+
+#include "UI/MultiLineUiElement.h"
+
+#include "Util/TextureLoader.h"
+
+PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) : UiSection("Species Info", InParent)
+{
+	const std::string CSVName = "Pokemon Stats";
+
+	// Attempt to load Pokeface data. If loading fails we will just not display Pokeface images.
+	InitPokefaceData();
+
+	// Add the top level species info elements.
+
+	// Species: This is just the entry name of the current row (IE: "BULBASAUR"  - 1)
+	std::shared_ptr<CSVTextBox> Species = std::make_shared<CSVTextBox>("Species", this, CSVName, "Entry Name");
+
+	// Pokeface Image: This is just the image of a pokemon that is shown in the hp bar in battle
+	PokefaceImage = std::make_shared<ImageBox>("##PokefaceImage", this);
+	if (bPokefaceDataLoaded)
+	{
+		PokefaceImage->SetTexture(PokefaceData.at(0));
+	}
+
+	AddCSVElement(Species);
+	AddElement(PokefaceImage);
+
+	// Add the identification info elements.
+
+	// Name ID: This is the text ID of the pokemon's name (IE: "BULBASAUR" (0x3E9))
+	NameID = std::make_shared<CSVTextBox>("Name ID", this, CSVName);
+
+	// Species Name ID: This is the text ID of the pokemon's species (IE: "SEED" (0x662))
+	std::shared_ptr<CSVTextBox> SpeciesNameID = std::make_shared<CSVTextBox>("Species Name ID", this, CSVName);
+
+	// Index: This is the internal ID number of this pokemon (IE: 31 (0x1F))
+	std::shared_ptr<IntHexStringBox> Index = std::make_shared<IntHexStringBox>("Index", this, CSVName, "Unknown 1", 0, 0);
+	Index->SetDisabled(true);
+
+	// National Dex ID: This is the National Dex number of this pokemon (IE: 255)
+	std::shared_ptr<CSVIntBox> NationalDexID = std::make_shared<CSVIntBox>("National Dex ID", this, CSVName, "National Dex Index", 1, 5);
+	NationalDexID->SetDisabled(true);
+
+	// National Dex ID: This is the Hoenn Dex number of this pokemon (IE: 4)
+	// Not sure what the number corresonds to for pokemon outside of Hoenn's regional dex.
+	std::shared_ptr<CSVIntBox> HoennDexID = std::make_shared<CSVIntBox>("Hoenn Dex ID", this, CSVName, "Hoenn dex regional id", 1, 5);
+	HoennDexID->SetDisabled(true);
+
+	AddElement(std::make_shared<SectionDivider>("Identification Info", this));
+	AddCSVElement(NameID);
+	AddCSVElement(SpeciesNameID);
+	AddCSVElement(Index);
+	AddCSVElement(NationalDexID);
+	AddCSVElement(HoennDexID);
+
+	// Add the type info elements.
+
+	//auto MultiLine = std::make_shared<MultiLineUiElement>("TypeMultiLine", this);
+
+	auto TypesOne = std::make_shared<CSVComboBox>("Type 1", this, CSVName, "Types 1", "Type");
+	auto TypesTwo = std::make_shared<CSVComboBox>("Type 2", this, CSVName, "Types 2", "Type");
+
+	//MultiLine->AddCSVElement(TypesOne);
+	//MultiLine->AddCSVElement(TypesTwo);
+
+	AddElement(std::make_shared<SectionDivider>("Type Info", this));
+	//AddElement(MultiLine);
+	AddCSVElement(TypesOne);
+	AddCSVElement(TypesTwo);
+
+	// Add the ability info elements.
+
+	auto AbilitiesOne = std::make_shared<CSVComboBox>("Abilities 1", this, CSVName, "Ability");
+	auto AbilitiesTwo = std::make_shared<CSVComboBox>("Abilities 2", this, CSVName, "Ability");
+
+	AddElement(std::make_shared<SectionDivider>("Ability Info", this));
+	AddCSVElement(AbilitiesOne);
+	AddCSVElement(AbilitiesTwo);
+
+	// Add the wild item info elements.
+
+	auto WildItemOne = std::make_shared<CSVComboBox>("Wild Item 1", this, CSVName, "Wild Items 1", "Item");
+	auto WildItemTwo = std::make_shared<CSVComboBox>("Wild Item 2", this, CSVName, "Wild Items 2", "Item");
+
+	AddElement(std::make_shared<SectionDivider>("Wild Item Info", this));
+	AddCSVElement(WildItemOne);
+	AddCSVElement(WildItemTwo);
+
+	// Add the ev yield elements.
+
+	// EV Yields HP,EV Yields Attack,EV Yields Defense,EV Yields Sp.Atk,EV Yields Sp.Def,EV Yields Speed
+
+	auto HPEvYield      = std::make_shared<CSVIntSlider>("HP EV",      this, CSVName, "EV Yields HP",      0, 10);
+	auto AttackEvYield  = std::make_shared<CSVIntSlider>("Attack EV",  this, CSVName, "EV Yields Attack",  0, 10);
+	auto DefenseEvYield = std::make_shared<CSVIntSlider>("Defense EV", this, CSVName, "EV Yields Defense", 0, 10);
+	auto SpAtkEvYield   = std::make_shared<CSVIntSlider>("Sp.Atk EV",  this, CSVName, "EV Yields Sp.Atk",  0, 10);
+	auto SpDefEvYield   = std::make_shared<CSVIntSlider>("Sp.Def EV",  this, CSVName, "EV Yields Sp.Def",  0, 10);
+	auto SpeedEvYield   = std::make_shared<CSVIntSlider>("Speed EV",   this, CSVName, "EV Yields Speed",   0, 10);
+
+	AddElement(std::make_shared<SectionDivider>("EV Yields", this));
+	AddCSVElement(HPEvYield);
+	AddCSVElement(AttackEvYield);
+	AddCSVElement(DefenseEvYield);
+	AddCSVElement(SpAtkEvYield);
+	AddCSVElement(SpDefEvYield);
+	AddCSVElement(SpeedEvYield);
+
+	// Add misc info elements.
+
+	auto LevelUpRate = std::make_shared<CSVComboBox>("Level up Rate", this, CSVName, "LevelUpRate");
+	LevelUpRate->SetShouldReloadDatabaseOnRefresh(false);
+
+	auto ExpYield = std::make_shared<CSVIntBox>("Exp Yield", this, CSVName, "Exp yield", 1, 5);
+	ExpYield->SetBounds(0, ExpYield->GetMaxValue());
+
+	auto GenderRatio = std::make_shared<CSVComboBox>("Gender Ratio", this, CSVName, "GenderRatio");
+	GenderRatio->SetShouldReloadDatabaseOnRefresh(false);
+
+	auto CatchRate = std::make_shared<CSVIntBox>("Catch Rate", this, CSVName, 1, 5);
+	CatchRate->SetBounds(0, CatchRate->GetMaxValue());
+
+	auto Height = std::make_shared<CSVIntBox>("Height (Meters)", this, CSVName, "Height", 1, 5);
+	Height->SetBounds(0, Height->GetMaxValue());
+
+	auto Weight = std::make_shared<CSVIntBox>("Weight (Kg)", this, CSVName, "Weight", 1, 5);
+	Weight->SetBounds(0, Height->GetMaxValue());
+
+	auto BaseHappiness = std::make_shared<CSVIntBox>("Base Happiness", this, CSVName, 1, 5);
+	BaseHappiness->SetBounds(0, BaseHappiness->GetMaxValue());
+
+	AddElement(std::make_shared<SectionDivider>("Misc Info", this));
+	AddCSVElement(LevelUpRate);
+	AddCSVElement(ExpYield);
+	AddCSVElement(GenderRatio);
+	AddCSVElement(CatchRate);
+	AddCSVElement(Height);
+	AddCSVElement(Weight);
+	AddCSVElement(BaseHappiness);
+
+	CalculateElementMaxWidth();
+}
+
+void PokemonStatsSpeciesInfo::Refresh()
+{
+	CalculateElementMaxWidth();
+
+	UiSection::Refresh();
+
+	// Set the correct PokeFace image based
+	// on the current row.
+	if (bPokefaceDataLoaded)
+	{
+		PokefaceImage->SetTexture(PokefaceData.at(GetParent()->GetTabCSVState()->GetCurrentRow()));
+	}
+}
+
+void PokemonStatsSpeciesInfo::InitPokefaceData()
+{
+	// TODO: Allow pokeface data to load if some pokeface files are missing,
+	// which will be needed to support custom pokemon additions to the Pokemon Stats.csv file
+	try
+	{
+		ICLogger::Debug("Attempting to load Pokeface data.");
+		// Attempt to find the Pokeface resource dir, which should be at
+		// "{ToolPath}/Resources/PokeFace/"
+		std::filesystem::path BasePath = std::filesystem::current_path();
+		BasePath /= "Resources";
+		BasePath /= "PokeFace";
+
+		if (!std::filesystem::is_directory(BasePath))
+		{
+			// If the Pokeface directory is not found throw an error
+			std::string ErrorMessage = std::format("{} is not a directory", BasePath.string());
+			throw std::exception(ErrorMessage.c_str());
+			return;
+		}
+
+		// Get the list of pokemon, which we can convert into Pokeface data file names
+		auto PokemonStatsCSV = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>("Pokemon Stats");
+		auto PokemonList = PokemonStatsCSV->GetStringColumn("Entry Name");
+
+		// Resize the PokefaceData list to be the same size as PokemonList, since
+		// we will need to set texture ids to the index directly.
+		PokefaceData = std::deque<GLuint>(PokemonList.size(), 0);
+
+		// Attempt to load a pokeface data file for each Pokemon list entry.
+		for (uint32_t Index = 0; Index < PokemonList.size(); Index++)
+		{
+			// Get the PokeFace file name, it will be of the format
+			// "face_{3 digit int}.png"
+			// Example: "face_002.png" is Ivysaur's Pokeface.
+			const std::string FileName = std::format("face_{:03}.png", Index);
+
+			std::filesystem::path PathToFace = BasePath / FileName;
+			if (!std::filesystem::exists(PathToFace))
+			{
+				// If the Pokeface file doesn't exist, throw an error and stop loading
+				std::string ErrorMessage = std::format("Pokeface file {} not found", FileName);
+				throw std::exception(ErrorMessage.c_str());
+				return;
+			}
+
+			int Width = 0;
+			int Height = 0;
+
+			// Attempt to load the pokeface image file, its Width/Height will be stored in the supplied
+			// Width and height variables.
+			bool Success = LoadTextureFromFile(PathToFace.string().c_str(), &PokefaceData.at(Index), &Width, &Height);
+			if (Success)
+			{
+				ICLogger::Trace("Successfully loaded Pokeface image {}", FileName);
+			}
+			else
+			{
+				std::string ErrorMessage = std::format("Error loading Pokeface image {}, is this a valid image file?", FileName);
+				throw std::exception(ErrorMessage.c_str());
+				break;
+			}
+		}
+
+		bPokefaceDataLoaded = true;
+		ICLogger::Debug("Pokeface data loading successful!");
+	}
+	catch (const std::exception& e)
+	{
+		PokefaceData.clear();
+		ICLogger::PushErrorNotification("Pokeface data will not be displayed", 10000, "Error Loading Pokeface data: {}", e.what());
+	}
+}
+
+void PokemonStatsSpeciesInfo::CalculateElementMaxWidth()
+{
+	const std::string CSVName = "Pokemon Stats";
+
+	// Determine the largest element size of anything in this section and set that as the min needed size.
+	auto PokemonStatsCSV = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(CSVName);
+	std::vector<std::string> StringLengths = PokemonStatsCSV->GetStringColumn("Entry Name");
+
+	auto NameIDStrings = PokemonStatsCSV->GetStringColumn("Name ID");
+	StringLengths.insert(StringLengths.end(), NameIDStrings.begin(), NameIDStrings.end());
+
+	auto SpeciesNameIDStrings = PokemonStatsCSV->GetStringColumn("Species Name ID");
+	StringLengths.insert(StringLengths.end(), SpeciesNameIDStrings.begin(), SpeciesNameIDStrings.end());
+
+	// Setting the min size for this element will effectively set the min size for every element in this
+	// Section as the section has size syncing enabled
+	NameID->GetSize().SetMinFromLongestString(StringLengths);
+}

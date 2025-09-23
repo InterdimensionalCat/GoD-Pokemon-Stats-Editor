@@ -19,6 +19,10 @@ void MainMenu::Tick()
 
 	for (auto& Section : MenuSections)
 	{
+		// TODO: Make menu sections use ImGui's built in shortcuts feature
+		// instead of checking manually.
+		// See thread for a potential workaround that allows this:
+		// https://github.com/ocornut/imgui/issues/456#issuecomment-2290384494
 		Section->CheckShortcuts();
 	}
 

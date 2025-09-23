@@ -5,7 +5,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-TeachableMoveInfo::TeachableMoveInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : UiSection(InWindowName, InPos, InSize), TMLearnField(), HMLearnField(), TutorLearnField()
+TeachableMoveInfo::TeachableMoveInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : OldUiSection(InWindowName, InPos, InSize), TMLearnField(), HMLearnField(), TutorLearnField()
 {
     TMCheckboxNames = std::vector<std::string>(50, "");
     HMCheckboxNames = std::vector<std::string>(8, "");
@@ -122,7 +122,7 @@ void TeachableMoveInfo::UpdateElement()
 
 void TeachableMoveInfo::CurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool ShouldSave)
 {
-    UiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
+    OldUiSection::CurrentPokemonUpdated(NewPokemonIndex, ShouldSave);
 
     // Update TMs
     for (int32_t i = 0; i < 50; i++)
@@ -265,7 +265,7 @@ float TeachableMoveInfo::CalculateLargestElementLength() const
 
 void TeachableMoveInfo::OnFontUpdated()
 {
-    UiSection::OnFontUpdated();
+    OldUiSection::OnFontUpdated();
     MinNeededLength = CalculateMinNeededLineLength();
 
     LargestLabelLength = CalculateLargestLabelLength();

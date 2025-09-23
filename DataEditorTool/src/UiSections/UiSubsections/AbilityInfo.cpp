@@ -5,7 +5,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-AbilityInfo::AbilityInfo(UiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
+AbilityInfo::AbilityInfo(OldUiSection* InParent, const std::string& InSubsectionName) : UiSubsection(InParent, InSubsectionName)
 {
     AbilitiesListItems = GoDUIWindowsInstance::instance.AbilitiesCSV->GetAbilitiesList();
 

@@ -4,7 +4,7 @@
 
 typedef unsigned int GLuint;
 
-class SpeciesInfo : public UiSection {
+class SpeciesInfo : public OldUiSection {
 public:
 
 	SpeciesInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize);

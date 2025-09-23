@@ -4,7 +4,7 @@
 
 class EggMovesInfo : public UiSubsection {
 public:
-	EggMovesInfo(UiSection* InParent, const std::string& InSubsectionName);
+	EggMovesInfo(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	void UpdateElement() override;
 

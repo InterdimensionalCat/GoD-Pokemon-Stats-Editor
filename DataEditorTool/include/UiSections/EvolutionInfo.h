@@ -6,7 +6,7 @@
 
 class ModifyEvolutionMethod;
 
-class EvolutionInfo : public UiSection {
+class EvolutionInfo : public OldUiSection {
 public:
 	// Contains Name ID, species Name ID, 
 	EvolutionInfo(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize);

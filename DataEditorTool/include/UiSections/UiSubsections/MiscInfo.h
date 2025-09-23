@@ -5,7 +5,7 @@
 
 class MiscInfo : public UiSubsection {
 public:
-	MiscInfo(UiSection* InParent, const std::string& InSubsectionName);
+	MiscInfo(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	void UpdateElement() override;
 

@@ -4,7 +4,7 @@
 class IdentificationInfo : public UiSubsection {
 public:
 	// Contains Name ID, species Name ID, 
-	IdentificationInfo(UiSection* InParent, const std::string& InSubsectionName);
+	IdentificationInfo(OldUiSection* InParent, const std::string& InSubsectionName);
 
 	void UpdateElement() override;
 

@@ -5,7 +5,7 @@
 #include "Util/ItemSizeUtils.h"
 #include "GoD-UI-Windows.h"
 
-PokemonList::PokemonList(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : UiSection(InWindowName, InPos, InSize)
+PokemonList::PokemonList(const std::string& InWindowName, const ImVec2& InPos, const ImVec2& InSize) : OldUiSection(InWindowName, InPos, InSize)
 {
     PokemonListItems = GoDUIWindowsInstance::instance.StatsCSV->GetPokemonList();
 
@@ -243,7 +243,7 @@ float PokemonList::CalculateLargestElementLength() const
 
 void PokemonList::OnFontUpdated()
 {
-    UiSection::OnFontUpdated();
+    OldUiSection::OnFontUpdated();
     MinNeededLength = CalculateMinNeededLineLength();
 
     LargestLabelLength = CalculateLargestLabelLength();
