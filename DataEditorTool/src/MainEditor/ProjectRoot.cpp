@@ -65,6 +65,9 @@ void ProjectRoot::OnProjectRootPathSet()
 
 	auto CSVDatabase = GoDCSV::CSVDatabase::Get();
 
+	// TODO: This can throw if we don't select a valid project root,
+	// leading to a crash, put this in a try/catch and warn the user
+	// if they attempt to set an incorrect project root
 	CSVDatabase->OnProjectRootPathSet();
 
 	/** TODO: don't load every CSV file on project root being set. */
