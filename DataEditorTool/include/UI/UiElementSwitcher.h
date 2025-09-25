@@ -11,18 +11,7 @@ public:
 
 	virtual void Tick() override;
 
-	virtual void Refresh() override;
-
-	virtual void PushConstrainedElementSize();
-
-	virtual void PopConstrainedElementSize();
-
-	virtual void PushConstrainedSizeForElement(const uint32_t ElementIndex);
-
-	virtual void PopConstrainedSizeForElement(const uint32_t ElementIndex);
-
-	virtual void AddCSVElement(const std::shared_ptr<UiCSVElement> NewElement);
-	virtual void AddElement(const std::shared_ptr<UiElement> NewElement);
+	void SwitchCurrentlyActiveElement(std::shared_ptr<UiElement> NewActiveElement);
 
 	/**
 	 * The size constraints of an element switcher is the size constraints
@@ -40,6 +29,6 @@ private:
 
 	std::shared_ptr<UiElement> CurrentlyActiveElement;
 
-	std::vector<std::shared_ptr<UiElement>> UiElementsToSwitchBetween;
+	int32_t CurrentlyActiveElementIndex = -1;
 
 };
