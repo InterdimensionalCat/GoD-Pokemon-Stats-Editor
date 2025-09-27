@@ -2,6 +2,7 @@
 #include "UI/BasicUiElements/CSVComboBoxInt.h"
 
 #include "CSV/StringTypes/ParenthValueString.h"
+#include "CSV/StringTypes/IntHexParenthValue.h"
 #include "CSV/Databases/ColumnDatabase.h"
 
 CSVComboBoxInt::CSVComboBoxInt
@@ -12,7 +13,7 @@ CSVComboBoxInt::CSVComboBoxInt
 	const std::string& InColumnName,
 	const std::string& InColumnDatabaseCSVFileName
 ) :
-	BasicUiElement<int32_t>(InName, InParent, InCSVFileName, InColumnName),
+	BasicUiElement<std::string>(InName, InParent, InCSVFileName, InColumnName),
 	ColumnDatabaseCSVFileName(InColumnDatabaseCSVFileName)
 {
 }
@@ -24,7 +25,7 @@ CSVComboBoxInt::CSVComboBoxInt
 	const std::string& InCSVFileName,
 	const std::string& InColumnDatabaseCSVFileName
 ) :
-	BasicUiElement<int32_t>(InName, InParent, InCSVFileName, InName),
+	BasicUiElement<std::string>(InName, InParent, InCSVFileName, InName),
 	ColumnDatabaseCSVFileName(InColumnDatabaseCSVFileName)
 {
 }
@@ -46,7 +47,8 @@ void CSVComboBoxInt::Refresh()
 
 	// Refresh the current value in the CSV file.
 	BasicUiElement::Refresh();
-	int32_t ManagedIntVal = GetManagedValue();
+	IntHexParenthValue ManagedValueIntHex = IntHexParenthValue(GetManagedValue());
+	int32_t ManagedIntVal = ManagedValueIntHex.GetValueAsInt();
 
 	std::vector<ParenthValueString> EntriesAsParenthValues;
 	EntriesAsParenthValues.reserve(EntriesList.size());
@@ -56,12 +58,12 @@ void CSVComboBoxInt::Refresh()
 		EntriesAsParenthValues.push_back(ParenthValueString(Entry));
 	}
 
-	auto EntryMatchingIntItr = std::find(
+	auto EntryMatchingIntItr = std::find_if(
 	EntriesAsParenthValues.begin(), 
 	EntriesAsParenthValues.end(),
 		[ManagedIntVal](const ParenthValueString& Entry)
 		{
-			return Entry.GetValue() = std::format("{}", ManagedIntVal);
+			return Entry.GetValue() == std::format("{}", ManagedIntVal);
 		}
 	);
 
@@ -168,23 +170,33 @@ void CSVComboBoxInt::Tick()
 		EntryFilter.Clear();
 	}
 }
-void CSVComboBox::SetShouldReloadDatabaseOnRefresh(const bool ShouldReload)
+void CSVComboBoxInt::SetShouldReloadDatabaseOnRefresh(const bool ShouldReload)
 {
 	bShouldReloadDatabaseOnRefresh = ShouldReload;
 }
 
-void CSVComboBox::SetSelectedEntry(const uint32_t NewSelectedEntry)
+void CSVComboBoxInt::SetSelectedEntry(const uint32_t NewSelectedEntry)
 {
 	// Only update the selected entry if
 	// The new entry does not match it.
 	if (SelectedEntry != NewSelectedEntry)
 	{
 		SelectedEntry = NewSelectedEntry;
-		SetManagedValue(EntriesList.at(SelectedEntry));
+
+		std::vector<ParenthValueString> EntriesAsParenthValues;
+		EntriesAsParenthValues.reserve(EntriesList.size());
+
+		for (auto Entry : EntriesList)
+		{
+			EntriesAsParenthValues.push_back(ParenthValueString(Entry));
+		}
+
+		IntHexParenthValue NewValue = IntHexParenthValue(stoi(EntriesAsParenthValues.at(SelectedEntry).GetValue()));
+		SetManagedValue(NewValue.GetParenthValueString());
 	}
 }
 
-void CSVComboBox::CalculateMinSize()
+void CSVComboBoxInt::CalculateMinSize()
 {
 	// Get the longest element in the Entries list
 	const auto LongestEntryItr = std::max_element(EntriesList.begin(), EntriesList.end(),
@@ -196,7 +208,7 @@ void CSVComboBox::CalculateMinSize()
 
 	if (LongestEntryItr == EntriesList.end())
 	{
-		ICLogger::Warn("CSVComboBox CalculateMinSize called with an empty Entries List");
+		ICLogger::Warn("CSVComboBoxInt CalculateMinSize called with an empty Entries List");
 		return;
 	}
 

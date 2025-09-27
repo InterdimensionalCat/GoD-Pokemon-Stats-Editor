@@ -2,7 +2,7 @@
 
 #include "UI/BasicUiElements/BasicUiElement.h"
 
-class CSVComboBoxInt : public BasicUiElement<int32_t>
+class CSVComboBoxInt : public BasicUiElement<std::string>
 {
 
 public:

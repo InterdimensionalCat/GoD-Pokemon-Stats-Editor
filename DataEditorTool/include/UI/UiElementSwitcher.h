@@ -25,9 +25,11 @@ public:
 	 */
 	virtual float GetLabelSize() override;
 
-private:
+protected:
 
 	std::shared_ptr<UiElement> CurrentlyActiveElement;
+
+private:
 
 	int32_t CurrentlyActiveElementIndex = -1;
 

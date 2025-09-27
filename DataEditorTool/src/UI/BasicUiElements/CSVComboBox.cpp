@@ -168,6 +168,11 @@ void CSVComboBox::SetShouldReloadDatabaseOnRefresh(const bool ShouldReload)
 	bShouldReloadDatabaseOnRefresh = ShouldReload;
 }
 
+uint32_t CSVComboBox::GetSelectedEntry() const
+{
+	return SelectedEntry;
+}
+
 void CSVComboBox::SetSelectedEntry(const uint32_t NewSelectedEntry)
 {
 	// Only update the selected entry if

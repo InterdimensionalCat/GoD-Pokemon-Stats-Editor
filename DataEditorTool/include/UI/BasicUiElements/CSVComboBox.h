@@ -2,6 +2,19 @@
 
 #include "UI/BasicUiElements/BasicUiElement.h"
 
+/**
+ * TODO: a better system for elements/element sizing:
+ * problems: we need both CSV modifying and regular elements,
+ * we need to allow for mult element objects and elements
+ * on the same line, we need elements of the same type that
+ * manage different underlying data types (int combo box vs string
+ * combo box).
+ * 
+ * Potential solution: seperate the ui functionality/buffers
+ * into UiComponent classes, then each implementation interacts
+ * with the buffer and can convert it to whatever it needs
+ */
+
 class CSVComboBox : public BasicUiElement<std::string>
 {
 
@@ -29,6 +42,8 @@ public:
 	virtual void Tick() override;
 
 	void SetShouldReloadDatabaseOnRefresh(const bool ShouldReload);
+
+	uint32_t GetSelectedEntry() const;
 
 private:
 

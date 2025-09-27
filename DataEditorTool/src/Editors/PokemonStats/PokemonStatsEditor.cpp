@@ -5,6 +5,7 @@
 #include "Editors/PokemonStats/PokemonStatsLearnedMoves.h"
 #include "Editors/PokemonStats/PokemonStatsTaughtMoves.h"
 #include "Editors/PokemonStats/PokemonStatsBaseStats.h"
+#include "Editors/PokemonStats/PokemonStatsEvolutionInfo.h"
 
 PokemonStatsEditor::PokemonStatsEditor(std::shared_ptr<ImGuiWindowClass> InTabDockspace) : UiTab("Pokemon Stats Editor", InTabDockspace)
 {
@@ -20,11 +21,13 @@ void PokemonStatsEditor::Init()
 	std::shared_ptr<PokemonStatsLearnedMoves> LearnedMoves = std::make_shared<PokemonStatsLearnedMoves>(this);
 	std::shared_ptr<PokemonStatsTaughtMoves> TaughtMoves  = std::make_shared<PokemonStatsTaughtMoves>(this);
 	std::shared_ptr<PokemonStatsBaseStats> BaseStats = std::make_shared<PokemonStatsBaseStats>(this);
+	std::shared_ptr<PokemonStatsEvolutionInfo> EvolutionInfo = std::make_shared<PokemonStatsEvolutionInfo>(this);
 
 	AddSection(SpeciesInfo);
 	AddSection(PokemonList);
 	AddSection(LearnedMoves);
 	AddSection(TaughtMoves);
 	AddSection(BaseStats);
+	AddSection(EvolutionInfo);
 	UiTab::Init();
 }

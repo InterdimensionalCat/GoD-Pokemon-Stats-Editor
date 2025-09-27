@@ -61,7 +61,7 @@ EvolutionInfo::EvolutionInfo(const std::string& InWindowName, const ImVec2& InPo
 
     // Evolution methods list:
     // None (0): No evolution,                                             Param: Always 0
-    // Max Happiness(1): Evolves when happiness is maxed,                  Param: Always 0
+    // Max Happiness (1): Evolves when happiness is maxed,                 Param: Always 0
     // Happiness (Day) (2): Unimplemented, used for Espeon in RSE,         Param: Always 0
     // Happiness (Night) (3): Unimplemented, used for Umbreon in RSE,      Param: Always 0
     // Level Up (4): Evolves when the level is reached,                    Param: The level needed to evolve
