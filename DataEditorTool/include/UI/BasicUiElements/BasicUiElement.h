@@ -88,34 +88,34 @@ private:
 	CSVPrimitiveType ManagedValue;
 };
 
-inline void BasicUiElement<bool>::UpdateManagedValueFromCSV()
-{
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
-
-	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
-	ManagedValue = CurrentRowData->GetBoolAtColumn(GetColumnName());
-}
-
-inline void BasicUiElement<float>::UpdateManagedValueFromCSV()
-{
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
-
-	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
-	ManagedValue = CurrentRowData->GetFloatAtColumn(GetColumnName());
-}
-
-inline void BasicUiElement<int32_t>::UpdateManagedValueFromCSV()
-{
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
-
-	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
-	ManagedValue = CurrentRowData->GetIntAtColumn(GetColumnName());
-}
-
-inline void BasicUiElement<std::string>::UpdateManagedValueFromCSV()
-{
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
-
-	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
-	ManagedValue = CurrentRowData->GetStringAtColumn(GetColumnName());
-}
+//inline void BasicUiElement<bool>::UpdateManagedValueFromCSV()
+//{
+//	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+//
+//	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
+//	ManagedValue = CurrentRowData->GetBoolAtColumn(GetColumnName());
+//}
+//
+//inline void BasicUiElement<float>::UpdateManagedValueFromCSV()
+//{
+//	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+//
+//	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
+//	ManagedValue = CurrentRowData->GetFloatAtColumn(GetColumnName());
+//}
+//
+//inline void BasicUiElement<int32_t>::UpdateManagedValueFromCSV()
+//{
+//	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+//
+//	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
+//	ManagedValue = CurrentRowData->GetIntAtColumn(GetColumnName());
+//}
+//
+//inline void BasicUiElement<std::string>::UpdateManagedValueFromCSV()
+//{
+//	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+//
+//	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
+//	ManagedValue = CurrentRowData->GetStringAtColumn(GetColumnName());
+//}
