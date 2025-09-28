@@ -30,19 +30,17 @@ EvolutionCondition::EvolutionCondition
 	LevelBox->SetElementMinSize(4);
 
 	std::string ItemBoxName = std::format("##Evo-Item{}", InEvolutionNumber);
-	ItemBox = std::make_shared<CSVComboBoxInt>(ItemBoxName, InParent, CSVName, ConditionColumnName, "Item");
+	ItemBox = std::make_shared<CSVComboBoxInt>(ItemBoxName, InParent, CSVName, ConditionColumnName, "Item", "Entry Name");
 
 	std::string StoneBoxName = std::format("##Evo-Stone{}", InEvolutionNumber);
-	StoneBox = std::make_shared<CSVComboBoxInt>(StoneBoxName, InParent, CSVName, ConditionColumnName, "EvolutionStone");
-	StoneBox->SetShouldReloadDatabaseOnRefresh(false);
+	StoneBox = std::make_shared<CSVComboBoxInt>(StoneBoxName, InParent, CSVName, ConditionColumnName, "EvolutionStone", "Item ID");
 
 	std::string BeautyBoxName = std::format("##Evo-Beauty{}", InEvolutionNumber);
 	BeautyBox = std::make_shared<IntHexStringBox>(BeautyBoxName, InParent, CSVName, ConditionColumnName, 1, 5);
 	BeautyBox->SetElementMinSize(4);
 
 	std::string KeyItemBoxName = std::format("##Evo-KeyItem{}", InEvolutionNumber);
-	KeyItemBox = std::make_shared<CSVComboBoxInt>(KeyItemBoxName, InParent, CSVName, ConditionColumnName, "KeyItem");
-	KeyItemBox->SetShouldReloadDatabaseOnRefresh(false);
+	KeyItemBox = std::make_shared<CSVComboBoxInt>(KeyItemBoxName, InParent, CSVName, ConditionColumnName, "KeyItem", "Key Item ID");
 
 	AddCSVElement(NoParamBox);
 	AddCSVElement(LevelBox);

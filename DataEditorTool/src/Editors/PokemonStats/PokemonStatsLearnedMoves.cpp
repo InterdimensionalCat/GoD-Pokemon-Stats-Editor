@@ -39,7 +39,7 @@ PokemonStatsLearnedMoves::PokemonStatsLearnedMoves(PokemonStatsEditor* InParent)
 	{
 		const std::string MoveComboBoxColumn = std::format("Egg Moves {}", MoveNum);
 		EggMovesGrid->AddCSVElement(
-			std::make_shared<CSVComboBox>("##" + MoveComboBoxColumn, this, CSVName, MoveComboBoxColumn, "Move")
+			std::make_shared<CSVComboBox>("##" + MoveComboBoxColumn, this, CSVName, MoveComboBoxColumn, "Move", "Entry Name")
 		);
 	}
 

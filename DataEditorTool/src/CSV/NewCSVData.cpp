@@ -18,31 +18,28 @@ void NewCSVData::Init()
 		// Try and load the CSV file, this will throw if loading fails.
 		auto CSVHeaderAndRows = CSVLoader::TryLoadCSV(GetName());
 
-		// Set the header row based on the loaded data.
-		HeaderRow = std::make_shared<CSVHeader>(CSVHeaderAndRows.first);
-
-		for (json& DataRowFields : CSVHeaderAndRows.second)
-		{
-			DataRows.push_back(std::make_shared<CSVRow>(DataRowFields));
-		}
-
-		// If everything succeeded, set bLoaded to true.
-		bLoaded = true;
-
-		// Show a notification that this CSV file loaded correctly.
-		ICLogger::PushInfoNotification(
-			std::format("{}.csv Loaded Successfully", GetName()),
-			6000,
-			"CSV file {}.csv loaded successfully",
-			GetName()
-		);
+		InitFromLoadedData(CSVHeaderAndRows);
 	}
 	catch (const std::exception& e)
 	{
 		HeaderRow.reset();
 		DataRows.clear();
-		ICLogger::PushErrorNotification("CSV file loading failed", 6000, "Loading CSV file {}.csv has failed: {}", GetName(), e.what());
+		throw e;
 	}
+}
+
+void NewCSVData::InitFromLoadedData(std::pair<std::vector<std::string>, std::vector<json>> InLoadedData)
+{
+	// Set the header row based on the loaded data.
+	HeaderRow = std::make_shared<CSVHeader>(InLoadedData.first);
+
+	for (json& DataRowFields : InLoadedData.second)
+	{
+		DataRows.push_back(std::make_shared<CSVRow>(DataRowFields));
+	}
+
+	// If everything succeeded, set bLoaded to true.
+	bLoaded = true;
 }
 
 std::string NewCSVData::Save()

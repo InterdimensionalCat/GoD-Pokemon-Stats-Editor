@@ -16,6 +16,8 @@ namespace GoDCSV
 		/** Load the CSV file with this filename via the CSVLoader */
 		void Init();
 
+		void InitFromLoadedData(std::pair<std::vector<std::string>, std::vector<json>> InLoadedData);
+
 		/** Save this CSV file to disk. Return a failure reason if saving fails. */
 		std::string Save();
 

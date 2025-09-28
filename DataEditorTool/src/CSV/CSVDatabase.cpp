@@ -2,7 +2,7 @@
 #include "CSV/CSVDatabase.h"
 #include "CSV/NewCSVData.h"
 #include "CSV/CSVLoader.h"
-#include "CSV/Databases/ColumnDatabase.h"
+#include "CSV/StaticCSVFiles.h"
 
 using namespace GoDCSV;
 
@@ -34,7 +34,42 @@ void CSVDatabase::OnProjectRootPathSet()
         }
     }
 
-    ColumnDatabase::LoadStaticDatabases();
+    LoadStaticDatabases();
+}
+
+void CSVDatabase::LoadStaticDatabases()
+{
+    // TODO: check for CSV files with this name in the root and use those instead
+
+	// Load LevelUpRate database.
+	const auto LevelUpRateData = StaticCSVFiles::LoadLevelUpRateDatabase();
+	CSVDatabaseMap.emplace("LevelUpRate", std::make_shared<NewCSVData>("LevelUpRate"));
+	CSVDatabaseMap.at("LevelUpRate")->InitFromLoadedData(LevelUpRateData);
+
+	// Load GenderRatio database.
+	const auto GenderRatioData = StaticCSVFiles::LoadGenderRatioDatabase();
+	CSVDatabaseMap.emplace("GenderRatio", std::make_shared<NewCSVData>("GenderRatio"));
+	CSVDatabaseMap.at("GenderRatio")->InitFromLoadedData(GenderRatioData);
+
+	// Load EvolutionMethod database.
+	const auto EvolutionMethodData = StaticCSVFiles::LoadEvolutionMethodDatabase();
+	CSVDatabaseMap.emplace("EvolutionMethod", std::make_shared<NewCSVData>("EvolutionMethod"));
+	CSVDatabaseMap.at("EvolutionMethod")->InitFromLoadedData(EvolutionMethodData);
+
+	// Load EvolutionStone database.
+	const auto EvolutionStoneData = StaticCSVFiles::LoadEvolutionStoneDatabase();
+	CSVDatabaseMap.emplace("EvolutionStone", std::make_shared<NewCSVData>("EvolutionStone"));
+	CSVDatabaseMap.at("EvolutionStone")->InitFromLoadedData(EvolutionStoneData);
+
+	// Load KeyItem database.
+	const auto KeyItemData = StaticCSVFiles::LoadKeyItemDatabase();
+	CSVDatabaseMap.emplace("KeyItem", std::make_shared<NewCSVData>("KeyItem"));
+	CSVDatabaseMap.at("KeyItem")->InitFromLoadedData(KeyItemData);
+}
+
+std::shared_ptr<GoDCSV::NewCSVData> CSVDatabase::GetCSVFile(const std::string& CSVFileName)
+{
+	return CSVDatabaseMap.at(CSVFileName);
 }
 
 bool CSVDatabase::RootContainsAllCSVFiles(const std::vector<std::string>& CSVFileNames) const
@@ -140,16 +175,69 @@ void GoDCSV::CSVDatabase::LoadCSVFile(const std::string& CSVFileName)
 
     if (!CSVFile->IsCSVFileLoaded())
     {
-        CSVFile->Init();
-        if (CSVFile->IsCSVFileLoaded())
-        {
-            ColumnDatabase::LoadEntryNameDatabase(std::format("{}-EntriesList", CSVFileName), CSVFileName);
-        }
+		try
+		{
+			CSVFile->Init();
+		}
+		catch (const std::exception& e)
+		{
+			ICLogger::PushErrorNotification(
+				"CSV file loading failed", 6000, "Loading CSV file {}.csv has failed: {}",
+				CSVFile->GetName(),
+				e.what());
+		}
+
+		if (CSVFile->IsCSVFileLoaded())
+		{
+			// Show a notification that this CSV file loaded correctly.
+			ICLogger::PushInfoNotification(
+				std::format("{}.csv Loaded Successfully", CSVFile->GetName()),
+				6000,
+				"CSV file {}.csv loaded successfully",
+				CSVFile->GetName()
+			);
+            // TODO: Remove this
+			// ColumnDatabase::LoadEntryNameDatabase(std::format("{}-EntriesList", CSVFileName), CSVFileName);
+		}
     }
     else
     {
         ICLogger::Warn("Attempted to load already loaded csv file {}.csv", CSVFileName);
     }
+}
+
+void CSVDatabase::LoadCSVFileFromData(const std::string& CSVFileName, std::pair<std::vector<std::string>, std::vector<json>> LoadedData)
+{
+    if (!IsCSVFileInDatabase(CSVFileName))
+    {
+		CSVDatabaseMap.emplace(CSVFileName, std::make_shared<NewCSVData>(CSVFileName));
+        ICLogger::Debug("Static CSV File {}.csv not found in database, creating a new database entry for it", CSVFileName);
+    }
+
+	auto CSVFile = CSVDatabaseMap.at(CSVFileName);
+
+	if (!CSVFile->IsCSVFileLoaded())
+	{
+		try
+		{
+			CSVFile->InitFromLoadedData(LoadedData);
+		}
+		catch (const std::exception& e)
+		{
+            ICLogger::Error("Loading Static CSV file {}.csv has failed: {}", CSVFile->GetName(), e.what());
+		}
+
+		if (CSVFile->IsCSVFileLoaded())
+		{
+			ICLogger::Info("Static CSV file {}.csv loaded successfully", CSVFile->GetName());
+            // TODO: Remove this
+			//ColumnDatabase::LoadEntryNameDatabase(std::format("{}-EntriesList", CSVFileName), CSVFileName);
+		}
+	}
+	else
+	{
+		ICLogger::Warn("Attempted to load already loaded csv file {}.csv", CSVFileName);
+	}
 }
 
 void CSVDatabase::LoadAllCSVFiles()

@@ -1,19 +1,23 @@
 #include "include.h"
 #include "UI/BasicUiElements/CSVComboBox.h"
 
-#include "CSV/Databases/ColumnDatabase.h"
+#include "CSV/StringTypes/EntryNameString.h"
+#include "CSV/StringTypes/ParenthValueString.h"
 
 CSVComboBox::CSVComboBox
 (
 	const std::string& InName,
 	UiSection* InParent, const 
 	std::string& InCSVFileName, 
-	const std::string& InColumnName, 
-	const std::string& InColumnDatabaseCSVFileName
+	const std::string& InColumnName,
+	const std::string& InEntriesListCSVFileName,
+	const std::string& InEntriesListColumnName
 ) :
 	BasicUiElement<std::string>(InName, InParent, InCSVFileName, InColumnName),
-	ColumnDatabaseCSVFileName(InColumnDatabaseCSVFileName)
+	EntriesListCSVFileName(InEntriesListCSVFileName),
+	EntriesListColumnName(InEntriesListColumnName)
 {
+
 }
 
 CSVComboBox::CSVComboBox
@@ -21,29 +25,36 @@ CSVComboBox::CSVComboBox
 	const std::string& InName, 
 	UiSection* InParent, 
 	const std::string& InCSVFileName, 
-	const std::string& InColumnDatabaseCSVFileName
+	const std::string& InEntriesListCSVFileName,
+	const std::string& InEntriesListColumnName
 ) :
-	BasicUiElement<std::string>(InName, InParent, InCSVFileName, InName),
-	ColumnDatabaseCSVFileName(InColumnDatabaseCSVFileName)
+	BasicUiElement<std::string>(InName, InParent, InCSVFileName),
+	EntriesListCSVFileName(InEntriesListCSVFileName),
+	EntriesListColumnName(InEntriesListColumnName)
 {
+	
 }
 
 void CSVComboBox::Refresh()
 {
-	// Reload the EntriesList database this combo box pulls from
-	const std::string ColumnDatabaseName = std::format("{}-EntriesList", ColumnDatabaseCSVFileName);
+	// Reload the entries list from the column this pulls entries from.
+	const auto& CSVDatabase = GoDCSV::CSVDatabase::Get();
 
-	if (bShouldReloadDatabaseOnRefresh)
+	EntriesList = CSVDatabase->GetCSVFile(EntriesListCSVFileName)->GetStringColumn(EntriesListColumnName);
+
+	if (EntriesListColumnName == "Entry Name")
 	{
-		ColumnDatabase::LoadEntryNameDatabase(
-			ColumnDatabaseName,
-			ColumnDatabaseCSVFileName
-		);
+		// We need to convert from an EntryNameString to a ParenthValueString if
+		// this was an Entry Name column.
+
+		for (auto& Entry : EntriesList)
+		{
+			EntryNameString EntryName = EntryNameString(Entry);
+			Entry = EntryName.ToParenthValueString().GetParenthValueString();
+		}
 	}
 
-	EntriesList = ColumnDatabase::GetColumnDatabase(ColumnDatabaseName)->GetEntriesAsStrings();
-
-	// Refresh the current value in the CSV file.
+	// Refresh the current value this combo box manages.
 	BasicUiElement::Refresh();
 	auto ComboBoxStringVal = GetManagedValue();
 
@@ -162,10 +173,6 @@ void CSVComboBox::Tick()
 		// entry is selected, so clear it whenever this combo box is inactive
 		EntryFilter.Clear();
 	}
-}
-void CSVComboBox::SetShouldReloadDatabaseOnRefresh(const bool ShouldReload)
-{
-	bShouldReloadDatabaseOnRefresh = ShouldReload;
 }
 
 uint32_t CSVComboBox::GetSelectedEntry() const

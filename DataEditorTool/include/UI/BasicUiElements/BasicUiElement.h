@@ -67,7 +67,7 @@ public:
 		if (NewValue != ManagedValue)
 		{
 			ManagedValue = NewValue;
-			std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+			std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(GetCSVFileName());
 
 			/**
 			 * TODO: once the command queue is up and running change this to

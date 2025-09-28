@@ -20,7 +20,7 @@ CSVEntryRowSelector::CSVEntryRowSelector
 
 void CSVEntryRowSelector::Refresh()
 {
-	auto CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+	auto CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(GetCSVFileName());
 	EntriesList = CSVData->GetStringColumn(GetColumnName());
 	CalculateMinSize();
 }

@@ -54,7 +54,7 @@ void UiTab::Tick()
 
     for (const auto& CSVFileName : GetRequiredForEditCSVFiles())
     {
-        if (CSVDatabase->GetCSVFile<GoDCSV::NewCSVData>(CSVFileName)->HasCSVFileBeenModified())
+        if (CSVDatabase->GetCSVFile(CSVFileName)->HasCSVFileBeenModified())
         {
             bManagedCSVHasBeenModified = true;
             break;
@@ -139,7 +139,7 @@ bool UiTab::LoadRequiredCSVFiles()
                 throw std::exception(ErrorMessage.c_str());
             }
 
-            auto CSVFile = CSVDatabase->GetCSVFile<GoDCSV::NewCSVData>(CSVFileName);
+            auto CSVFile = CSVDatabase->GetCSVFile(CSVFileName);
             if (CSVFile->IsCSVFileLoaded())
             {
                 ICLogger::Debug("CSV File {} already loaded, skipping", CSVFileName);

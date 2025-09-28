@@ -26,7 +26,8 @@ public:
 		UiSection* InParent,
 		const std::string& InCSVFileName,
 		const std::string& InColumnName,
-		const std::string& InColumnDatabaseCSVFileName
+		const std::string& InEntriesListCSVFileName,
+		const std::string& InEntriesListColumnName
 	);
 
 	CSVComboBox
@@ -34,14 +35,13 @@ public:
 		const std::string& InName,
 		UiSection* InParent,
 		const std::string& InCSVFileName,
-		const std::string& InColumnDatabaseCSVFileName
+		const std::string& InEntriesListCSVFileName,
+		const std::string& InEntriesListColumnName
 	);
 
 	virtual void Refresh() override;
 
 	virtual void Tick() override;
-
-	void SetShouldReloadDatabaseOnRefresh(const bool ShouldReload);
 
 	uint32_t GetSelectedEntry() const;
 
@@ -56,13 +56,13 @@ private:
 	 */
 	void CalculateMinSize();
 
-	std::string ColumnDatabaseCSVFileName;
+	std::string EntriesListCSVFileName;
+
+	std::string EntriesListColumnName;
 
 	std::vector<std::string> EntriesList;
 
 	uint32_t SelectedEntry = 0;
 
 	ImGuiTextFilter EntryFilter;
-
-	bool bShouldReloadDatabaseOnRefresh = true;
 };

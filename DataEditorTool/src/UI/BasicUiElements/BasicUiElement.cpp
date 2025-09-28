@@ -4,7 +4,7 @@
 template<>
 void BasicUiElement<bool>::UpdateManagedValueFromCSV()
 {
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(GetCSVFileName());
 
 	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
 	ManagedValue = CurrentRowData->GetBoolAtColumn(GetColumnName());
@@ -12,7 +12,7 @@ void BasicUiElement<bool>::UpdateManagedValueFromCSV()
 template<>
 void BasicUiElement<float>::UpdateManagedValueFromCSV()
 {
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(GetCSVFileName());
 
 	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
 	ManagedValue = CurrentRowData->GetFloatAtColumn(GetColumnName());
@@ -21,7 +21,7 @@ void BasicUiElement<float>::UpdateManagedValueFromCSV()
 template<>
 void BasicUiElement<int32_t>::UpdateManagedValueFromCSV()
 {
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(GetCSVFileName());
 
 	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
 	ManagedValue = CurrentRowData->GetIntAtColumn(GetColumnName());
@@ -30,7 +30,7 @@ void BasicUiElement<int32_t>::UpdateManagedValueFromCSV()
 template<>
 void BasicUiElement<std::string>::UpdateManagedValueFromCSV()
 {
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(GetCSVFileName());
+	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(GetCSVFileName());
 
 	auto CurrentRowData = CSVData->GetRowAtIndex(GetCurrentRow());
 	ManagedValue = CurrentRowData->GetStringAtColumn(GetColumnName());

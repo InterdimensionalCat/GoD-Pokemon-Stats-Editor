@@ -72,7 +72,7 @@ std::vector<std::string> PokemonStatsTaughtMoves::GetMoveColumns(const std::stri
 {
 	const std::string CSVName = "Pokemon Stats";
 	const auto Database = CSVDatabase::Get();
-	const auto PokemonStatsCSV = Database->GetCSVFile<NewCSVData>(CSVName);
+	const auto PokemonStatsCSV = Database->GetCSVFile(CSVName);
 	const auto CSVHeader = PokemonStatsCSV->GetHeaderRow();
 	const auto& HeaderArray = CSVHeader->GetColumnNamesArray();
 

@@ -1,108 +1,28 @@
 ﻿#include "include.h"
-#include "CSV/Databases/ColumnDatabase.h"
+#include "CSV/StaticCSVFiles.h"
 
 #include "CSV/CSVDatabase.h"
 #include "CSV/NewCSVData.h"
 #include "CSV/StringTypes/ParenthValueString.h"
 #include "CSV/StringTypes/EntryNameString.h"
 
-std::map<std::string, std::shared_ptr<ColumnDatabase>> ColumnDatabase::ColumnDatabaseMap = std::map<std::string, std::shared_ptr<ColumnDatabase>>();
+using namespace GoDCSV;
 
-// TODO: ColumnDatabases is honestly not a good solution to the problem of not wanting to
-// redefine lists of columns in CSV files and also static lists. Consider a better solution
-// and refactoring it.
-ColumnDatabase::ColumnDatabase
-(
-	const std::string& InDatabaseName,
-	const std::string& CSVFileName
-) :
-	DatabaseName(InDatabaseName)
-{
-	auto EntryNameStrings = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(CSVFileName)->GetStringColumn("Entry Name");
+using LoadedCSVData = std::pair<std::vector<std::string>, std::vector<json>>;
 
-	EntriesInColumn.reserve(EntryNameStrings.size());
-	for (const auto& String : EntryNameStrings)
-	{
-		const EntryNameString EntryName = EntryNameString(String);
-		EntriesInColumn.push_back(EntryName.ToParenthValueString());
-	}
-}
-
-ColumnDatabase::ColumnDatabase(
-	const std::string& InDatabaseName,
-	const std::vector<ParenthValueString>& InEntriesInColumn
-) :
-	DatabaseName(InDatabaseName),
-	EntriesInColumn(InEntriesInColumn)
+LoadedCSVData StaticCSVFiles::LoadLevelUpRateDatabase()
 {
 
-}
-
-std::vector<ParenthValueString> ColumnDatabase::GetEntries()
-{
-	return EntriesInColumn;
-}
-
-std::vector<std::string> ColumnDatabase::GetEntriesAsStrings()
-{
-	std::vector<std::string> ReturnedStrings;
-	ReturnedStrings.reserve(EntriesInColumn.size());
-
-	for (const auto& ParenthValue : EntriesInColumn)
-	{
-		ReturnedStrings.push_back(ParenthValue.GetParenthValueString());
-	}
-
-	return ReturnedStrings;
-}
-
-std::string ColumnDatabase::GetName() const
-{
-	return DatabaseName;
-}
-
-void ColumnDatabase::LoadEntryNameDatabase(
-	const std::string& InDatabaseName, 
-	const std::string& CSVFileName
-)
-{
-	ColumnDatabaseMap.insert_or_assign(
-		InDatabaseName, 
-		std::make_shared<ColumnDatabase>(InDatabaseName, CSVFileName)
-	);
-}
-
-void ColumnDatabase::LoadStaticDatabase
-(
-	const std::string& InDatabaseName, 
-	const std::vector<ParenthValueString>& InEntriesInColumn
-)
-{
-	ColumnDatabaseMap.insert_or_assign(
-		InDatabaseName,
-		std::make_shared<ColumnDatabase>(InDatabaseName, InEntriesInColumn)
-	);
-}
-
-std::shared_ptr<ColumnDatabase> ColumnDatabase::GetColumnDatabase(const std::string& DatabaseName)
-{
-	return ColumnDatabaseMap.at(DatabaseName);
-}
-
-void ColumnDatabase::LoadStaticDatabases()
-{
 	// TODO: Show the standard level up rate strings rather than
 	// the internal ones (IE: "Medium Fast" instead of "Standard")
 
 	// Xp Rate Documentation:
-    // Standard (0):   Medium Fast
-    // Very Fast (1):  Erratic
-    // Slowest (2)     Fluctuating
-    // Slow (3):       Medium Slow
-    // Fast (4):       Fast
-    // Very Slow (5):  Slow
-
-	const std::string LevelUpRateDatabaseName = "LevelUpRate-EntriesList";
+	// Standard (0):   Medium Fast
+	// Very Fast (1):  Erratic
+	// Slowest (2)     Fluctuating
+	// Slow (3):       Medium Slow
+	// Fast (4):       Fast
+	// Very Slow (5):  Slow
 
 	std::vector<ParenthValueString> LevelUpRateEntries;
 
@@ -113,9 +33,11 @@ void ColumnDatabase::LoadStaticDatabases()
 	LevelUpRateEntries.push_back(ParenthValueString("Fast (4)"));
 	LevelUpRateEntries.push_back(ParenthValueString("Very Slow (5)"));
 
-	LoadStaticDatabase(LevelUpRateDatabaseName, LevelUpRateEntries);
+	return CreateLoadedDataFromParenthValueList(LevelUpRateEntries, "Rate");
+}
 
-
+LoadedCSVData StaticCSVFiles::LoadGenderRatioDatabase()
+{
 	// Gender Ratio Documentation:
 	// Any value between 0 and 255 can be input,
 	// the gender ratio is ~= Input/254 (its not exact)
@@ -132,10 +54,9 @@ void ColumnDatabase::LoadStaticDatabases()
 	// Female Only (254)
 	// Genderless (255)
 
-	// However, interestingly, 87.5% Female pokemon are so
-	// uncommonly made, that in Gen 3 no pokemon use this
+	// However, interestingly, 87.5% Female Pokemon are so
+	// uncommonly made, that in Gen 3 no Pokemon use this
 	// gender ratio yet.
-	const std::string GenderRatioDatabaseName = "GenderRatio-EntriesList";
 
 	std::vector<ParenthValueString> GenderRatioEntries;
 
@@ -148,8 +69,11 @@ void ColumnDatabase::LoadStaticDatabases()
 	GenderRatioEntries.push_back(ParenthValueString("Female Only (254)"));
 	GenderRatioEntries.push_back(ParenthValueString("Genderless (255)"));
 
-	LoadStaticDatabase(GenderRatioDatabaseName, GenderRatioEntries);
+	return CreateLoadedDataFromParenthValueList(GenderRatioEntries, "Ratio");
+}
 
+LoadedCSVData StaticCSVFiles::LoadEvolutionMethodDatabase()
+{
 	// Evolution Method Documentation:
 
 	// None (0): No evolution,                                             Param: Always 0
@@ -169,7 +93,6 @@ void ColumnDatabase::LoadStaticDatabases()
 	// Shedinja evolution method (14): Shedinja appears at this level,     Param: The level needed to evolve
 	// Max Beauty (15): Evolves when Beauty is raised to the param value,  Param: The beauty value needed to evolve
 	// Level Up With Key Item (16): Used to evolve Espeon/Umbreon,         Param: Key Item ID (item 350 and after) + 150, (516 for Espeon, 517 for Umbreon).
-	const std::string EvolutionMethodDatabaseName = "EvolutionMethod-EntriesList";
 
 	std::vector<ParenthValueString> EvolutionMethodEntries;
 
@@ -191,11 +114,12 @@ void ColumnDatabase::LoadStaticDatabases()
 	EvolutionMethodEntries.push_back(ParenthValueString("Max Beauty (15)"));
 	EvolutionMethodEntries.push_back(ParenthValueString("Level Up With Key Item (16)"));
 
-	LoadStaticDatabase(EvolutionMethodDatabaseName, EvolutionMethodEntries);
+	return CreateLoadedDataFromParenthValueList(EvolutionMethodEntries, "Method");
+}
 
+LoadedCSVData StaticCSVFiles::LoadEvolutionStoneDatabase()
+{
 	// Evolution stones:
-
-	const std::string EvolutionStoneDatabaseName = "EvolutionStone-EntriesList";
 
 	std::vector<ParenthValueString> EvolutionStoneEntries;
 
@@ -206,17 +130,17 @@ void ColumnDatabase::LoadStaticDatabases()
 	EvolutionStoneEntries.push_back(ParenthValueString("WATER STONE (97)"));
 	EvolutionStoneEntries.push_back(ParenthValueString("LEAF STONE (98)"));
 
-	LoadStaticDatabase(EvolutionStoneDatabaseName, EvolutionStoneEntries);
+	return CreateLoadedDataFromParenthValueList(EvolutionStoneEntries, "Item ID");
+}
 
+LoadedCSVData StaticCSVFiles::LoadKeyItemDatabase()
+{
 	// Key Items:
 	// Needed for the "Evolve with Key Item" evolution condition.
 	// For some reason this condition does not use the standard
 	// item ID for each key item, but rather a secondary ID that is
 	// just the original ID + 150, so for example, the SAFE KEY is
 	// normally item ID 350, but for the key item evo condition its 500
-
-	const std::string KeyItemDatabaseName = "KeyItem-EntriesList";
-
 	std::vector<ParenthValueString> KeyItemEntries;
 
 	KeyItemEntries.push_back(ParenthValueString("SAFE KEY (500)"));
@@ -240,5 +164,24 @@ void ColumnDatabase::LoadStaticDatabases()
 	KeyItemEntries.push_back(ParenthValueString("BONSLY PHOTO (518)"));
 	KeyItemEntries.push_back(ParenthValueString("CRY ANALYZER (519)"));
 
-	LoadStaticDatabase(KeyItemDatabaseName, KeyItemEntries);
+	return CreateLoadedDataFromParenthValueList(KeyItemEntries, "Key Item ID");
+}
+
+LoadedCSVData StaticCSVFiles::CreateLoadedDataFromParenthValueList(const std::vector<ParenthValueString>& InEntries, const std::string& ValueColumnName)
+{
+	LoadedCSVData LoadedData;
+	LoadedData.first = { "Entry Name", ValueColumnName};
+	for (int32_t Index = 0; Index < InEntries.size(); Index++)
+	{
+		json NewRow;
+		EntryNameString EntryName = EntryNameString(
+			InEntries.at(Index).GetString(),
+			std::format("{}", Index)
+		);
+		NewRow["Entry Name"] = EntryName.GetEntryNameString();
+		NewRow[ValueColumnName] = InEntries.at(Index).GetParenthValueString();
+		LoadedData.second.push_back(NewRow);
+	}
+
+	return LoadedData;
 }

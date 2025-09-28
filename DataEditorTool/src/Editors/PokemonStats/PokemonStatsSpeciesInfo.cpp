@@ -68,8 +68,8 @@ PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) :
 
 	//auto MultiLine = std::make_shared<MultiLineUiElement>("TypeMultiLine", this);
 
-	auto TypesOne = std::make_shared<CSVComboBox>("Type 1", this, CSVName, "Types 1", "Type");
-	auto TypesTwo = std::make_shared<CSVComboBox>("Type 2", this, CSVName, "Types 2", "Type");
+	auto TypesOne = std::make_shared<CSVComboBox>("Type 1", this, CSVName, "Types 1", "Type", "Entry Name");
+	auto TypesTwo = std::make_shared<CSVComboBox>("Type 2", this, CSVName, "Types 2", "Type", "Entry Name");
 
 	//MultiLine->AddCSVElement(TypesOne);
 	//MultiLine->AddCSVElement(TypesTwo);
@@ -81,8 +81,8 @@ PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) :
 
 	// Add the ability info elements.
 
-	auto AbilitiesOne = std::make_shared<CSVComboBox>("Abilities 1", this, CSVName, "Ability");
-	auto AbilitiesTwo = std::make_shared<CSVComboBox>("Abilities 2", this, CSVName, "Ability");
+	auto AbilitiesOne = std::make_shared<CSVComboBox>("Abilities 1", this, CSVName, "Ability", "Entry Name");
+	auto AbilitiesTwo = std::make_shared<CSVComboBox>("Abilities 2", this, CSVName, "Ability", "Entry Name");
 
 	AddElement(std::make_shared<SectionDivider>("Ability Info", this));
 	AddCSVElement(AbilitiesOne);
@@ -90,8 +90,8 @@ PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) :
 
 	// Add the wild item info elements.
 
-	auto WildItemOne = std::make_shared<CSVComboBox>("Wild Item 1", this, CSVName, "Wild Items 1", "Item");
-	auto WildItemTwo = std::make_shared<CSVComboBox>("Wild Item 2", this, CSVName, "Wild Items 2", "Item");
+	auto WildItemOne = std::make_shared<CSVComboBox>("Wild Item 1", this, CSVName, "Wild Items 1", "Item", "Entry Name");
+	auto WildItemTwo = std::make_shared<CSVComboBox>("Wild Item 2", this, CSVName, "Wild Items 2", "Item", "Entry Name");
 
 	AddElement(std::make_shared<SectionDivider>("Wild Item Info", this));
 	AddCSVElement(WildItemOne);
@@ -118,14 +118,12 @@ PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) :
 
 	// Add misc info elements.
 
-	auto LevelUpRate = std::make_shared<CSVComboBox>("Level up Rate", this, CSVName, "LevelUpRate");
-	LevelUpRate->SetShouldReloadDatabaseOnRefresh(false);
+	auto LevelUpRate = std::make_shared<CSVComboBox>("Level up Rate", this, CSVName, "LevelUpRate", "Rate");
 
 	auto ExpYield = std::make_shared<CSVIntBox>("Exp Yield", this, CSVName, "Exp yield", 1, 5);
 	ExpYield->SetBounds(0, ExpYield->GetMaxValue());
 
-	auto GenderRatio = std::make_shared<CSVComboBox>("Gender Ratio", this, CSVName, "GenderRatio");
-	GenderRatio->SetShouldReloadDatabaseOnRefresh(false);
+	auto GenderRatio = std::make_shared<CSVComboBox>("Gender Ratio", this, CSVName, "GenderRatio", "Ratio");
 
 	auto CatchRate = std::make_shared<CSVIntBox>("Catch Rate", this, CSVName, 1, 5);
 	CatchRate->SetBounds(0, CatchRate->GetMaxValue());
@@ -187,7 +185,7 @@ void PokemonStatsSpeciesInfo::InitPokefaceData()
 		}
 
 		// Get the list of pokemon, which we can convert into Pokeface data file names
-		auto PokemonStatsCSV = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>("Pokemon Stats");
+		auto PokemonStatsCSV = GoDCSV::CSVDatabase::Get()->GetCSVFile("Pokemon Stats");
 		auto PokemonList = PokemonStatsCSV->GetStringColumn("Entry Name");
 
 		// Resize the PokefaceData list to be the same size as PokemonList, since
@@ -244,7 +242,7 @@ void PokemonStatsSpeciesInfo::CalculateElementMaxWidth()
 	const std::string CSVName = "Pokemon Stats";
 
 	// Determine the largest element size of anything in this section and set that as the min needed size.
-	auto PokemonStatsCSV = GoDCSV::CSVDatabase::Get()->GetCSVFile<GoDCSV::NewCSVData>(CSVName);
+	auto PokemonStatsCSV = GoDCSV::CSVDatabase::Get()->GetCSVFile(CSVName);
 	std::vector<std::string> StringLengths = PokemonStatsCSV->GetStringColumn("Entry Name");
 
 	auto NameIDStrings = PokemonStatsCSV->GetStringColumn("Name ID");

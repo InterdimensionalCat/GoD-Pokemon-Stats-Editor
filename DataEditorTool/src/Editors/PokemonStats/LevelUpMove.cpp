@@ -22,7 +22,7 @@ LevelUpMove::LevelUpMove(
 
 	DragDrop = std::make_shared<DragDropButton<int32_t>>(SwapMoves, InParent, LevelUpMoveIndex, "LevelUpMovesSwap");
 
-	MoveComboBox = std::make_shared<CSVComboBox>("##" + MoveComboBoxColumn, ParentLearnedMoves, CSVName, MoveComboBoxColumn, "Move");
+	MoveComboBox = std::make_shared<CSVComboBox>("##" + MoveComboBoxColumn, ParentLearnedMoves, CSVName, MoveComboBoxColumn, "Move", "Entry Name");
 
 	LevelIntBox = std::make_shared<CSVIntBox>("##" + LevelIntBoxColumn, ParentLearnedMoves, CSVName, LevelIntBoxColumn, 1, 5);
 

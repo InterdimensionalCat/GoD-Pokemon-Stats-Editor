@@ -16,14 +16,12 @@ EvolutionElement::EvolutionElement(
 	const std::string MethodComboBoxName = std::format("##MethodCombo {}", InEvolutionNumber);
 	const std::string MethodComboBoxColumn = std::format("Evolutions {} Evolution Method", InEvolutionNumber);
 
-	MethodComboBox = std::make_shared<CSVComboBox>(MethodComboBoxName, InParent, CSVName, MethodComboBoxColumn, "EvolutionMethod");
-
-	MethodComboBox->SetShouldReloadDatabaseOnRefresh(false);
+	MethodComboBox = std::make_shared<CSVComboBox>(MethodComboBoxName, InParent, CSVName, MethodComboBoxColumn, "EvolutionMethod", "Method");
 
 	const std::string FormComboBoxName = std::format("##FormCombo {}", InEvolutionNumber);
 	const std::string FormComboBoxColumn = std::format("Evolutions {} Evolved Form", InEvolutionNumber);
 
-	FormComboBox = std::make_shared<CSVComboBox>(FormComboBoxName, InParent, CSVName, FormComboBoxColumn, "Pokemon Stats");
+	FormComboBox = std::make_shared<CSVComboBox>(FormComboBoxName, InParent, CSVName, FormComboBoxColumn, "Pokemon Stats", "Entry Name");
 
 	const std::string ConditionSwitcherName = std::format("Condition {}", InEvolutionNumber);
 	EvolutionConditionSwitcher = std::make_shared<EvolutionCondition>(ConditionSwitcherName, InParent, this, InEvolutionNumber);

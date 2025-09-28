@@ -13,6 +13,8 @@ namespace GoDCSV
 	class CSVDatabase
 	{
 
+		using LoadedCSVData = std::pair<std::vector<std::string>, std::vector<json>>;
+		
 	public:
 
 		CSVDatabase() = default;
@@ -26,26 +28,13 @@ namespace GoDCSV
 		 */
 		void OnProjectRootPathSet();
 
-		/**
-		 * Get the CSV file with the specified name from the Database
-		 * and cast it to the specified CSV data type.
-		 */
-		template <NewCSVDataOrSubclass CSVType>
-		std::shared_ptr<CSVType> GetCSVFile(const std::string& CSVFileName)
-		{
-			return std::dynamic_pointer_cast<CSVType>(CSVDatabaseMap.at(CSVFileName));
-		}
+		/** Load the hard-coded databases needed for the editor to function. */
+		void LoadStaticDatabases();
 
 		/**
 		* Get the CSV file with the specified name from the Database.
-		* No need to cast if we are just trying to get a NewCSVData
-		* typed CSV file.
 		*/
-		template <>
-		std::shared_ptr<NewCSVData> GetCSVFile<NewCSVData>(const std::string& CSVFileName)
-		{
-			return CSVDatabaseMap.at(CSVFileName);
-		}
+		std::shared_ptr<NewCSVData> GetCSVFile(const std::string& CSVFileName);
 
 		/** Return whether or not the current root contains all the given CSV files. */
 		bool RootContainsAllCSVFiles(const std::vector<std::string>& CSVFileNames) const;
@@ -78,6 +67,11 @@ namespace GoDCSV
 		void ClearDatabase();
 
 		void LoadCSVFile(const std::string& CSVFileName);
+		
+		void LoadCSVFileFromData(
+			const std::string& CSVFileName,
+			LoadedCSVData LoadedData
+		);
 
 		/** DEBUG COMMANDS: USE FOR TESTING ONLY */
 		

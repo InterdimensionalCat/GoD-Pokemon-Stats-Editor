@@ -44,6 +44,15 @@ void GuiContext::Init(std::shared_ptr<WindowContext> MainWindowContext)
             throw std::exception("ImGui OpenGL impl initialization failed.");
         }
 
+		// Space between two elements inside a single item.
+        // ImGui::GetStyle().ItemInnerSpacing.x = 100.f;
+  
+        // Space on either side of the inside content of an item and its border.
+		//ImGui::GetStyle().FramePadding.x = 100.f;
+
+        // Space between the window border and its content on either side.
+        // ImGui::GetStyle().WindowPadding.x = 100.f;
+
         ICLogger::Debug(
             "Successfully loaded ImGui version {} with platform backend {} and renderer backend {}",
             IMGUI_VERSION, 
