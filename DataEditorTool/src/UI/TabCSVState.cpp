@@ -2,7 +2,7 @@
 #include "UI/TabCSVState.h"
 
 #include "UI/UiTab.h"
-#include "UI/UiCSVElement.h"
+#include "UI/UiElement/UiCSVElement/UiCSVElement.h"
 
 TabCSVState::TabCSVState(UiTab* InParentTab) : ParentTab(InParentTab)
 {
@@ -44,7 +44,7 @@ void TabCSVState::RefreshTab()
 	bShouldRefreshTab = true;
 }
 
-void TabCSVState::AddElementToUpdate(std::shared_ptr<UiCSVElement> NewElement)
+void TabCSVState::AddElementToUpdate(UiCSVElement* NewElement)
 {
 	ElementsToUpdate.push_back(NewElement);
 	bShouldRefreshRow = true;

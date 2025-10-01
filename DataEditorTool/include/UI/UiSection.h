@@ -9,11 +9,10 @@
  *********************************************************************/
 #pragma once
 #include "UI/UiObject.h"
-#include "UI/UiSize.h"
 
 class UiTab;
 class UiElement;
-class UiCSVElement;
+class UiSyncedSize;
 
 // TODO: UiSections have 3 types of UiElements:
 // UiCSVElement: manages CSV data
@@ -40,41 +39,28 @@ public:
 
 	virtual void Tick() override;
 
-	void AddCSVElement(const std::shared_ptr<UiCSVElement> NewElement);
+	virtual void CalculateElementConstrainedSizes();
+
 	void AddElement(const std::shared_ptr<UiElement> NewElement);
 
-	void SetShouldSyncWidthAcrossElements(const bool ShouldSync);
-
-	void CalcNumItemsOnNextLine(const uint32_t ItemIndex);
-
-	bool ShouldSyncWidthAcrossElements();
-
 	/**
-	 * UiSections usually will want to be at least long enough
-	 * to display their longest element or subsection correctly.
+	 * Calculate a new Synced size this section. This will be
+	 * the summed size of every element that doesn't ignore
+	 * size syncing.
+	 * 
+	 * We return a const pointer because this summed size is 
+	 * not saved and recalculated every tick.
+	 * 
+	 * TODO: Currently this is re-calculated every tick,
+	 * we could probably calculate size
 	 */
-	virtual float GetMinNeededWidth();
-
-	/**
-	 * Usually, the max allowed will be the minimum max allowed of
-	 * this UiSection's elements.
-	 */
-	virtual float GetMaxAllowedWidth();
-
-	/** Get the label size of this UiSection's largest element label. */
-	virtual float GetElementsMaxLabelSize();
-
-	/**
-	 * This is const because this will get reset every tick.
-	 * If element syncing is turned on set the Min/Max of each element
-	 */
-	const UiSize& GetSyncedSize() const;
-
-	uint32_t GetNumItemsThisLine() const;
+	void CalculateSyncedSize() const;
 
 	UiTab* GetParent();
 
 private:
+
+	std::shared_ptr<UiSyncedSize> SyncedSize;
 
 	/** Smart pointer not needed because we don't own this object. */
 	UiTab* ParentTab;
@@ -83,9 +69,4 @@ private:
 
 	std::vector<std::shared_ptr<UiElement>> UiElements;
 
-	bool bShouldSyncWidthAcrossElements;
-
-	UiSize SyncedSize;
-
-	uint32_t NumItemsThisLine = 1;
 };

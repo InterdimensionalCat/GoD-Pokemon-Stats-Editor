@@ -3,6 +3,7 @@
 class UiTab;
 class UiCSVElement;
 
+/** TODO: rename to UiTabController **/
 class TabCSVState
 {
 
@@ -20,7 +21,7 @@ public:
 
 	void RefreshRow();
 
-	void AddElementToUpdate(std::shared_ptr<UiCSVElement> NewElement);
+	void AddElementToUpdate(UiCSVElement* NewElement);
 
 	void SetCurrentRow(const int32_t NewRowValue);
 
@@ -37,5 +38,10 @@ private:
 
 	int32_t CurrentRow = 0;
 
-	std::vector<std::shared_ptr<UiCSVElement>> ElementsToUpdate;
+	/**
+	 * TODO: if element removal is ever implemented, 
+	 * then raw UiCSVElement pointers could potentially 
+	 * become invalid, and we will likely need to change this.
+	 */
+	std::vector<UiCSVElement*> ElementsToUpdate;
 };

@@ -22,6 +22,9 @@ std::string UiObject::GetName() const
 
 std::string UiObject::GetInvisibleName() const
 {
+	// TODO: always remove "##" from the name if it exists,
+	// then add "## to the beginning so the whole name is
+	// guaranteed invisible
 	if (Name.contains("##"))
 	{
 		return GetName();
@@ -31,3 +34,7 @@ std::string UiObject::GetInvisibleName() const
 		return "##" + GetName();
 	}
 }
+
+// TODO: add a "GetVisibleName()" function that
+// that returns the full name without any "##" in it,
+// guaranteeing that it is visible.
