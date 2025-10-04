@@ -1,15 +1,15 @@
 #include "include.h"
 #include "Editors/PokemonStats/BaseStat.h"
-#include "UI/BasicUiElements/SimpleText.h"
-#include "UI/BasicUiElements/CSVIntBox.h"
-#include "UI/BasicUiElements/CSVProgressBar.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleProgressBar.h"
+#include "UI/UiElement/UiCSVElement/IntElement/CSVIntBox.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleText.h"
 
 BaseStat::BaseStat(
 	const std::string& InStatName,
 	UiSection* InParent,
 	const std::string& InStatColumnName
 ) :
-	MultiLineUiElement(std::format("{}-MultiLine", InStatName), InParent)
+	UiSingleLineMultiElement(std::format("{}-MultiLine", InStatName), InParent)
 {
 	const std::string CSVName = "Pokemon Stats";
 
@@ -20,23 +20,22 @@ BaseStat::BaseStat(
 	auto StatIntBoxName = std::format("##{}-IntBox", InStatName);
 	StatIntBox = std::make_shared<CSVIntBox>(StatIntBoxName, InParent, CSVName, InStatColumnName, 1, 5);
 
-	StatIntBox->SetElementMinSize(4);
-	StatIntBox->GetSize().SetSizeRule(UiSizeRule_FixedSize);
+	StatIntBox->SetElementMinSize(3);
+	StatIntBox->SetIsFixedSize(true);
 
 	StatIntBox->SetBounds(0, 999);
 
 	// Show a Progress Bar which displays the value of the base stat.
 	auto StatProgressBarName = std::format("##{}-ProgressBar", InStatName);
-	StatProgressBar = std::make_shared<CSVProgressBar>(StatProgressBarName, InParent);
-	StatProgressBar->GetSize().SetMin(128.f);
-	StatProgressBar->GetSize().SetSizeRule(UiSizeRule_Normal);
+	StatProgressBar = std::make_shared<SimpleProgressBar>(StatProgressBarName, InParent);
+	StatProgressBar->SetBarMinSize(128.f);
 
-	// Show the range of possible values a pokemon's stat
+	// Show the range of possible values a Pokemon's stat
 	// can be with the current base stat
 	StatRangeText = std::make_shared<SimpleText>(GetFormattedStatRange(999, 999), InParent);
 
 	AddElement(StatNameText);
-	AddCSVElement(StatIntBox);
+	AddElement(StatIntBox);
 	AddElement(StatProgressBar);
 	AddElement(StatRangeText);
 }
@@ -50,13 +49,9 @@ void BaseStat::Tick()
 
 	// Update the min/max stat range to the right of the progress bar
 	UpdateStatRange();
-	MultiLineUiElement::Tick();
-}
 
-//void BaseStat::Refresh()
-//{
-//	
-//}
+	UiSingleLineMultiElement::Tick();
+}
 
 void BaseStat::UpdateProgressBarColorAndProgress()
 {
@@ -119,7 +114,7 @@ void BaseStat::UpdateProgressBarColorAndProgress()
 	GreenColor = std::clamp(GreenColor, 0.2f, 1.0f);
 
 	// The blue color is 0 for the entire first half, then scales up linearly, but
-	// at a faster rate in the econd half, maxing at 0.9 instead of 1.0
+	// at a faster rate in the second half, maxing at 0.9 instead of 1.0
 
 	float BlueColor = WeightedSecondHalfProgress * 3.f;
 	BlueColor = std::clamp(BlueColor, 0.f, 0.9f);
@@ -165,7 +160,7 @@ void BaseStat::UpdateStatRange()
 	}
 	else
 	{
-		// A pokemon's other stats at level 100 with no modifiers all 
+		// A Pokemon's other stats at level 100 with no modifiers all 
 		// follow the same pattern: 2 times its base stat + 5,
 		// however, this is not the lowest the stat can be because
 		// of natures, natures can increase/decrease a stat by 10%,

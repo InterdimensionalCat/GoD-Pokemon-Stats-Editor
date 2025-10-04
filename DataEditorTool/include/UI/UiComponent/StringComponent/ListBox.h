@@ -10,6 +10,12 @@ public:
 	ListBox
 	(
 		const std::string& InName,
+		UiSingleElement* InParent
+	);
+
+	ListBox
+	(
+		const std::string& InName,
 		UiSingleElement* InParent,
 		std::vector<std::string> InEntriesList
 	);

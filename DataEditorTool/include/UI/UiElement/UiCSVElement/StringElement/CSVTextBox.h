@@ -28,6 +28,8 @@ public:
 
 	virtual void UiComponentUpdated() override;
 
+	void SetMinFromLongestString(const std::vector<std::string>& PossibleStrings);
+
 private:
 
 	std::shared_ptr<TextBox> TextBoxComponent;

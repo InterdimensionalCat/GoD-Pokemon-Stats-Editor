@@ -1,9 +1,9 @@
 #pragma once
 
-#include "UI/UiElementSwitcher.h"
+#include "UI/UiElement/UiMultiElement/UiElementSwitcher.h"
 
-class IntHexStringBox;
-class CSVComboBoxInt;
+class CSVIntHexBox;
+class CSVIntHexComboBox;
 class EvolutionElement;
 
 enum class EvoConditionType : int32_t
@@ -41,26 +41,22 @@ public:
 
 	virtual void Refresh() override;
 
-	virtual void PushConstrainedSizeForElement(const uint32_t ElementIndex) override;
-
-	virtual void PopConstrainedSizeForElement(const uint32_t ElementIndex) override;
-
 	void SwitchCondition(const int32_t ConditionIndex);
 
 private:
 
 	EvolutionElement* ParentElement;
 
-	std::shared_ptr<IntHexStringBox> NoParamBox;
+	std::shared_ptr<CSVIntHexBox> NoParamBox;
 	
-	std::shared_ptr<IntHexStringBox> LevelBox;
+	std::shared_ptr<CSVIntHexBox> LevelBox;
 
-	std::shared_ptr<CSVComboBoxInt> ItemBox;
+	std::shared_ptr<CSVIntHexComboBox> ItemBox;
 
-	std::shared_ptr<CSVComboBoxInt> StoneBox;
+	std::shared_ptr<CSVIntHexComboBox> StoneBox;
 
-	std::shared_ptr<IntHexStringBox> BeautyBox;
+	std::shared_ptr<CSVIntHexBox> BeautyBox;
 
-	std::shared_ptr<CSVComboBoxInt> KeyItemBox;
+	std::shared_ptr<CSVIntHexComboBox> KeyItemBox;
 	
 };

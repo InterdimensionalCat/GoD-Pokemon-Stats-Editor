@@ -3,7 +3,8 @@
 #include "UI/UiElement/UiSingleElement.h"
 #include "UI/UiSize/UiSize.h"
 
-SectionDivider::SectionDivider(const std::string& InName, UiSingleElement* InParent) : UiComponent(InName, InParent)
+SectionDivider::SectionDivider(const std::string& InName, UiSingleElement* InParent)
+	: UiComponent(InName, InParent, false)
 {
 	SetNumSpaceLengths(2);
 
@@ -25,12 +26,6 @@ void SectionDivider::DisplayComponent()
 void SectionDivider::SetNumSpaceLengths(const uint32_t NewNumSpaceLengths)
 {
 	NumSpaceLengths = NewNumSpaceLengths;
-}
-
-bool SectionDivider::HasLabel() const
-{
-	// Section dividers never have a label.
-	return false;
 }
 
 float SectionDivider::CalculateInternalSpace() const

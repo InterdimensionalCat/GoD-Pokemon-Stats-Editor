@@ -18,12 +18,12 @@ public:
 		const T& InDragDropPayload,
 		const std::string& InDragDropName
 	) :
-		UiElement(InName, InParent),
+		UiComponent(InName, InParent, false),
 		DragDropPreviewText(""),
 		DragDropName(InDragDropName),
 		DragDropPayload(InDragDropPayload)
 	{
-		ComponentSize.SetIsFixedSize(true);
+		ComponentSize->SetIsFixedSize(true);
 		SetMinContentSizeFromStringLength(1);
 	}
 
@@ -58,12 +58,6 @@ public:
 		InternalSize += Style.FramePadding.x * 2;
 
 		return InternalSize;
-	}
-
-	virtual bool HasLabel() const override
-	{
-		// DragDropButtons never have a label.
-		return false;
 	}
 
 private:

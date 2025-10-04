@@ -1,12 +1,12 @@
 #pragma once
 
-#include "UI/MultiLineUiElement.h"
+#include "UI/UiElement/UiMultiElement/UiSingleLineMultiElement.h"
 
 class SimpleText;
 class CSVIntBox;
-class CSVProgressBar;
+class SimpleProgressBar;
 
-class BaseStat : public MultiLineUiElement
+class BaseStat : public UiSingleLineMultiElement
 {
 
 public:
@@ -37,5 +37,5 @@ private:
 
 	std::shared_ptr<SimpleText> StatRangeText;
 
-	std::shared_ptr<CSVProgressBar> StatProgressBar;
+	std::shared_ptr<SimpleProgressBar> StatProgressBar;
 };

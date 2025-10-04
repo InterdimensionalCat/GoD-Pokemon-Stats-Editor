@@ -2,15 +2,14 @@
 #include "Editors/PokemonStats/PokemonStatsSpeciesInfo.h"
 
 #include "Editors/PokemonStats/PokemonStatsEditor.h"
-#include "UI/BasicUiElements/SectionDivider.h"
-#include "UI/BasicUiElements/CSVTextBox.h"
-#include "UI/BasicUiElements/IntHexStringBox.h"
-#include "UI/BasicUiElements/CSVIntBox.h"
-#include "UI/BasicUiElements/ImageBox.h"
-#include "UI/BasicUiElements/CSVComboBox.h"
-#include "UI/BasicUiElements/CSVIntSlider.h"
 
-#include "UI/MultiLineUiElement.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleSectionDivider.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleImageBox.h"
+#include "UI/UiElement/UiCSVElement/StringElement/CSVTextBox.h"
+#include "UI/UiElement/UiCSVElement/IntElement/CSVIntHexBox.h"
+#include "UI/UiElement/UiCSVElement/IntElement/CSVIntBox.h"
+#include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
+#include "UI/UiElement/UiCSVElement/IntElement/CSVIntSlider.h"
 
 #include "Util/TextureLoader.h"
 
@@ -26,76 +25,71 @@ PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) :
 	// Species: This is just the entry name of the current row (IE: "BULBASAUR"  - 1)
 	std::shared_ptr<CSVTextBox> Species = std::make_shared<CSVTextBox>("Species", this, CSVName, "Entry Name");
 
-	// Pokeface Image: This is just the image of a pokemon that is shown in the hp bar in battle
-	PokefaceImage = std::make_shared<ImageBox>("##PokefaceImage", this);
+	// Pokeface Image: This is just the image of a Pokemon that is shown in the hp bar in battle
+	PokefaceImage = std::make_shared<SimpleImageBox>("##PokefaceImage", this);
 	if (bPokefaceDataLoaded)
 	{
 		PokefaceImage->SetTexture(PokefaceData.at(0));
 	}
 
-	AddCSVElement(Species);
+	AddElement(Species);
 	AddElement(PokefaceImage);
 
 	// Add the identification info elements.
 
-	// Name ID: This is the text ID of the pokemon's name (IE: "BULBASAUR" (0x3E9))
+	// Name ID: This is the text ID of the Pokemon's name (IE: "BULBASAUR" (0x3E9))
 	NameID = std::make_shared<CSVTextBox>("Name ID", this, CSVName);
 
-	// Species Name ID: This is the text ID of the pokemon's species (IE: "SEED" (0x662))
+	// Species Name ID: This is the text ID of the Pokemon's species (IE: "SEED" (0x662))
 	std::shared_ptr<CSVTextBox> SpeciesNameID = std::make_shared<CSVTextBox>("Species Name ID", this, CSVName);
 
-	// Index: This is the internal ID number of this pokemon (IE: 31 (0x1F))
-	std::shared_ptr<IntHexStringBox> Index = std::make_shared<IntHexStringBox>("Index", this, CSVName, "Unknown 1", 0, 0);
+	// Index: This is the internal ID number of this Pokemon (IE: 31 (0x1F))
+	std::shared_ptr<CSVIntHexBox> Index = std::make_shared<CSVIntHexBox>("Index", this, CSVName, "Unknown 1", 0, 0);
 	Index->SetDisabled(true);
 
-	// National Dex ID: This is the National Dex number of this pokemon (IE: 255)
+	// National Dex ID: This is the National Dex number of this Pokemon (IE: 255)
 	std::shared_ptr<CSVIntBox> NationalDexID = std::make_shared<CSVIntBox>("National Dex ID", this, CSVName, "National Dex Index", 1, 5);
 	NationalDexID->SetDisabled(true);
 
-	// National Dex ID: This is the Hoenn Dex number of this pokemon (IE: 4)
-	// Not sure what the number corresonds to for pokemon outside of Hoenn's regional dex.
+	// National Dex ID: This is the Hoenn Dex number of this Pokemon (IE: 4)
+	// Not sure what the number corresponds to for Pokemon outside of Hoenn's regional dex.
 	std::shared_ptr<CSVIntBox> HoennDexID = std::make_shared<CSVIntBox>("Hoenn Dex ID", this, CSVName, "Hoenn dex regional id", 1, 5);
 	HoennDexID->SetDisabled(true);
 
-	AddElement(std::make_shared<SectionDivider>("Identification Info", this));
-	AddCSVElement(NameID);
-	AddCSVElement(SpeciesNameID);
-	AddCSVElement(Index);
-	AddCSVElement(NationalDexID);
-	AddCSVElement(HoennDexID);
+	AddElement(std::make_shared<SimpleSectionDivider>("Identification Info", this));
+	AddElement(NameID);
+	AddElement(SpeciesNameID);
+	AddElement(Index);
+	AddElement(NationalDexID);
+	AddElement(HoennDexID);
 
 	// Add the type info elements.
-
-	//auto MultiLine = std::make_shared<MultiLineUiElement>("TypeMultiLine", this);
 
 	auto TypesOne = std::make_shared<CSVComboBox>("Type 1", this, CSVName, "Types 1", "Type", "Entry Name");
 	auto TypesTwo = std::make_shared<CSVComboBox>("Type 2", this, CSVName, "Types 2", "Type", "Entry Name");
 
-	//MultiLine->AddCSVElement(TypesOne);
-	//MultiLine->AddCSVElement(TypesTwo);
 
-	AddElement(std::make_shared<SectionDivider>("Type Info", this));
-	//AddElement(MultiLine);
-	AddCSVElement(TypesOne);
-	AddCSVElement(TypesTwo);
+	AddElement(std::make_shared<SimpleSectionDivider>("Type Info", this));
+	AddElement(TypesOne);
+	AddElement(TypesTwo);
 
 	// Add the ability info elements.
 
 	auto AbilitiesOne = std::make_shared<CSVComboBox>("Abilities 1", this, CSVName, "Ability", "Entry Name");
 	auto AbilitiesTwo = std::make_shared<CSVComboBox>("Abilities 2", this, CSVName, "Ability", "Entry Name");
 
-	AddElement(std::make_shared<SectionDivider>("Ability Info", this));
-	AddCSVElement(AbilitiesOne);
-	AddCSVElement(AbilitiesTwo);
+	AddElement(std::make_shared<SimpleSectionDivider>("Ability Info", this));
+	AddElement(AbilitiesOne);
+	AddElement(AbilitiesTwo);
 
 	// Add the wild item info elements.
 
 	auto WildItemOne = std::make_shared<CSVComboBox>("Wild Item 1", this, CSVName, "Wild Items 1", "Item", "Entry Name");
 	auto WildItemTwo = std::make_shared<CSVComboBox>("Wild Item 2", this, CSVName, "Wild Items 2", "Item", "Entry Name");
 
-	AddElement(std::make_shared<SectionDivider>("Wild Item Info", this));
-	AddCSVElement(WildItemOne);
-	AddCSVElement(WildItemTwo);
+	AddElement(std::make_shared<SimpleSectionDivider>("Wild Item Info", this));
+	AddElement(WildItemOne);
+	AddElement(WildItemTwo);
 
 	// Add the ev yield elements.
 
@@ -108,13 +102,13 @@ PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) :
 	auto SpDefEvYield   = std::make_shared<CSVIntSlider>("Sp.Def EV",  this, CSVName, "EV Yields Sp.Def",  0, 10);
 	auto SpeedEvYield   = std::make_shared<CSVIntSlider>("Speed EV",   this, CSVName, "EV Yields Speed",   0, 10);
 
-	AddElement(std::make_shared<SectionDivider>("EV Yields", this));
-	AddCSVElement(HPEvYield);
-	AddCSVElement(AttackEvYield);
-	AddCSVElement(DefenseEvYield);
-	AddCSVElement(SpAtkEvYield);
-	AddCSVElement(SpDefEvYield);
-	AddCSVElement(SpeedEvYield);
+	AddElement(std::make_shared<SimpleSectionDivider>("EV Yields", this));
+	AddElement(HPEvYield);
+	AddElement(AttackEvYield);
+	AddElement(DefenseEvYield);
+	AddElement(SpAtkEvYield);
+	AddElement(SpDefEvYield);
+	AddElement(SpeedEvYield);
 
 	// Add misc info elements.
 
@@ -137,14 +131,14 @@ PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) :
 	auto BaseHappiness = std::make_shared<CSVIntBox>("Base Happiness", this, CSVName, 1, 5);
 	BaseHappiness->SetBounds(0, BaseHappiness->GetMaxValue());
 
-	AddElement(std::make_shared<SectionDivider>("Misc Info", this));
-	AddCSVElement(LevelUpRate);
-	AddCSVElement(ExpYield);
-	AddCSVElement(GenderRatio);
-	AddCSVElement(CatchRate);
-	AddCSVElement(Height);
-	AddCSVElement(Weight);
-	AddCSVElement(BaseHappiness);
+	AddElement(std::make_shared<SimpleSectionDivider>("Misc Info", this));
+	AddElement(LevelUpRate);
+	AddElement(ExpYield);
+	AddElement(GenderRatio);
+	AddElement(CatchRate);
+	AddElement(Height);
+	AddElement(Weight);
+	AddElement(BaseHappiness);
 
 	CalculateElementMaxWidth();
 }
@@ -184,7 +178,7 @@ void PokemonStatsSpeciesInfo::InitPokefaceData()
 			return;
 		}
 
-		// Get the list of pokemon, which we can convert into Pokeface data file names
+		// Get the list of Pokemon, which we can convert into Pokeface data file names
 		auto PokemonStatsCSV = GoDCSV::CSVDatabase::Get()->GetCSVFile("Pokemon Stats");
 		auto PokemonList = PokemonStatsCSV->GetStringColumn("Entry Name");
 
@@ -253,5 +247,5 @@ void PokemonStatsSpeciesInfo::CalculateElementMaxWidth()
 
 	// Setting the min size for this element will effectively set the min size for every element in this
 	// Section as the section has size syncing enabled
-	NameID->GetSize().SetMinFromLongestString(StringLengths);
+	NameID->SetMinFromLongestString(StringLengths);
 }

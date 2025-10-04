@@ -23,6 +23,8 @@ public:
 
 	virtual void SetSameLine(const bool bInSameLine) override;
 
+	virtual void SetSameLine(const float OffsetFromStart) override;
+
 	virtual void SetDisabled(const bool bInDisabled) override;
 
 	virtual void AddElement(const std::shared_ptr<UiElement> NewElement);

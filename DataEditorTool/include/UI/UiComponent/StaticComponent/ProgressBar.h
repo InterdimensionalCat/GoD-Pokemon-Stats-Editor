@@ -19,8 +19,6 @@ public:
 
 	void SetBarMinSize(const float InMinSize);
 
-	bool HasLabel() const override;
-
 	virtual float CalculateInternalSpace() const override;
 
 private:

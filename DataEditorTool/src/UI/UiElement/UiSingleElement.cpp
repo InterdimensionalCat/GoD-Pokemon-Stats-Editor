@@ -2,6 +2,7 @@
 #include "UI/UiElement/UiSingleElement.h"
 #include "UI/UiSize/UiConstrainedSize.h"
 #include "UI/UiComponent/UiComponent.h"
+#include "UI/UiSize/UiSize.h"
 
 UiSingleElement::UiSingleElement(const std::string& InName,
 	UiSection* InParent
@@ -17,7 +18,8 @@ void UiSingleElement::Tick()
 	// Display the component with its width set to the pre-calculated
 	// constrained size.
 	ImGui::PushItemWidth(ConstrainedSize->GetConstrainedSize());
-	Component->DisplayComponent();
+	Component->Tick();
+	//Component->DisplayComponent();
 	ImGui::PopItemWidth();
 }
 
@@ -36,9 +38,19 @@ void UiSingleElement::SetSameLine(const bool bInSameLine)
 	Component->SetSameLine(bInSameLine);
 }
 
+void UiSingleElement::SetSameLine(const float OffsetFromStart)
+{
+	Component->SetSameLine(OffsetFromStart);
+}
+
 void UiSingleElement::SetDisabled(const bool bInDisabled)
 {
 	Component->SetDisabled(bInDisabled);
+}
+
+void UiSingleElement::SetIsFixedSize(const bool bInIsFixedSize)
+{
+	Component->GetSizeConstraints()->SetIsFixedSize(bInIsFixedSize);
 }
 
 void UiSingleElement::SetUiComponent(std::shared_ptr<UiComponent> NewComponent)

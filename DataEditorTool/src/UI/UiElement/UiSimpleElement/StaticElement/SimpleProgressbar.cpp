@@ -15,7 +15,7 @@ SimpleProgressBar::SimpleProgressBar
 	SetUiComponent(ProgressBarComponent);
 }
 
-void SimpleProgressBar::ComponentUpdated()
+void SimpleProgressBar::UiComponentUpdated()
 {
 	// Implementation intentionally left blank.
 }
@@ -28,4 +28,9 @@ void SimpleProgressBar::SetCurrentProgress(const float NewProgress)
 void SimpleProgressBar::SetProgressBarColor(const ImVec4& NewColor)
 {
 	ProgressBarComponent->SetProgressBarColor(NewColor);
+}
+
+void SimpleProgressBar::SetBarMinSize(const float InMinSize)
+{
+	ProgressBarComponent->SetBarMinSize(InMinSize);
 }

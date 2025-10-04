@@ -2,8 +2,8 @@
 #include "Editors/PokemonStats/EvolutionCondition.h"
 #include "Editors/PokemonStats/EvolutionElement.h"
 #include "Editors/PokemonStats/PokemonStatsEvolutionInfo.h"
-#include "UI/BasicUiElements/IntHexStringBox.h"
-#include "UI/BasicUiElements/CSVComboBoxInt.h"
+#include "UI/UiElement/UiCSVElement/IntElement/CSVIntHexBox.h"
+#include "UI/UiElement/UiCSVElement/StringElement/CSVIntHexComboBox.h"
 
 EvolutionCondition::EvolutionCondition
 (
@@ -21,33 +21,33 @@ EvolutionCondition::EvolutionCondition
 	std::string ConditionColumnName = std::format("Evolutions {} Evolution Condition", InEvolutionNumber);
 	std::string NoParamBoxName = std::format("##Evo-No Condition{}", InEvolutionNumber);
 
-	NoParamBox = std::make_shared<IntHexStringBox>(NoParamBoxName, InParent, CSVName, ConditionColumnName, 1, 5);
+	NoParamBox = std::make_shared<CSVIntHexBox>(NoParamBoxName, InParent, CSVName, ConditionColumnName, 1, 5);
 	NoParamBox->SetDisabled(true);
 	NoParamBox->SetElementMinSize(4);
 
 	std::string LevelBoxName = std::format("##Evo-Level{}", InEvolutionNumber);
-	LevelBox = std::make_shared<IntHexStringBox>(LevelBoxName, InParent, CSVName, ConditionColumnName, 1, 5);
+	LevelBox = std::make_shared<CSVIntHexBox>(LevelBoxName, InParent, CSVName, ConditionColumnName, 1, 5);
 	LevelBox->SetElementMinSize(4);
 
 	std::string ItemBoxName = std::format("##Evo-Item{}", InEvolutionNumber);
-	ItemBox = std::make_shared<CSVComboBoxInt>(ItemBoxName, InParent, CSVName, ConditionColumnName, "Item", "Entry Name");
+	ItemBox = std::make_shared<CSVIntHexComboBox>(ItemBoxName, InParent, CSVName, ConditionColumnName, "Item", "Entry Name");
 
 	std::string StoneBoxName = std::format("##Evo-Stone{}", InEvolutionNumber);
-	StoneBox = std::make_shared<CSVComboBoxInt>(StoneBoxName, InParent, CSVName, ConditionColumnName, "EvolutionStone", "Item ID");
+	StoneBox = std::make_shared<CSVIntHexComboBox>(StoneBoxName, InParent, CSVName, ConditionColumnName, "EvolutionStone", "Item ID");
 
 	std::string BeautyBoxName = std::format("##Evo-Beauty{}", InEvolutionNumber);
-	BeautyBox = std::make_shared<IntHexStringBox>(BeautyBoxName, InParent, CSVName, ConditionColumnName, 1, 5);
+	BeautyBox = std::make_shared<CSVIntHexBox>(BeautyBoxName, InParent, CSVName, ConditionColumnName, 1, 5);
 	BeautyBox->SetElementMinSize(4);
 
 	std::string KeyItemBoxName = std::format("##Evo-KeyItem{}", InEvolutionNumber);
-	KeyItemBox = std::make_shared<CSVComboBoxInt>(KeyItemBoxName, InParent, CSVName, ConditionColumnName, "KeyItem", "Key Item ID");
+	KeyItemBox = std::make_shared<CSVIntHexComboBox>(KeyItemBoxName, InParent, CSVName, ConditionColumnName, "KeyItem", "Key Item ID");
 
-	AddCSVElement(NoParamBox);
-	AddCSVElement(LevelBox);
-	AddCSVElement(ItemBox);
-	AddCSVElement(StoneBox);
-	AddCSVElement(BeautyBox);
-	AddCSVElement(KeyItemBox);
+	AddElement(NoParamBox);
+	AddElement(LevelBox);
+	AddElement(ItemBox);
+	AddElement(StoneBox);
+	AddElement(BeautyBox);
+	AddElement(KeyItemBox);
 
 	SwitchCurrentlyActiveElement(NoParamBox);
 }
@@ -56,19 +56,6 @@ void EvolutionCondition::Refresh()
 {
 	SwitchCondition(ParentElement->GetCurrentMethod());
 	CurrentlyActiveElement->Refresh();
-}
-
-void EvolutionCondition::PushConstrainedSizeForElement(const uint32_t ElementIndex)
-{
-	// The currently active element can use whatever size was pushed for
-	// this multi ui element.
-
-	// TODO: This should probably be in UiElementSwitcher
-}
-
-void EvolutionCondition::PopConstrainedSizeForElement(const uint32_t ElementIndex)
-{
-	// implementation left intentionally blank for the above reason.
 }
 
 void EvolutionCondition::SwitchCondition(const int32_t ConditionIndex)
@@ -120,7 +107,7 @@ void EvolutionCondition::SwitchCondition(const int32_t ConditionIndex)
 		break;
 	case EvoConditionType::LevelUpKeyItem:
 		// Level Up with Key Item uses a unique Key item identifier item, 
-		// whos ID is (Item ID + 150)
+		// whose ID is (Item ID + 150)
 		SwitchCurrentlyActiveElement(KeyItemBox);
 		break;
 	}

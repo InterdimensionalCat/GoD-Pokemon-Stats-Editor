@@ -1,13 +1,14 @@
 #include "include.h"
 #include "UI/UiComponent/StaticComponent/ProgressBar.h"
 #include "UI/UiElement/UiSingleElement.h"
+#include "UI/UiSize/UiSize.h"
 
 ProgressBar::ProgressBar
 (
 	const std::string& InName,
 	UiSingleElement* InParent
 ) :
-	UiComponent(InName, InParent)
+	UiComponent(InName, InParent, false)
 {
 	SetBarMinSize(128.f);
 }
@@ -41,12 +42,6 @@ void ProgressBar::SetBarMinSize(const float InMinSize)
 	// big enough to display, so we set a min size in pixels using 
 	// the ExtraSpace parameter.
 	ComponentSize->SetMin(UiSizeBound("", CalculateInternalSpace(), InMinSize));
-}
-
-bool ProgressBar::HasLabel() const
-{
-	// Progress bars never have a label.
-	return false;
 }
 
 float ProgressBar::CalculateInternalSpace() const

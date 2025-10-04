@@ -13,7 +13,7 @@ public:
 		const int InFastStepSize = 0
 	);
 
-	virtual void DisplayElement() override;
+	virtual void DisplayComponent() override;
 
 	/**
 	 * Set this element's min required size by passing in the

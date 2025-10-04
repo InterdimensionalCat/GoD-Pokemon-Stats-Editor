@@ -2,6 +2,7 @@
 #include "UI/UiObject.h"
 
 class UiSingleElement;
+class UiSize;
 
 /**
  * Lowest level Ui object. Manages and displays 1 piece of ImGui UI.
@@ -14,7 +15,16 @@ class UiComponent : public UiObject
 {
 public:
 
-	UiComponent(const std::string& InName, UiSingleElement* InParent);
+	UiComponent(
+		const std::string& InName,
+		UiSingleElement* InParent,
+		const bool InHasLabel
+	);
+
+	UiComponent(
+		const std::string& InName,
+		UiSingleElement* InParent
+	);
 
 	/**
 	 * Prepare this UiComponent for display by setting state such
@@ -33,6 +43,7 @@ public:
 	void ComponentUpdated();
 
 	void SetSameLine(const bool IsSameLine);
+	void SetSameLine(const float OffsetFromStart);
 	void SetDisabled(const bool InIsDisabled);
 
 	void SetMinContentSizeFromString(const std::string& NewMinString);
@@ -53,9 +64,9 @@ public:
 	 * This is virtual because some elements never
 	 * have a label, even if their name has a label size.
 	 */
-	// virtual float GetLabelSize() const;
-	virtual bool HasLabel() const;
-	
+	 // virtual float GetLabelSize() const;
+	bool HasLabel() const;
+
 	/**
 	 * Calculate the internal space this UiComponent,
 	 * not including the InnerItemSpacing between
@@ -73,9 +84,14 @@ protected:
 	// max of all contained UiSizes.
 	std::shared_ptr<UiSize> ComponentSize;
 
+
 private:
 
+	bool bHasLabel = true;
+
 	bool bIsSameLine = false;
+
+	float SameLineOffsetFromStart = 0.f;
 
 	bool bIsDisabled = false;
 

@@ -1,14 +1,13 @@
 #include "include.h"
 #include "Editors/PokemonStats/PokemonStatsTaughtMoves.h"
 #include "Editors/PokemonStats/PokemonStatsEditor.h"
-#include "UI/BasicUiElements/SectionDivider.h"
-#include "UI/BasicUiElements/CSVCheckbox.h"
-#include "UI/UiElementGrid.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleSectionDivider.h"
+#include "UI/UiElement/UiCSVElement/BoolElement/CSVCheckbox.h"
+#include "UI/UiElement/UiMultiElement/UiElementGrid.h"
 
 #include "CSV/CSVDatabase.h"
 #include "CSV/NewCSVData.h"
 #include "CSV/CSVHeader.h"
-#include "UI/BasicUiElements/SectionDivider.h"
 
 using namespace GoDCSV;
 
@@ -21,35 +20,37 @@ PokemonStatsTaughtMoves::PokemonStatsTaughtMoves(PokemonStatsEditor* InParent) :
 	TaughtMovesGrid->SetShouldAlignElements(true);
 
 	// Add the TM moves.
-	auto TMSectionDivider = std::make_shared<SectionDivider>("TMs", this);
+	auto TMSectionDivider = std::make_shared<SimpleSectionDivider>("TMs", this);
 	TMSectionDivider->SetNumSpaceLengths(0);
-	TaughtMovesGrid->AddSectionDivider(TMSectionDivider);
+	TaughtMovesGrid->AddElement(TMSectionDivider, false);
 
 	auto TMMoveColumns = GetMoveColumns("TM");
 
 	for (auto TMMove : TMMoveColumns)
 	{
-		TaughtMovesGrid->AddCSVElement(
-			std::make_shared<CSVCheckbox>(TMMove, this, CSVName)
+		TaughtMovesGrid->AddElement(
+			std::make_shared<CSVCheckbox>(TMMove, this, CSVName),
+			true
 		);
 	}
 
 	// Add the HM moves.
-	auto HMSectionDivider = std::make_shared<SectionDivider>("HMs", this);
-	TaughtMovesGrid->AddSectionDivider(HMSectionDivider);
+	auto HMSectionDivider = std::make_shared<SimpleSectionDivider>("HMs", this);
+	TaughtMovesGrid->AddElement(HMSectionDivider, false);
 
 	auto HMMoveColumns = GetMoveColumns("HM");
 
 	for (auto HMMove : HMMoveColumns)
 	{
-		TaughtMovesGrid->AddCSVElement(
-			std::make_shared<CSVCheckbox>(HMMove, this, CSVName)
+		TaughtMovesGrid->AddElement(
+			std::make_shared<CSVCheckbox>(HMMove, this, CSVName),
+			true
 		);
 	}
 
 	// Add the Tutor moves.
-	auto TutorSectionDivider = std::make_shared<SectionDivider>("Tutor Moves", this);
-	TaughtMovesGrid->AddSectionDivider(TutorSectionDivider);
+	auto TutorSectionDivider = std::make_shared<SimpleSectionDivider>("Tutor Moves", this);
+	TaughtMovesGrid->AddElement(TutorSectionDivider, false);
 
 	auto TutorMoveColumns = GetMoveColumns("TutorMove0");
 
@@ -59,8 +60,9 @@ PokemonStatsTaughtMoves::PokemonStatsTaughtMoves(PokemonStatsEditor* InParent) :
 
 	for (auto TutorMove : TutorMoveColumns)
 	{
-		TaughtMovesGrid->AddCSVElement(
-			std::make_shared<CSVCheckbox>(TutorMove, this, CSVName)
+		TaughtMovesGrid->AddElement(
+			std::make_shared<CSVCheckbox>(TutorMove, this, CSVName),
+			true
 		);
 	}
 

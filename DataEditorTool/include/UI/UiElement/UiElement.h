@@ -55,6 +55,8 @@ public:
 
 	virtual void SetSameLine(const bool bInSameLine) = 0;
 
+	virtual void SetSameLine(const float OffsetFromStart) = 0;
+
 	virtual void SetDisabled(const bool bInDisabled) = 0;
 
 	bool ShouldOverrideSyncedSize() const;

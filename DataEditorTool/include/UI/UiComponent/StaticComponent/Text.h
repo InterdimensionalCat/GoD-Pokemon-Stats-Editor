@@ -12,13 +12,9 @@ public:
 		UiSingleElement* InParent
 	);
 
-	virtual void DisplayElement() override;
+	virtual void DisplayComponent() override;
 
 	void SetText(const std::string& NewText);
-
-	virtual float GetLabelSize() override;
-
-	virtual bool HasLabel() const override;
 
 	virtual float CalculateInternalSpace() const override;
 

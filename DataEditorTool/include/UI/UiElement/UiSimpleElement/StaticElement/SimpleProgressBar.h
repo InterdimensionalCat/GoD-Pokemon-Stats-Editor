@@ -14,11 +14,13 @@ public:
 		UiSection* InParent
 	);
 
-	virtual void ComponentUpdated() override;
+	virtual void UiComponentUpdated() override;
 
 	void SetCurrentProgress(const float NewProgress);
 
 	void SetProgressBarColor(const ImVec4& NewColor);
+
+	void SetBarMinSize(const float InMinSize);
 
 private:
 

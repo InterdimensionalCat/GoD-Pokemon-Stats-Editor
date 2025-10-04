@@ -2,13 +2,23 @@
 #include "UI/UiComponent/StringComponent/ListBox.h"
 #include "UI/UiElement/UiSingleElement.h"
 
+ListBox::ListBox(
+const std::string& InName, 
+UiSingleElement* InParent
+) :
+	UiComponent(InName, InParent, false),
+	EntriesList()
+{
+
+}
+
 ListBox::ListBox
 (
 	const std::string& InName,
 	UiSingleElement* InParent,
 	std::vector<std::string> InEntriesList
 ) :
-	UiComponent(InName, InParent),
+	UiComponent(InName, InParent, false),
 	EntriesList()
 {
 	SetEntriesList(InEntriesList);

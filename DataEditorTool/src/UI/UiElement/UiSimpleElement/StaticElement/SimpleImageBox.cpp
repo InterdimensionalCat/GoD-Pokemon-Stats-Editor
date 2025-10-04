@@ -12,7 +12,7 @@ SimpleImageBox::SimpleImageBox(const std::string& InName, UiSection* InParent)
 	SetUiComponent(ImageBoxComponent);
 }
 
-void SimpleImageBox::ComponentUpdated()
+void SimpleImageBox::UiComponentUpdated()
 {
 	// Implementation intentionally left blank.
 }

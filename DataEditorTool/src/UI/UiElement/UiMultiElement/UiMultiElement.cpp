@@ -62,6 +62,14 @@ void UiMultiElement::SetSameLine(const bool bInSameLine)
 	}
 }
 
+void UiMultiElement::SetSameLine(const float OffsetFromStart)
+{
+	for (auto UiElement : UiElements)
+	{
+		UiElement->SetSameLine(OffsetFromStart);
+	}
+}
+
 void UiMultiElement::SetDisabled(const bool bInDisabled)
 {
 	for (auto UiElement : UiElements)

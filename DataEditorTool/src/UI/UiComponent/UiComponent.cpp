@@ -3,10 +3,15 @@
 #include "UI/UiElement/UiSingleElement.h"
 #include "UI/UiSize/UiSize.h"
 
-UiComponent::UiComponent(const std::string& InName, UiSingleElement* InParent) :
+UiComponent::UiComponent(
+	const std::string& InName,
+	UiSingleElement* InParent,
+	const bool InHasLabel
+) :
 	UiObject(InName, InParent),
 	ParentElement(InParent),
 	ComponentSize(std::make_shared<UiSize>()),
+	bHasLabel(InHasLabel),
 	bIsSameLine(false),
 	bIsDisabled(false)
 {
@@ -20,12 +25,31 @@ UiComponent::UiComponent(const std::string& InName, UiSingleElement* InParent) :
 	}
 }
 
+UiComponent::UiComponent(
+	const std::string& InName,
+	UiSingleElement* InParent
+) :
+	UiComponent(InName, InParent, true)
+{
+
+}
+
 void UiComponent::Tick()
 {
 
 	if (IsSameLine())
 	{
-		ImGui::SameLine();
+		// Set same line with an offset from start X
+		// if same line with an offset was set, otherwise
+		// just set same line with no offset.
+		if (SameLineOffsetFromStart != 0.f)
+		{
+			ImGui::SameLine(SameLineOffsetFromStart);
+		}
+		else
+		{
+			ImGui::SameLine();
+		}
 	}
 
 	// Disable this element in ImGui before ticking if marked as disabled
@@ -58,6 +82,13 @@ void UiComponent::ComponentUpdated()
 void UiComponent::SetSameLine(const bool IsSameLine)
 {
 	bIsSameLine = IsSameLine;
+	SameLineOffsetFromStart = 0.f;
+}
+
+void UiComponent::SetSameLine(const float OffsetFromStart)
+{
+	bIsSameLine = true;
+	SameLineOffsetFromStart = OffsetFromStart;
 }
 
 void UiComponent::SetDisabled(const bool InIsDisabled)
@@ -114,7 +145,7 @@ bool UiComponent::IsDisabled() const
 
 bool UiComponent::HasLabel() const
 {
-	return true;
+	return bHasLabel;
 }
 
 float UiComponent::CalculateInternalSpace() const

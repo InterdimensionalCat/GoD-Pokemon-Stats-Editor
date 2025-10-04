@@ -33,17 +33,33 @@ void UiSingleLineMultiElement::CalculateConstrainedSize(const std::shared_ptr<co
 		SizeConstraints
 	);
 
+	//ConstrainedSize->SetConstrainedSize(
+	//	ConstrainedSize->GetConstrainedSize() -
+	//	ImGui::GetStyle().WindowPadding.x);
+
 	// Next, we need to account for fixed size elements. The sizing behavior we
 	// want is for fixed size elements to always be their fixed size, and for
 	// non-fixed size elements to share the remaining space equally.
 	auto FixedSizeElements = GetFixedSizeElements();
 
-	float TotalFixedSizeIncludingLabels = 0.f;
+	//float TotalFixedSizeIncludingLabels = 0.f;
+	auto FixedSizeElementsSummedSize = std::make_shared<UiSummedSize>();
 	const int32_t NumFixedElements = FixedSizeElements.size();
 
 	for (auto Element : FixedSizeElements)
 	{
-		TotalFixedSizeIncludingLabels += Element->GetSizeConstraints()->GetMinWithLabel();
+		FixedSizeElementsSummedSize->AddSizeToConsider(Element->GetSizeConstraints());
+		//TotalFixedSizeIncludingLabels += Element->GetSizeConstraints()->GetMinWithLabel();
+	}
+
+	float TotalFixedSizeIncludingLabels = FixedSizeElementsSummedSize->GetMinWithLabel();
+
+	// We need to add an extra ItemSpacing.x because UiSummedSize assumes
+	// that we have 1 less item spacing than the number of elements, but in
+	// this case that is not true
+	if (NumFixedElements < UiElements.size())
+	{
+		TotalFixedSizeIncludingLabels += ImGui::GetStyle().ItemSpacing.x;
 	}
 
 	// Update the ConstrainedSize to account for the fixed size elements.
@@ -52,6 +68,15 @@ void UiSingleLineMultiElement::CalculateConstrainedSize(const std::shared_ptr<co
 	);
 
 	const int32_t NumVariableSizeElements = UiElements.size() - NumFixedElements;
+
+	// We have to account for the inner item spacing between all elements for sizing variable
+	// size elements as well.
+	if (NumVariableSizeElements > 1)
+	{
+		ConstrainedSize->SetConstrainedSize(
+			ConstrainedSize->GetConstrainedSize() - ImGui::GetStyle().ItemSpacing.x * static_cast<float>(NumVariableSizeElements - 1)
+		);
+	}
 
 	if (NumVariableSizeElements != 0)
 	{
@@ -64,7 +89,7 @@ void UiSingleLineMultiElement::CalculateConstrainedSize(const std::shared_ptr<co
 	// Finally, calculate the constrained size of all child elements.
 	for (auto Element : UiElements)
 	{
-		
+
 		if (!Element->ShouldOverrideSyncedSize())
 		{
 			ICLogger::Warn("UiSingleLineMultiElement {} has a child element {} that does not override synced size. This may be a mistake.", GetName(), Element->GetName());
@@ -100,7 +125,7 @@ void UiSingleLineMultiElement::AddElement(const std::shared_ptr<UiElement> NewEl
 {
 	NewElement->SetShouldOverrideSyncedSize(true);
 
-	if(UiElements.size() != 0)
+	if (UiElements.size() != 0)
 	{
 		NewElement->SetSameLine(true);
 	}

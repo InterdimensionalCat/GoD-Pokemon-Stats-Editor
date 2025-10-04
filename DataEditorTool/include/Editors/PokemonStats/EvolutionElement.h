@@ -1,11 +1,11 @@
 #pragma once
 
-#include "UI/MultiLineUiElement.h"
+#include "UI/UiElement/UiMultiElement/UiSingleLineMultiElement.h"
 
 class CSVComboBox;
 class EvolutionCondition;
 
-class EvolutionElement : public MultiLineUiElement
+class EvolutionElement : public UiSingleLineMultiElement
 {
 
 public:

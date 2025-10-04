@@ -48,6 +48,11 @@ float UiSummedSize::GetMinWithLabel() const
 	for (const auto& SizeToConsider : SizesToConsider)
 	{
 		TotalMin += SizeToConsider->GetMinWithLabel();
+
+ 		if (TotalMin >= FLT_MAX)
+		{
+			return FLT_MAX;
+		}
 	}
 
 	TotalMin += Style.ItemSpacing.x * NumItemSpaces;
@@ -65,6 +70,11 @@ float UiSummedSize::GetMinWithoutLabel() const
 	for (const auto& SizeToConsider : SizesToConsider)
 	{
 		TotalMin += SizeToConsider->GetMinWithoutLabel();
+
+		if (TotalMin >= FLT_MAX)
+		{
+			return FLT_MAX;
+		}
 	}
 
 	TotalMin += Style.ItemSpacing.x * NumItemSpaces;
@@ -75,21 +85,39 @@ float UiSummedSize::GetMinWithoutLabel() const
 float UiSummedSize::GetMaxWithLabel() const
 {
 	float TotalMax = 0.f;
+
+	const auto& Style = ImGui::GetStyle();
+	const int32_t NumItemSpaces = static_cast<int32_t>(SizesToConsider.size()) - 1;
+
 	for (const auto& SizeToConsider : SizesToConsider)
 	{
 		TotalMax += SizeToConsider->GetMaxWithLabel();
+
+		if (TotalMax >= FLT_MAX)
+		{
+			return FLT_MAX;
+		}
 	}
 
-	return TotalMax;
+	return TotalMax += Style.ItemSpacing.x * NumItemSpaces;
 }
 
 float UiSummedSize::GetMaxWithoutLabel() const
 {
 	float TotalMax = 0.f;
+
+	const auto& Style = ImGui::GetStyle();
+	const int32_t NumItemSpaces = static_cast<int32_t>(SizesToConsider.size()) - 1;
+
 	for (const auto& SizeToConsider : SizesToConsider)
 	{
 		TotalMax += SizeToConsider->GetMaxWithoutLabel();
+
+		if (TotalMax >= FLT_MAX)
+		{
+			return FLT_MAX;
+		}
 	}
 
-	return TotalMax;
+	return TotalMax += Style.ItemSpacing.x * NumItemSpaces;
 }

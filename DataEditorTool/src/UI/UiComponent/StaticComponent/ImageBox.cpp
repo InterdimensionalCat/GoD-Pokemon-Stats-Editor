@@ -3,7 +3,8 @@
 #include "UI/UiElement/UiSingleElement.h"
 #include "UI/UiSize/UiSize.h"
 
-ImageBox::ImageBox(const std::string& InName, UiSingleElement* InParent) : UiComponent(InName, InParent)
+ImageBox::ImageBox(const std::string& InName, UiSingleElement* InParent)
+	: UiComponent(InName, InParent, false)
 {
 	// Images will always be a fixed size.
 	ComponentSize->SetIsFixedSize(true);
@@ -40,12 +41,6 @@ void ImageBox::SetImageSize(const float ImageSizeX, const float ImageSizeY)
 ImVec2 ImageBox::GetImageSize() const
 {
 	return ImageSize;
-}
-
-bool ImageBox::HasLabel() const
-{
-	// Images never have a label.
-	return false;
 }
 
 float ImageBox::CalculateInternalSpace() const

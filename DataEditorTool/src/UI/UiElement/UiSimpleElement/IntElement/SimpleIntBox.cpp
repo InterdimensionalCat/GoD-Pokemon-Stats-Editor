@@ -42,10 +42,10 @@ void SimpleIntBox::SetIntBuffer(const int NewBufferValue)
 
 int SimpleIntBox::GetMinValue() const
 {
-	IntBoxComponent->GetMinValue();
+	return IntBoxComponent->GetMinValue();
 }
 
 int SimpleIntBox::GetMaxValue() const
 {
-	IntBoxComponent->GetMaxValue();
+	return IntBoxComponent->GetMaxValue();
 }

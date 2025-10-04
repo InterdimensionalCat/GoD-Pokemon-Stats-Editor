@@ -20,8 +20,6 @@ public:
 
 	void SetNumSpaceLengths(const uint32_t NewNumSpaceLengths);
 
-	virtual bool HasLabel() const override;
-
 	virtual float CalculateInternalSpace() const override;
 
 private:

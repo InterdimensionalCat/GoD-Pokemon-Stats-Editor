@@ -24,7 +24,11 @@ public:
 
 	virtual void SetSameLine(const bool bInSameLine) override;
 
+	virtual void SetSameLine(const float OffsetFromStart) override;
+
 	virtual void SetDisabled(const bool bInDisabled) override;
+
+	void SetIsFixedSize(const bool bInIsFixedSize);
 
 protected:
 

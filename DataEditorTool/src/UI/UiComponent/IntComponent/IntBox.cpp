@@ -19,7 +19,7 @@ IntBox::IntBox
 
 }
 
-void IntBox::DisplayElement()
+void IntBox::DisplayComponent()
 {
 	// Show an int entry box.
 	ImGui::InputInt(GetName().c_str(), &IntBuffer, StepSize, FastStepSize);

@@ -1,15 +1,15 @@
 #include "include.h"
 #include "Editors/PokemonStats/EvolutionElement.h"
 #include "Editors/PokemonStats/EvolutionCondition.h"
-#include "UI/BasicUiElements/CSVComboBox.h"
-#include "UI/BasicUiElements/SimpleText.h"
+#include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleText.h"
 
 EvolutionElement::EvolutionElement(
 	const std::string& InName,
 	UiSection* InParent,
 	int32_t InEvolutionNumber
 ) :
-	MultiLineUiElement(InName, InParent)
+	UiSingleLineMultiElement(InName, InParent)
 {
 	const std::string CSVName = "Pokemon Stats";
 
@@ -26,12 +26,12 @@ EvolutionElement::EvolutionElement(
 	const std::string ConditionSwitcherName = std::format("Condition {}", InEvolutionNumber);
 	EvolutionConditionSwitcher = std::make_shared<EvolutionCondition>(ConditionSwitcherName, InParent, this, InEvolutionNumber);
 
-	AddCSVElement(MethodComboBox);
+	AddElement(MethodComboBox);
 	AddElement(std::make_shared<SimpleText>(std::format("Method {}  ", InEvolutionNumber), InParent));
-	AddCSVElement(FormComboBox);
+	AddElement(FormComboBox);
 	AddElement(std::make_shared<SimpleText>(std::format("Form {}  ", InEvolutionNumber), InParent));
 	AddElement(EvolutionConditionSwitcher);
-	AddElement(std::make_shared<SimpleText>(std::format("Condition {}  ", InEvolutionNumber), InParent));
+	AddElement(std::make_shared<SimpleText>(std::format("Condition {}", InEvolutionNumber), InParent));
 }
 
 int32_t EvolutionElement::GetCurrentMethod() const

@@ -7,14 +7,14 @@ Text::Text(
 	const std::string& InName,
 	UiSingleElement* InParent
 ) :
-	UiComponent(InName, InParent),
+	UiComponent(InName, InParent, false),
 	TextToDisplay(InName)
 {
 	ComponentSize->SetIsFixedSize(true);
 	SetMinContentSizeFromString(TextToDisplay);
 }
 
-void Text::DisplayElement()
+void Text::DisplayComponent()
 {
 	// Show the name of this element as text.
 	ImGui::Text(TextToDisplay.c_str());
@@ -24,12 +24,6 @@ void Text::SetText(const std::string& NewText)
 {
 	TextToDisplay = NewText;
 	SetMinContentSizeFromString(TextToDisplay);
-}
-
-bool Text::HasLabel() const
-{
-	// Text does not have a label.
-	return false;
 }
 
 float Text::CalculateInternalSpace() const

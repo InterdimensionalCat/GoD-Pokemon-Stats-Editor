@@ -1,15 +1,15 @@
 #pragma once
 
-#include "UI/MultiLineUiElement.h"
+#include "UI/UiElement/UiMultiElement/UiSingleLineMultiElement.h"
 
 class CSVComboBox;
 class CSVIntBox;
 class PokemonStatsLearnedMoves;
 
 template<typename T>
-class DragDropButton;
+class SimpleDragDropButton;
 
-class LevelUpMove : public MultiLineUiElement
+class LevelUpMove : public UiSingleLineMultiElement
 {
 
 public:
@@ -28,7 +28,7 @@ private:
 
 	int32_t LevelUpMoveIndex = 0;
 
-	std::shared_ptr<DragDropButton<int32_t>> DragDrop;
+	std::shared_ptr<SimpleDragDropButton<int32_t>> DragDrop;
 
 	std::shared_ptr<CSVComboBox> MoveComboBox;
 

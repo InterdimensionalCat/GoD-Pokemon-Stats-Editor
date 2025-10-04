@@ -69,10 +69,10 @@ void CSVIntHexBox::SetBounds(const int NewMinValue, const int NewMaxValue)
 
 int CSVIntHexBox::GetMinValue() const
 {
-	IntBoxComponent->GetMinValue();
+	return IntBoxComponent->GetMinValue();
 }
 
 int CSVIntHexBox::GetMaxValue() const
 {
-	IntBoxComponent->GetMaxValue();
+	return IntBoxComponent->GetMaxValue();
 }

@@ -6,6 +6,9 @@ class ListBox;
 class CSVRowSelector : public UiCSVElement
 {
 
+
+public:
+
 	CSVRowSelector
 	(
 		const std::string& InName,

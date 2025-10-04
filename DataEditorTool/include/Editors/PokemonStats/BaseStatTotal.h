@@ -1,11 +1,12 @@
 #pragma once
 
-#include "UI/MultiLineUiElement.h"
+#include "UI/UiElement/UiMultiElement/UiSingleLineMultiElement.h"
+
 
 class SimpleText;
-class IntBox;
+class SimpleIntBox;
 
-class BaseStatTotal : public MultiLineUiElement
+class BaseStatTotal : public UiSingleLineMultiElement
 {
 
 public:
@@ -17,12 +18,12 @@ public:
 
 	void UpdateStatTotal(int32_t NewStatTotal);
 
-	std::shared_ptr<IntBox> GetIntBox();
+	std::shared_ptr<SimpleIntBox> GetIntBox();
 
 private:
 
 	std::shared_ptr<SimpleText> StatNameText;
 
-	std::shared_ptr<IntBox> TotalIntBox;
+	std::shared_ptr<SimpleIntBox> TotalIntBox;
 
 };

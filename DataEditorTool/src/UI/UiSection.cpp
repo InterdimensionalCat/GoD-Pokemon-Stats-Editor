@@ -4,6 +4,7 @@
 #include "UI/UiElement/UiElement.h"
 #include "UI/TabCSVState.h"
 #include "UI/UiSize/UiSyncedSize.h"
+#include "UI/UiSize/UiConstrainedSize.h"
 
 UiSection::UiSection(const std::string& InName, UiTab* InParent) :
 	UiObject(InName, InParent),
@@ -83,5 +84,10 @@ void UiSection::CalculateSyncedSize() const
 
 		SyncedSize->AddSizeToConsider(Element->GetSizeConstraints());
 	}
+}
+
+UiTab* UiSection::GetParent()
+{
+	return ParentTab;
 }
 

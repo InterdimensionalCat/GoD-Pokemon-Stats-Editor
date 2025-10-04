@@ -14,6 +14,12 @@ UiSizeBound::UiSizeBound(
 
 float UiSizeBound::CalculateBound() const
 {
+	// Ensure that we don't calculate a bound higher than FLT_MAX.
+	if(ExtraSpace >= FLT_MAX || InternalSpace >= FLT_MAX)
+	{
+		return FLT_MAX;
+	}
+
 	return ImGui::CalcTextSize(ContentSize.c_str()).x + 
 		InternalSpace + 
 		ExtraSpace;
@@ -146,12 +152,21 @@ float UiSize::GetLabelSizeWithSpacing() const
 
 float UiSize::GetLabelSizeWithoutSpacing() const
 {
-	return ImGui::CalcTextSize(Label.c_str()).x;
+	return ImGui::CalcTextSize(Label.c_str(), nullptr, true).x;
 }
 
 float UiSize::GetMinWithLabel() const
 {
-	return GetMinWithoutLabel() + GetLabelSizeWithSpacing();
+	auto BoundWithoutLabel = GetMinWithoutLabel();
+
+	if (BoundWithoutLabel >= FLT_MAX)
+	{
+		// If the max bound is FLT_MAX, then just return FLT_MAX
+		// as adding the label size will overflow.
+		return FLT_MAX;
+	}
+
+	return BoundWithoutLabel + GetLabelSizeWithSpacing();
 }
 
 float UiSize::GetMinWithoutLabel() const
@@ -161,7 +176,7 @@ float UiSize::GetMinWithoutLabel() const
 
 float UiSize::GetMaxWithLabel() const
 {
-	if(GetIsFixedSize())
+	if(IsFixedSize())
 	{
 		// If this is a fixed size element, ignore the max size
 		// and return the min size.
@@ -169,7 +184,16 @@ float UiSize::GetMaxWithLabel() const
 	}
 	else
 	{
-		return GetMaxWithoutLabel() + GetLabelSizeWithSpacing();
+		auto BoundWithoutLabel =  GetMaxWithoutLabel();
+
+		if(BoundWithoutLabel >= FLT_MAX)
+		{
+			// If the max bound is FLT_MAX, then just return FLT_MAX
+			// as adding the label size will overflow.
+			return FLT_MAX;
+		}
+
+		return BoundWithoutLabel + GetLabelSizeWithSpacing();
 	}
 }
 

@@ -3,14 +3,17 @@
 
 class ImageBox;
 
+
 class SimpleImageBox : public UiSingleElement
 {
+
+	typedef unsigned int GLuint;
 
 public:
 
 	SimpleImageBox(const std::string& InName, UiSection* InParent);
 
-	virtual void ComponentUpdated() override;
+	virtual void UiComponentUpdated() override;
 
 	void SetTexture(const GLuint InTextureID);
 

@@ -3,8 +3,8 @@
 #include "Editors/PokemonStats/PokemonStatsEditor.h"
 #include "Editors/PokemonStats/BaseStatTotal.h"
 #include "Editors/PokemonStats/BaseStat.h"
-#include "UI/BasicUiElements/CSVIntBox.h"
-#include "UI/BasicUiElements/IntBox.h"
+#include "UI/UiElement/UiCSVElement/IntElement/CSVIntBox.h"
+#include "UI/UiElement/UiSimpleElement/IntElement/SimpleIntBox.h"
 
 
 
@@ -43,7 +43,6 @@ void PokemonStatsBaseStats::CalculateBaseStatTotal()
 	CurrentBST->UpdateStatTotal(BaseStatTotalInt);
 
 	// Resize this element to match the size of the stat int boxes above it.
-	auto FirstElementIntBox = BaseStatElements[0]->GetStatIntBox();
-	CurrentBST->GetIntBox()->GetSize().SetMin(FirstElementIntBox->GetSize().GetMin());
-	CurrentBST->GetIntBox()->GetSize().SetPaddingSpace(0.f);
+	// auto FirstElementIntBox = BaseStatElements[0]->GetStatIntBox();
+	CurrentBST->GetIntBox()->SetElementMinSize(3);
 }

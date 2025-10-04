@@ -12,10 +12,7 @@ CSVTextBox::CSVTextBox
 	UiBasicCSVElement<std::string>(InName, InParent, InCSVFileName, InColumnName),
 	TextBoxComponent(std::make_shared<TextBox>(InName, this))
 {
-	// We don't need to set the text box buffer to
-	// The managed value here because the whole tab
-	// will refresh on the next tick after elements
-	// are added.
+	SetUiComponent(TextBoxComponent);
 }
 
 CSVTextBox::CSVTextBox
@@ -26,7 +23,7 @@ CSVTextBox::CSVTextBox
 ) :
 	CSVTextBox(InName, InParent, InCSVFileName, InName)
 {
-	SetUiComponent(TextBoxComponent);
+
 }
 
 void CSVTextBox::Refresh()
@@ -38,4 +35,18 @@ void CSVTextBox::Refresh()
 void CSVTextBox::UiComponentUpdated()
 {
 	SetManagedValue(TextBoxComponent->GetTextBoxBuffer());
+}
+
+void CSVTextBox::SetMinFromLongestString(const std::vector<std::string>& PossibleStrings)
+{
+	const auto LongestString = std::max_element(
+		PossibleStrings.begin(),
+		PossibleStrings.end(),
+		[](const std::string& A, const std::string& B)
+		{
+			return A.length() < B.length();
+		}
+	);
+
+	TextBoxComponent->SetMinContentSizeFromString(*LongestString);
 }

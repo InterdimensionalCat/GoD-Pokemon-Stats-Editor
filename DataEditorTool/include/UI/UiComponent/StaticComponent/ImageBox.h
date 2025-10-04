@@ -20,8 +20,6 @@ public:
 
 	ImVec2 GetImageSize() const;
 
-	virtual bool HasLabel() const override;
-
 	float CalculateInternalSpace() const override;
 
 private:

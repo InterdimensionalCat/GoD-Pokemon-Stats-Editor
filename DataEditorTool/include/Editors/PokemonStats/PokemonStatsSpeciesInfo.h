@@ -3,7 +3,7 @@
 #include "UI/UiSection.h"
 
 class PokemonStatsEditor;
-class ImageBox;
+class SimpleImageBox;
 class CSVTextBox;
 typedef unsigned int GLuint;
 
@@ -22,7 +22,7 @@ public:
 
 private:
 	std::shared_ptr<CSVTextBox> NameID;
-	std::shared_ptr<ImageBox> PokefaceImage;
+	std::shared_ptr<SimpleImageBox> PokefaceImage;
 
 	/**
 	 * List of loaded Pokeface image ids.

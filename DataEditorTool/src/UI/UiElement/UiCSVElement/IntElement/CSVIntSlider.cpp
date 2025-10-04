@@ -48,10 +48,10 @@ void CSVIntSlider::SetBounds(const int NewMinValue, const int NewMaxValue)
 
 int CSVIntSlider::GetMinValue() const
 {
-	IntSliderComponent->GetMinValue();
+	return IntSliderComponent->GetMinValue();
 }
 
 int CSVIntSlider::GetMaxValue() const
 {
-	IntSliderComponent->GetMaxValue();
+	return IntSliderComponent->GetMaxValue();
 }

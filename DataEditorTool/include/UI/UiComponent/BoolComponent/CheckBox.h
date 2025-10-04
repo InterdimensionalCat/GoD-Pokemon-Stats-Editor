@@ -2,6 +2,7 @@
 #include "UI/UiComponent/UiComponent.h"
 
 class UiElement;
+class UiSize;
 
 class CheckBox : public UiComponent
 {

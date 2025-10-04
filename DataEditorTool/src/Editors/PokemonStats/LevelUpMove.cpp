@@ -1,16 +1,18 @@
 #include "include.h"
 #include "Editors/PokemonStats/LevelUpMove.h"
 #include "Editors/PokemonStats/PokemonStatsLearnedMoves.h"
-#include "UI/BasicUiElements/CSVComboBox.h"
-#include "UI/BasicUiElements/CSVIntBox.h"
-#include "UI/BasicUiElements/DragDropButton.h"
+#include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
+#include "UI/UiElement/UiCSVElement/IntElement/CSVIntBox.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleDragDropButton.h"
+#include "UI/UiSize/UiSize.h"
+#include "UI/UiSize/UiConstrainedSize.h"
 
 LevelUpMove::LevelUpMove(
 	const std::string& InName,
 	PokemonStatsLearnedMoves* InParent,
 	int32_t InLevelUpMoveNumber
 ) :
-	MultiLineUiElement(InName, InParent),
+	UiSingleLineMultiElement(InName, InParent),
 	ParentLearnedMoves(InParent),
 	LevelUpMoveIndex(static_cast<int32_t>(InLevelUpMoveNumber - 1))
 {
@@ -20,20 +22,20 @@ LevelUpMove::LevelUpMove(
 	const std::string LevelIntBoxColumn = std::format("Level Up Moves {} Level", InLevelUpMoveNumber);
 	const std::string SwapMoves = std::format("##SwapMoves-{}", LevelUpMoveIndex);
 
-	DragDrop = std::make_shared<DragDropButton<int32_t>>(SwapMoves, InParent, LevelUpMoveIndex, "LevelUpMovesSwap");
+	DragDrop = std::make_shared<SimpleDragDropButton<int32_t>>(SwapMoves, InParent, LevelUpMoveIndex, "LevelUpMovesSwap");
 
 	MoveComboBox = std::make_shared<CSVComboBox>("##" + MoveComboBoxColumn, ParentLearnedMoves, CSVName, MoveComboBoxColumn, "Move", "Entry Name");
 
 	LevelIntBox = std::make_shared<CSVIntBox>("##" + LevelIntBoxColumn, ParentLearnedMoves, CSVName, LevelIntBoxColumn, 1, 5);
 
-	LevelIntBox->SetElementMinSize(4);
-	LevelIntBox->GetSize().SetSizeRule(UiSizeRule_FixedSize);
+	LevelIntBox->SetElementMinSize(3);
+	LevelIntBox->SetIsFixedSize(true);
 
 	LevelIntBox->SetBounds(0, 100);
 
 	AddElement(DragDrop);
-	AddCSVElement(MoveComboBox);
-	AddCSVElement(LevelIntBox);
+	AddElement(MoveComboBox);
+	AddElement(LevelIntBox);
 }
 
 void LevelUpMove::Tick()
@@ -42,23 +44,26 @@ void LevelUpMove::Tick()
 	DragDrop->SetDragDropPreviewText(std::format("Reorder Move {}", MoveComboBox->GetManagedValue()));
 	const ImVec2 ButtonStartPos = ImGui::GetCursorPos();
 
-	MultiLineUiElement::Tick();
+	UiSingleLineMultiElement::Tick();
 
 	// Render an invisible button on top of the level up moves as a dummy target for the 
 	// drag/drop button
 	ImGui::SetCursorPos(ButtonStartPos);
 	std::string InvisButtonName = std::format("{}-SwapMoveInvis", GetInvisibleName());
-	ImGui::InvisibleButton(InvisButtonName.c_str(), ImVec2(ConstrainedSizeForThisFrame, ImGui::GetFrameHeight()), 0);
+	ImGui::InvisibleButton(
+		InvisButtonName.c_str(),
+		ImVec2(ConstrainedSize->GetConstrainedSize(), ImGui::GetFrameHeight()),
+		0);
 
 	//ImGui::DebugDrawItemRect();
 
 	// Rotate elements based on the dragged element if a drag/drop was completed
-    if (ImGui::BeginDragDropTarget())
-    {
-        if (const ImGuiPayload* Payload = ImGui::AcceptDragDropPayload("LevelUpMovesSwap"))
-        {
-            IM_ASSERT(Payload->DataSize == sizeof(int32_t));
-            const int32_t MovedElementIndex = *(const int32_t*)Payload->Data;
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* Payload = ImGui::AcceptDragDropPayload("LevelUpMovesSwap"))
+		{
+			IM_ASSERT(Payload->DataSize == sizeof(int32_t));
+			const int32_t MovedElementIndex = *(const int32_t*)Payload->Data;
 			const int32_t MoveToElementIndex = LevelUpMoveIndex;
 
 			const auto& LevelUpMoves = ParentLearnedMoves->GetLevelUpMoves();
@@ -104,7 +109,7 @@ void LevelUpMove::Tick()
 					LevelUpToModify->LevelIntBox->SetManagedValue(LevelUpMovesData.at(Index).second);
 				}
 			}
-        }
-        ImGui::EndDragDropTarget();
-    }
+		}
+		ImGui::EndDragDropTarget();
+	}
 }
