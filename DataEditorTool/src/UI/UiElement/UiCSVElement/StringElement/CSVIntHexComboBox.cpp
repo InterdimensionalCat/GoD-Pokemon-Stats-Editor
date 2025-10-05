@@ -94,7 +94,7 @@ void CSVIntHexComboBox::UiComponentUpdated()
 		EntriesAsParenthValues.push_back(ParenthValueString(Entry));
 	}
 
-	IntHexParenthValue NewValue = IntHexParenthValue(EntriesAsParenthValues.at(GetSelectedEntry()).GetValue());
+	IntHexParenthValue NewValue = IntHexParenthValue(stoi(EntriesAsParenthValues.at(GetSelectedEntry()).GetValue()));
 	SetManagedValue(NewValue.GetParenthValueString());
 }
 

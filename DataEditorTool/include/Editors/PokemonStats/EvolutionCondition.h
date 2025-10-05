@@ -43,6 +43,14 @@ public:
 
 	void SwitchCondition(const int32_t ConditionIndex);
 
+	int32_t GetDefaultForCondition(const int32_t ConditionIndex);
+
+	std::string GetCSVFileName() const;
+
+	std::string GetColumnName() const;
+
+	int32_t GetCurrentRow() const;
+
 private:
 
 	EvolutionElement* ParentElement;

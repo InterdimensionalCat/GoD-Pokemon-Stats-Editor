@@ -56,6 +56,11 @@ void CSVIntBox::SetBounds(const int NewMinValue, const int NewMaxValue)
 	IntBoxComponent->SetBounds(NewMinValue, NewMaxValue);
 }
 
+int CSVIntBox::GetIntBuffer() const
+{
+	return IntBoxComponent->GetIntBuffer();
+}
+
 int CSVIntBox::GetMinValue() const
 {
 	return IntBoxComponent->GetMinValue();

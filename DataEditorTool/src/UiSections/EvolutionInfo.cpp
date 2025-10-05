@@ -249,7 +249,7 @@ void EvolutionInfo::UpdateConditionAsLevel(const int32_t i)
     const int32_t PrevConditionInt = *EvolutionConditionInts.at(i);
     if (ImGui::InputInt(EvolutionConditionStr.c_str(), EvolutionConditionInts.at(i).get()))
     {
-        Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(shared_from_this(), EvolutionConditionInts.at(i), PrevConditionInt, *EvolutionConditionInts.at(i)));
+        //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(shared_from_this(), EvolutionConditionInts.at(i), PrevConditionInt, *EvolutionConditionInts.at(i)));
         (*EvolutionConditions.at(i)) = std::format("{:x}", (*EvolutionConditionInts.at(i)));
         std::transform(EvolutionConditions.at(i)->begin(), EvolutionConditions.at(i)->end(), EvolutionConditions.at(i)->begin(), ::toupper);
         (*EvolutionConditions.at(i)) = std::format("{} (0x{})", (*EvolutionConditionInts.at(i)), (*EvolutionConditions.at(i)));

@@ -4,6 +4,7 @@
 
 class CSVComboBox;
 class EvolutionCondition;
+class EvolutionMethod;
 
 class EvolutionElement : public UiSingleLineMultiElement
 {
@@ -18,9 +19,11 @@ public:
 
 	int32_t GetCurrentMethod() const;
 
+	std::shared_ptr<EvolutionCondition> GetEvolutionCondition() const;
+
 private:
 
-	std::shared_ptr<CSVComboBox> MethodComboBox;
+	std::shared_ptr<EvolutionMethod> MethodComboBox;
 
 	std::shared_ptr<CSVComboBox> FormComboBox;
 

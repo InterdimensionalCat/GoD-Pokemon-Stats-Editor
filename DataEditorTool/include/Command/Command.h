@@ -1,39 +1,19 @@
 #pragma once
-#include "UiSections/UiSection.h"
-//#include <vector>
-//#include <memory>
-//#include <string>
-
-class OldUiSection;
 
 class Command {
+
 public:
-	Command(std::shared_ptr<OldUiSection> InModifiedSection);
 
-	virtual void ExecuteCommand();
+	Command() = default;
 
-	virtual void UndoCommand();
+	virtual void Execute() = 0;
 
-	virtual void RedoCommand();
+	virtual void Undo() = 0;
 
-	virtual std::string GetCommandName();
+	virtual void Redo() = 0;
 
-	static void PushNewCommandAndExecute(std::shared_ptr<Command> NewCommand);
+	virtual std::string GetName() const = 0;
 
-	static void Undo();
+	virtual std::string ToString() const = 0;
 
-	static void Redo();
-
-	static bool CanUndo();
-
-	static bool CanRedo();
-
-	static void ClearCommandQueue();
-
-private:
-
-	std::shared_ptr<OldUiSection> ModifiedSection;
-
-	static std::vector<std::shared_ptr<Command>> CommandQueue;
-	static int32_t CurrentCommand;
 };

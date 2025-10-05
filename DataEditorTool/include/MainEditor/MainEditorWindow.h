@@ -35,6 +35,8 @@ public:
 
 	void OpenNewEditorTab(std::shared_ptr<UiTab> NewTab);
 
+	void SatLastFocusedTab(UiTab* NewLastFocusedTab);
+
 	/** We should try to avoid exposing raw backend structures outside their context objects. */
 	// std::shared_ptr<GLFWwindow> GetWindow();
 
@@ -45,6 +47,8 @@ public:
 	std::shared_ptr<FontManager> GetFontManager();
 
 	std::shared_ptr<ModalManager> GetModalManager();
+
+	UiTab* GetLastFocusedTab();
 
 	static std::shared_ptr<MainEditorWindow> Get();
 
@@ -75,6 +79,8 @@ private:
 
 	/** Currently open tabs. */
 	std::vector<std::shared_ptr<UiTab>> EditorTabs;
+
+	UiTab* LastFocusedTab;
 
 	//IcColor ClearColor;
 

@@ -1,50 +1,39 @@
 #pragma once
 
-#include "UI/UiElement/UiCSVElement/UiBasicCSVElement.h"
+#include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
 
-class ComboBox;
+class EvolutionElement;
 
-class CSVComboBox : public UiBasicCSVElement<std::string>
+class EvolutionMethod : public CSVComboBox
 {
 
 public:
 
-	CSVComboBox
+	EvolutionMethod
 	(
 		const std::string& InName,
 		UiSection* InParent,
+		EvolutionElement* InParentElement,
 		const std::string& InCSVFileName,
 		const std::string& InColumnName,
 		const std::string& InEntriesListCSVFileName,
 		const std::string& InEntriesListColumnName
 	);
 
-	CSVComboBox
+	EvolutionMethod
 	(
 		const std::string& InName,
 		UiSection* InParent,
+		EvolutionElement* InParentElement,
 		const std::string& InCSVFileName,
 		const std::string& InEntriesListCSVFileName,
 		const std::string& InEntriesListColumnName
 	);
 
-
-	virtual void Refresh() override;
-
 	virtual void UiComponentUpdated() override;
 
-	uint32_t GetSelectedEntry() const;
-
-protected:
-
-	std::shared_ptr<ComboBox> ComboBoxComponent;
-
 private:
-	
-	void UpdateEntriesList();
 
-	std::string EntriesListCSVFileName;
-
-	std::string EntriesListColumnName;
+	EvolutionElement* ParentElement;
 
 };

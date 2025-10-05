@@ -14,6 +14,10 @@ public:
 
 private:
 
+	ImGuiKeyChord SetRootShortcut = ImGuiMod_Ctrl | ImGuiKey_O;
+
+	ImGuiKeyChord SaveShortcut = ImGuiMod_Ctrl | ImGuiKey_S;
+
 	void SetProjectRootPath();
 
 	void SaveAll();

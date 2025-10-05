@@ -6,6 +6,7 @@
 #include "UI/TabCSVState.h"
 #include "CSV/CSVDatabase.h"
 #include "CSV/NewCSVData.h"
+#include "MainEditor/MainEditorWindow.h"
 
 /** TODO: recalc all sizes in a tab when the tab becomes active or the font type/size changes */
 
@@ -75,13 +76,15 @@ void UiTab::Tick()
 
     if (!ImGui::Begin(GetName().c_str(), nullptr, WindowFlags))
     {
-        SetTabActive(true);
+		SetTabFocused(false);
+		SetTabActive(false);
         ImGui::End();
         return;
     }
     else
     {
-        SetTabActive(false);
+		SetTabFocused(ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows | ImGuiFocusedFlags_DockHierarchy));
+		SetTabActive(true);
     }
 
     // Cover the Section Dockspace over the entire UiTab.
@@ -106,12 +109,27 @@ void UiTab::SetTabActive(const bool InTabActive)
     if (InTabActive && !bIsTabActive)
     {
         bIsTabActive = InTabActive;
-        TabState->RefreshRow();
+        TabState->SetShouldRefresh();
     }
     else
     {
         bIsTabActive = InTabActive;
     }
+}
+
+void UiTab::SetTabFocused(const bool InTabFocused)
+{
+    if (InTabFocused && !bIsTabFocused)
+    {
+        ICLogger::Debug("Tab {} gained focus", GetName());
+    }
+
+    bIsTabFocused = InTabFocused;
+
+    if(bIsTabFocused)
+    {
+		MainEditorWindow::Get()->SatLastFocusedTab(this);
+	}
 }
 
 bool UiTab::LoadRequiredCSVFiles()
@@ -182,4 +200,14 @@ const std::vector<std::string>& UiTab::GetRequiredForViewingCSVFiles() const
 std::shared_ptr<ImGuiWindowClass> UiTab::GetSectionDockspace() const
 {
     return SectionDockspace;
+}
+
+bool UiTab::IsTabActive()
+{
+    return bIsTabActive;
+}
+
+bool UiTab::IsTabFocused()
+{
+    return bIsTabFocused;
 }

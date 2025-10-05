@@ -5,6 +5,7 @@
 #include "CSV/CSVDatabase.h"
 #include "CSV/NewCSVData.h"
 #include "CSV/CSVRow.h"
+#include "Command/ModifySingleCSVValue.h"
 
 class UiComponent;
 
@@ -59,14 +60,14 @@ public:
 		if (NewValue != ManagedValue)
 		{
 			ManagedValue = NewValue;
-			std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(GetCSVFileName());
+			GetTabState()->PushCommand(std::make_shared<ModifySingleCSVValue>(
+				GetCSVFileName(),
+				GetColumnName(),
+				GetCurrentRow(),
+				NewValue
+			));
 
-			/**
-			 * TODO: once the command queue is up and running change this to
-			 * pushing a modify value command instead.
-			 */
-			CSVData->SetField(GetColumnName(), GetCurrentRow(), NewValue);
-			GetTabState()->RefreshTab();
+			GetTabState()->SetShouldRefresh();
 		}
 	}
 

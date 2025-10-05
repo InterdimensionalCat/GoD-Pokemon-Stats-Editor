@@ -81,7 +81,7 @@ void PokemonList::UpdateElement()
         if (std::find(FilteredItemsArr.begin(), FilteredItemsArr.end(), CurrentlySelectedItem) == FilteredItemsArr.end() && FilteredItemsArr.size() != 0)
         {
             // Set the top result as the new selected item if the previous top result was removed from the search.
-            Command::PushNewCommandAndExecute(std::make_shared<SwitchActivePokemon>(CurrentlySelectedItem, FilteredItemsArr.at(0), std::static_pointer_cast<PokemonList>(shared_from_this())));
+            //Command::PushNewCommandAndExecute(std::make_shared<SwitchActivePokemon>(CurrentlySelectedItem, FilteredItemsArr.at(0), std::static_pointer_cast<PokemonList>(shared_from_this())));
             //SetCurrentlySelectedItem(FilteredItemsArr.at(0));
         }
 
@@ -105,7 +105,7 @@ void PokemonList::UpdateElement()
             {
                 if (CurrentlySelectedItem != FilteredItemsArr.at(n))
                 {
-                    Command::PushNewCommandAndExecute(std::make_shared<SwitchActivePokemon>(CurrentlySelectedItem, FilteredItemsArr.at(n), std::static_pointer_cast<PokemonList>(shared_from_this())));
+                    //Command::PushNewCommandAndExecute(std::make_shared<SwitchActivePokemon>(CurrentlySelectedItem, FilteredItemsArr.at(n), std::static_pointer_cast<PokemonList>(shared_from_this())));
                 }
                 //SetCurrentlySelectedItem(FilteredItemsArr.at(n));
                 if (FilterString != "") {
@@ -137,7 +137,7 @@ void PokemonList::UpdateElement()
             if (FilteredItemItr != FilteredItemsArr.end() && FilteredItemItr != FilteredItemsArr.begin())
             {
                 FilteredItemItr--;
-                Command::PushNewCommandAndExecute(std::make_shared<SwitchActivePokemon>(CurrentlySelectedItem, *FilteredItemItr, std::static_pointer_cast<PokemonList>(shared_from_this())));
+                //Command::PushNewCommandAndExecute(std::make_shared<SwitchActivePokemon>(CurrentlySelectedItem, *FilteredItemItr, std::static_pointer_cast<PokemonList>(shared_from_this())));
                 ImGui::FocusItem();
             }
         }
@@ -150,7 +150,7 @@ void PokemonList::UpdateElement()
                 FilteredItemItr++;
                 if (FilteredItemItr != FilteredItemsArr.end())
                 {
-                    Command::PushNewCommandAndExecute(std::make_shared<SwitchActivePokemon>(CurrentlySelectedItem, *FilteredItemItr, std::static_pointer_cast<PokemonList>(shared_from_this())));
+                    //Command::PushNewCommandAndExecute(std::make_shared<SwitchActivePokemon>(CurrentlySelectedItem, *FilteredItemItr, std::static_pointer_cast<PokemonList>(shared_from_this())));
                     ImGui::FocusItem();
                 }
             }

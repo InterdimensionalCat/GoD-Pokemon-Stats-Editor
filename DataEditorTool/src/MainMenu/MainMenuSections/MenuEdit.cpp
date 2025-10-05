@@ -1,5 +1,8 @@
 #include "include.h"
 #include "MainMenu/MainMenuSections/MenuEdit.h"
+#include "MainEditor/MainEditorWindow.h"
+#include "UI/UiTab.h"
+#include "UI/TabCSVState.h"
 
 MenuEdit::MenuEdit() : MainMenuSection("Edit", 1)
 {
@@ -8,12 +11,12 @@ MenuEdit::MenuEdit() : MainMenuSection("Edit", 1)
 
 void MenuEdit::Tick()
 {
-	if (ImGui::MenuItem("Undo", "Ctrl+Z", nullptr, CanUndoLastCommand() && IsProjectRootPathSet()))
+	if (ImGui::MenuItem("Undo", ImGui::GetKeyChordName(UndoShortcut), nullptr, CanUndoLastCommand() && IsProjectRootPathSet()))
 	{
 		UndoLastCommand();
 	}
 
-	if (ImGui::MenuItem("Redo", "Ctrl+Y", nullptr, CanRedoLastCommand() && IsProjectRootPathSet()))
+	if (ImGui::MenuItem("Redo", ImGui::GetKeyChordName(RedoShortcut), nullptr, CanRedoLastCommand() && IsProjectRootPathSet()))
 	{
 		RedoLastCommand();
 	}
@@ -22,9 +25,7 @@ void MenuEdit::Tick()
 void MenuEdit::CheckShortcuts()
 {
 	// Undo shortcut (Ctrl+Z)
-	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Z, false) && 
-		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
-			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
+	if (IsChordPressedAndNotRouted(UndoShortcut))
 	{
 		if (CanUndoLastCommand() && IsProjectRootPathSet())
 		{
@@ -33,9 +34,7 @@ void MenuEdit::CheckShortcuts()
 	}
 
 	// Redo shortcut (Ctrl+Y)
-	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Y, false) && 
-		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
-			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
+	if (IsChordPressedAndNotRouted(RedoShortcut))
 	{
 		if (CanRedoLastCommand() && IsProjectRootPathSet())
 		{
@@ -46,20 +45,50 @@ void MenuEdit::CheckShortcuts()
 
 bool MenuEdit::CanUndoLastCommand()
 {
-	return false;
+	auto FocusedTab = MainEditorWindow::Get()->GetLastFocusedTab();
+
+	if (FocusedTab == nullptr)
+	{
+		return false;
+	}
+
+	return FocusedTab->GetTabCSVState()->CanUndo();
 }
 
 bool MenuEdit::CanRedoLastCommand()
 {
-	return false;
+	auto FocusedTab = MainEditorWindow::Get()->GetLastFocusedTab();
+
+	if (FocusedTab == nullptr)
+	{
+		return false;
+	}
+	
+	return FocusedTab->GetTabCSVState()->CanRedo();
 }
 
 void MenuEdit::UndoLastCommand()
 {
+	auto FocusedTab = MainEditorWindow::Get()->GetLastFocusedTab();
 
+	if (FocusedTab == nullptr)
+	{
+		ICLogger::Warn("MenuEdit::UndoLastCommand called with no focused tab.");
+		return;
+	}
+
+	FocusedTab->GetTabCSVState()->Undo();
 }
 
 void MenuEdit::RedoLastCommand()
 {
+	auto FocusedTab = MainEditorWindow::Get()->GetLastFocusedTab();
 
+	if (FocusedTab == nullptr)
+	{
+		ICLogger::Warn("MenuEdit::RedoLastCommand called with no focused tab.");
+		return;
+	}
+
+	FocusedTab->GetTabCSVState()->Redo();
 }

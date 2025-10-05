@@ -16,6 +16,8 @@ public:
 
 	bool IsProjectRootPathSet() const;
 
+	bool IsChordPressedAndNotRouted(const ImGuiKeyChord& KeyChord) const;
+
 private:
 
 	std::string SectionName;

@@ -14,6 +14,10 @@ public:
 
 private:
 
+	ImGuiKeyChord UndoShortcut = ImGuiMod_Ctrl | ImGuiKey_Z;
+
+	ImGuiKeyChord RedoShortcut = ImGuiMod_Ctrl | ImGuiKey_Y;
+
 	bool CanUndoLastCommand();
 
 	bool CanRedoLastCommand();

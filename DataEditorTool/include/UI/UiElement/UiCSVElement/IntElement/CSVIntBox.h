@@ -48,6 +48,8 @@ public:
 	/** Set the Min/Max value bounds. */
 	void SetBounds(const int NewMinValue, const int NewMaxValue);
 
+	int GetIntBuffer() const;
+
 	int GetMinValue() const;
 	int GetMaxValue() const;
 

@@ -16,5 +16,9 @@ public:
 
 private:
 
+	ImGuiKeyChord IncreaseFontShortcut = ImGuiMod_Ctrl | ImGuiKey_Equal;
+
+	ImGuiKeyChord DecreaseFontShortcut = ImGuiMod_Ctrl | ImGuiKey_Minus;
+
 	std::shared_ptr<FontManager> MainFontManager;
 };

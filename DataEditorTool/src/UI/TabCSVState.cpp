@@ -3,29 +3,68 @@
 
 #include "UI/UiTab.h"
 #include "UI/UiElement/UiCSVElement/UiCSVElement.h"
+#include "Command/Command.h"
+#include "Command/CommandQueue.h"
 
-TabCSVState::TabCSVState(UiTab* InParentTab) : ParentTab(InParentTab)
+TabCSVState::TabCSVState(UiTab* InParentTab): 
+	ParentTab(InParentTab),
+	CurrentRow(0),
+	bShouldRefresh(false),
+	CommandHistory(std::make_shared<CommandQueue>())
 {
 
 }
 
 void TabCSVState::Tick()
 {
-	if (bShouldRefreshRow)
+	if (bShouldRefresh)
 	{
-		RefreshRow();
-	}
-
-	// TODO: Refactor this to work
-	// the same way RefreshRow works
-	if (bShouldRefreshTab)
-	{
-		ParentTab->Refresh();
-		bShouldRefreshTab = false;
+		Refresh();
+		bShouldRefresh = false;
 	}
 }
 
-void TabCSVState::RefreshRow()
+void TabCSVState::SetShouldRefresh()
+{
+	bShouldRefresh = true;
+}
+
+void TabCSVState::AddElementToUpdate(UiCSVElement* NewElement)
+{
+	ElementsToUpdate.push_back(NewElement);
+	bShouldRefresh = true;
+}
+
+void TabCSVState::PushCommand(std::shared_ptr<Command> NewCommand)
+{
+	CommandHistory->ExecuteCommand(NewCommand);
+	bShouldRefresh = true;
+}
+
+void TabCSVState::Undo()
+{
+	CommandHistory->Undo();
+	bShouldRefresh = true;
+}
+
+void TabCSVState::Redo()
+{
+	CommandHistory->Redo();
+	bShouldRefresh = true;
+}
+
+void TabCSVState::SetCurrentRow(const int32_t NewRowValue)
+{
+	CurrentRow = NewRowValue;
+	bShouldRefresh = true;
+}
+
+int32_t TabCSVState::GetCurrentRow() const
+{
+	return CurrentRow;
+}
+
+void TabCSVState::Refresh()
 {
 	for (auto& Element : ElementsToUpdate)
 	{
@@ -35,28 +74,15 @@ void TabCSVState::RefreshRow()
 		}
 	}
 
-	RefreshTab();
-	bShouldRefreshRow = false;
+	ParentTab->Refresh();
 }
 
-void TabCSVState::RefreshTab()
+bool TabCSVState::CanUndo() const
 {
-	bShouldRefreshTab = true;
+	return CommandHistory->CanUndo();
 }
 
-void TabCSVState::AddElementToUpdate(UiCSVElement* NewElement)
+bool TabCSVState::CanRedo() const
 {
-	ElementsToUpdate.push_back(NewElement);
-	bShouldRefreshRow = true;
-}
-
-void TabCSVState::SetCurrentRow(const int32_t NewRowValue)
-{
-	CurrentRow = NewRowValue;
-	bShouldRefreshRow = true;
-}
-
-int32_t TabCSVState::GetCurrentRow() const
-{
-	return CurrentRow;
+	return CommandHistory->CanRedo();
 }

@@ -34,6 +34,7 @@ public:
 
 	void AddSection(const std::shared_ptr<UiSection> NewSection);
 	void SetTabActive(const bool InTabActive);
+	void SetTabFocused(const bool InTabFocused);
 
 	bool LoadRequiredCSVFiles();
 
@@ -42,6 +43,7 @@ public:
 	const std::vector<std::string>& GetRequiredForViewingCSVFiles() const;
 	std::shared_ptr<ImGuiWindowClass> GetSectionDockspace() const;
 	bool IsTabActive();
+	bool IsTabFocused();
 
 protected:
 
@@ -88,4 +90,7 @@ private:
 	 * it is current.
 	 */
 	bool bIsTabActive = false;
+
+	/** Is this tab focused? (as in the tab has keyboard/mouse focus) */
+	bool bIsTabFocused = false;
 };

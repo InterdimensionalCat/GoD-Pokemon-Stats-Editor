@@ -55,7 +55,11 @@ void BaseStat::Tick()
 
 void BaseStat::UpdateProgressBarColorAndProgress()
 {
-	int32_t BaseStatInt = StatIntBox->GetManagedValue();
+	// Get the base stat value from the IntBox,
+	// we use the buffer value instead of the managed value
+	// because the managed value will only update when we
+	// commit a new value.
+	int32_t BaseStatInt = StatIntBox->GetIntBuffer();
 
 	// If base stat is less than half the progress bar max (255/2 = 127.5),
 	// this is equal to the percent of the way to 127.5

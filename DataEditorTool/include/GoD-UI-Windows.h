@@ -10,6 +10,7 @@
 #include "Command/Command.h"
 #include "Settings/AppSettings.h"
 #include "Util/UnsavedProgressModal.h"
+#include "UiSections/UiSection.h"
 
 class PokemonList;
 class GLFWwindow;

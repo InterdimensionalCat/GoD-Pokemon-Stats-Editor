@@ -20,13 +20,13 @@ void IdentificationInfo::UpdateElement()
     std::string PrevNameId = *CurrentNameID;
     if (ImGui::InputText(FieldLabels.at("Name").c_str(), CurrentNameID.get()))
     {
-        Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<std::string>>(Parent->shared_from_this(), CurrentNameID, PrevNameId, *CurrentNameID));
+        //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<std::string>>(Parent->shared_from_this(), CurrentNameID, PrevNameId, *CurrentNameID));
     }
     //ImGui::PushItemWidth(160);
     std::string PrevSpeciesNameID = *CurrentSpeciesNameID;
     if (ImGui::InputText(FieldLabels.at("Species").c_str(), CurrentSpeciesNameID.get()))
     {
-        Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<std::string>>(Parent->shared_from_this(), CurrentSpeciesNameID, PrevSpeciesNameID, *CurrentSpeciesNameID));
+        //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<std::string>>(Parent->shared_from_this(), CurrentSpeciesNameID, PrevSpeciesNameID, *CurrentSpeciesNameID));
     }
 
     ImGui::BeginDisabled();

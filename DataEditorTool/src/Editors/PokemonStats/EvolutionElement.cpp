@@ -1,6 +1,7 @@
 #include "include.h"
 #include "Editors/PokemonStats/EvolutionElement.h"
 #include "Editors/PokemonStats/EvolutionCondition.h"
+#include "Editors/PokemonStats/EvolutionMethod.h"
 #include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleText.h"
 
@@ -16,7 +17,7 @@ EvolutionElement::EvolutionElement(
 	const std::string MethodComboBoxName = std::format("##MethodCombo {}", InEvolutionNumber);
 	const std::string MethodComboBoxColumn = std::format("Evolutions {} Evolution Method", InEvolutionNumber);
 
-	MethodComboBox = std::make_shared<CSVComboBox>(MethodComboBoxName, InParent, CSVName, MethodComboBoxColumn, "EvolutionMethod", "Method");
+	MethodComboBox = std::make_shared<EvolutionMethod>(MethodComboBoxName, InParent, this, CSVName, MethodComboBoxColumn, "EvolutionMethod", "Method");
 
 	const std::string FormComboBoxName = std::format("##FormCombo {}", InEvolutionNumber);
 	const std::string FormComboBoxColumn = std::format("Evolutions {} Evolved Form", InEvolutionNumber);
@@ -37,4 +38,9 @@ EvolutionElement::EvolutionElement(
 int32_t EvolutionElement::GetCurrentMethod() const
 {
 	return static_cast<int32_t>(MethodComboBox->GetSelectedEntry());
+}
+
+std::shared_ptr<EvolutionCondition> EvolutionElement::GetEvolutionCondition() const
+{
+	return EvolutionConditionSwitcher;
 }

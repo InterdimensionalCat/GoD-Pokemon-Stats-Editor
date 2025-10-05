@@ -32,3 +32,9 @@ bool MainMenuSection::IsProjectRootPathSet() const
 {
 	return ProjectRoot::Get()->IsProjectRootSet();
 }
+
+bool MainMenuSection::IsChordPressedAndNotRouted(const ImGuiKeyChord& KeyChord) const
+{
+	bool IsRouted = ImGui::GetShortcutRoutingData(KeyChord)->RoutingCurr != ImGuiKeyOwner_NoOwner;
+	return !IsRouted && ImGui::IsKeyChordPressed(KeyChord);
+}

@@ -115,9 +115,7 @@ void MenuView::CheckShortcuts()
 	const int32_t CurrentFontSize = CurrentFont.FontSize;
 
 	// Increase Font Size (Ctrl+=)
-	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Equal, false) && 
-		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
-			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
+	if (IsChordPressedAndNotRouted(IncreaseFontShortcut))
 	{
 
 		// Allow font increase/decrease if we are not at the max/min font size, respectively.
@@ -130,9 +128,7 @@ void MenuView::CheckShortcuts()
 	}
 
 	// Decrease Font Size (Ctrl+-)
-	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Minus, false) && 
-		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
-			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
+	if (IsChordPressedAndNotRouted(DecreaseFontShortcut))
 	{
 		// Allow font increase/decrease if we are not at the max/min font size, respectively.
 		const bool bFontDecreaseEnabled = CurrentFontSize > MinFontSize;

@@ -85,7 +85,7 @@ void MiscInfo::UpdateElement()
     const int32_t PrevExpYield = *ExpYield;
     if (ImGui::InputInt("Exp Yield", ExpYield.get()))
     {
-        Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), ExpYield, PrevExpYield, *ExpYield));
+        //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), ExpYield, PrevExpYield, *ExpYield));
     }
 
     //ImGui::PushItemWidth(160);
@@ -95,27 +95,27 @@ void MiscInfo::UpdateElement()
     const int32_t PrevCatchRate = *CatchRate;
     if (ImGui::InputInt("Catch Rate", CatchRate.get()))
     {
-        Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), CatchRate, PrevCatchRate, *CatchRate));
+        //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), CatchRate, PrevCatchRate, *CatchRate));
     }
 
     //ImGui::PushItemWidth(160);
     const int32_t PrevHeight = *Height;
     if (ImGui::InputInt("Height (Meters)", Height.get())) {
-        Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), Height, PrevHeight, *Height));
+        //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), Height, PrevHeight, *Height));
     }
 
     //ImGui::PushItemWidth(160);
     const int32_t PrevWeight = *Weight;
     if(ImGui::InputInt("Weight (Kg)", Weight.get()))
     {
-        Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), Weight, PrevWeight, *Weight));
+        //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), Weight, PrevWeight, *Weight));
     }
 
     //ImGui::PushItemWidth(160);
     const int32_t PrevHappiness = *HappinessInt;
     if (ImGui::InputInt("Base Happiness", HappinessInt.get()))
     {
-        Command::PushNewCommandAndExecute(std::make_shared<ModifyHappiness>(Parent->shared_from_this(), HappinessString, HappinessInt, PrevHappiness, *HappinessInt));
+        //Command::PushNewCommandAndExecute(std::make_shared<ModifyHappiness>(Parent->shared_from_this(), HappinessString, HappinessInt, PrevHappiness, *HappinessInt));
     }
 }
 

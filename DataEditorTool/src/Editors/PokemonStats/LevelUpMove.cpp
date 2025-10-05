@@ -6,6 +6,10 @@
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleDragDropButton.h"
 #include "UI/UiSize/UiSize.h"
 #include "UI/UiSize/UiConstrainedSize.h"
+#include "UI/UiTab.h"
+
+#include "Command/MultiCommand.h"
+#include "Command/ModifySingleCSVValue.h"
 
 LevelUpMove::LevelUpMove(
 	const std::string& InName,
@@ -79,6 +83,9 @@ void LevelUpMove::Tick()
 
 			if (MovedElementIndex != MoveToElementIndex)
 			{
+				
+				std::shared_ptr<MultiCommand> ReorderMovesCommand = std::make_shared<MultiCommand>("Reorder Level Up Moves");
+
 				if (MovedElementIndex < MoveToElementIndex)
 				{
 					// Case 1: Move was reordered to a higher slot, in this case we
@@ -92,7 +99,7 @@ void LevelUpMove::Tick()
 
 				if (MovedElementIndex > MoveToElementIndex)
 				{
-					// Case 2: Move was reordered to a lower slot, in this cas we
+					// Case 2: Move was reordered to a lower slot, in this case we
 					// rotate everything in between up (or to the left in the array)
 					std::rotate(
 						LevelUpMovesData.begin() + MoveToElementIndex,
@@ -105,9 +112,29 @@ void LevelUpMove::Tick()
 				for (int32_t Index = 0; Index < LevelUpMovesData.size(); Index++)
 				{
 					auto LevelUpToModify = ParentLearnedMoves->GetLevelUpMoveAtIndex(Index);
-					LevelUpToModify->MoveComboBox->SetManagedValue(LevelUpMovesData.at(Index).first);
-					LevelUpToModify->LevelIntBox->SetManagedValue(LevelUpMovesData.at(Index).second);
+
+					if (LevelUpMovesData.at(Index).first != LevelUpToModify->MoveComboBox->GetManagedValue())
+					{
+						ReorderMovesCommand->AddCommandAndExecute(std::make_shared<ModifySingleCSVValue>(
+							LevelUpToModify->MoveComboBox->GetCSVFileName(),
+							LevelUpToModify->MoveComboBox->GetColumnName(),
+							LevelUpToModify->MoveComboBox->GetCurrentRow(),
+							LevelUpMovesData.at(Index).first
+						));
+					}
+
+					if (LevelUpMovesData.at(Index).second != LevelUpToModify->LevelIntBox->GetManagedValue())
+					{
+						ReorderMovesCommand->AddCommandAndExecute(std::make_shared<ModifySingleCSVValue>(
+							LevelUpToModify->LevelIntBox->GetCSVFileName(),
+							LevelUpToModify->LevelIntBox->GetColumnName(),
+							LevelUpToModify->LevelIntBox->GetCurrentRow(),
+							LevelUpMovesData.at(Index).second
+						));
+					}
 				}
+
+				ParentLearnedMoves->GetParent()->GetTabCSVState()->PushCommand(ReorderMovesCommand);
 			}
 		}
 		ImGui::EndDragDropTarget();

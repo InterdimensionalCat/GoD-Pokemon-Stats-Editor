@@ -5,6 +5,7 @@
 #include "CSV/CSVDatabase.h"
 #include "CSV/NewCSVData.h"
 #include "UI/TabCSVState.h"
+#include "Command/ChangeRow.h"
 
 CSVRowSelector::CSVRowSelector
 (
@@ -27,7 +28,7 @@ void CSVRowSelector::Refresh()
 
 void CSVRowSelector::UiComponentUpdated()
 {
-	GetTabState()->SetCurrentRow(GetSelectedEntry());
+	GetTabState()->PushCommand(std::make_shared<ChangeRow>(GetTabState().get(), GetSelectedEntry()));
 }
 
 uint32_t CSVRowSelector::GetSelectedEntry() const

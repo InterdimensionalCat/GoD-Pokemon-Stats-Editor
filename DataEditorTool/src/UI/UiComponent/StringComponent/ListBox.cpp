@@ -82,19 +82,22 @@ void ListBox::DisplayComponent()
 
 		// If we deactivate the text box with results passing the filter,
 		// Automatically set the selected entry to the topmost result.
-		if (ImGui::IsItemDeactivatedAfterEdit())
-		{
-			for (uint32_t Index = 0; Index < EntriesList.size(); Index++)
-			{
-				const std::string EntryValue = EntriesList.at(Index);
+		// 
+		// This has been disabled because it will conflict with a mouse click
+		// on another index from the user.
+		//if (ImGui::IsItemDeactivatedAfterEdit())
+		//{
+		//	for (uint32_t Index = 0; Index < EntriesList.size(); Index++)
+		//	{
+		//		const std::string EntryValue = EntriesList.at(Index);
 
-				if (EntryFilter.PassFilter(EntryValue.c_str()))
-				{
-					SetSelectedEntry(Index);
-					break;
-				}
-			}
-		}
+		//		if (EntryFilter.PassFilter(EntryValue.c_str()))
+		//		{
+		//			SetSelectedEntry(Index);
+		//			break;
+		//		}
+		//	}
+		//}
 
 		// Space elements out a bit more vertically in the
 		// list box so entries don't look super cramped.

@@ -2,6 +2,8 @@
 
 class UiTab;
 class UiCSVElement;
+class Command;
+class CommandQueue;
 
 /** TODO: rename to UiTabController **/
 class TabCSVState
@@ -17,21 +19,29 @@ public:
 
 	void Tick();
 
-	void RefreshTab();
-
-	void RefreshRow();
+	void SetShouldRefresh();
 
 	void AddElementToUpdate(UiCSVElement* NewElement);
 
+	void PushCommand(std::shared_ptr<Command> NewCommand);
+
+	void Undo();
+
+	void Redo();
+
 	void SetCurrentRow(const int32_t NewRowValue);
+
+	bool CanUndo() const;
+
+	bool CanRedo() const;
 
 	int32_t GetCurrentRow() const;
 
 private:
 
-	bool bShouldRefreshTab = false;
+	void Refresh();
 
-	bool bShouldRefreshRow = false;
+	bool bShouldRefresh = false;
 
 	/** Smart pointer not needed because we don't own this object. */
 	UiTab* ParentTab;
@@ -44,4 +54,9 @@ private:
 	 * become invalid, and we will likely need to change this.
 	 */
 	std::vector<UiCSVElement*> ElementsToUpdate;
+
+	/**
+	 * Undo/Redo queue for this tab.
+	 */
+	std::shared_ptr<CommandQueue> CommandHistory;
 };

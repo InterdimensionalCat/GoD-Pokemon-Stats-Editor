@@ -67,7 +67,7 @@ void TeachableMoveInfo::UpdateElement()
         const bool bPrevTM = *TMLearnField.at(i);
         if (ImGui::Checkbox(TMCheckboxNames.at(i).c_str(), TMLearnField.at(i).get()))
         {
-            Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<bool>>(shared_from_this(), TMLearnField.at(i), bPrevTM, (*TMLearnField.at(i))));
+            //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<bool>>(shared_from_this(), TMLearnField.at(i), bPrevTM, (*TMLearnField.at(i))));
         }
 
         // Display x check boxes on each line
@@ -87,7 +87,7 @@ void TeachableMoveInfo::UpdateElement()
         const bool bPrevHM = *HMLearnField.at(i);
         if (ImGui::Checkbox(HMCheckboxNames.at(i).c_str(), HMLearnField.at(i).get()))
         {
-            Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<bool>>(shared_from_this(), HMLearnField.at(i), bPrevHM, (*HMLearnField.at(i))));
+            //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<bool>>(shared_from_this(), HMLearnField.at(i), bPrevHM, (*HMLearnField.at(i))));
         }
 
         // Display x check boxes on each line
@@ -107,7 +107,7 @@ void TeachableMoveInfo::UpdateElement()
         const bool bPrevTutor = *TutorLearnField.at(i);
         if (ImGui::Checkbox(TutorCheckboxNames.at(i).c_str(), TutorLearnField.at(i).get()))
         {
-            Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<bool>>(shared_from_this(), TutorLearnField.at(i), bPrevTutor, (*TutorLearnField.at(i))));
+            //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<bool>>(shared_from_this(), TutorLearnField.at(i), bPrevTutor, (*TutorLearnField.at(i))));
         }
 
         // Display x check boxes on each line

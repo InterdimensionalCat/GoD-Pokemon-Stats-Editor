@@ -50,7 +50,7 @@ bool FilterableComboBox(std::shared_ptr<OldUiSection> CurrentSection, const std:
         if (std::find(FilteredItemsArr.begin(), FilteredItemsArr.end(), *SelectedItemString) == FilteredItemsArr.end() && FilteredItemsArr.size() != 0)
         {
             // Set the top result as the new selected item if the previous top result was removed from the search.
-            Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<std::string>>(CurrentSection, SelectedItemString, *SelectedItemString, FilteredItemsArr.at(0), FilterString));
+            //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<std::string>>(CurrentSection, SelectedItemString, *SelectedItemString, FilteredItemsArr.at(0), FilterString));
         }
 
         for (int32_t n = 0; n < FilteredItemsArr.size(); n++)
@@ -59,7 +59,7 @@ bool FilterableComboBox(std::shared_ptr<OldUiSection> CurrentSection, const std:
             if (ImGui::Selectable(FilteredItemsArr.at(n).c_str(), is_selected))
             {
                 // If we actually select an object, reset the filter string before the combo box is closed.
-                Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<std::string>>(CurrentSection, SelectedItemString, *SelectedItemString, FilteredItemsArr.at(n), FilterString));
+                //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<std::string>>(CurrentSection, SelectedItemString, *SelectedItemString, FilteredItemsArr.at(n), FilterString));
                 (*FilterString) = "";
             }
 

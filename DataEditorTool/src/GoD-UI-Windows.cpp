@@ -73,19 +73,19 @@ void GoDUIWindowsInstance::Tick()
 	// Undo shortcut (Ctrl+Z)
 	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Z, false) && (ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
 	{
-		if (Command::CanUndo())
-		{
-			Command::Undo();
-		}
+		//if (Command::CanUndo())
+		//{
+		//	Command::Undo();
+		//}
 	}
 
 	// Redo shortcut (Ctrl+Y)
 	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_Y, false) && (ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
 	{
-		if (Command::CanRedo())
-		{
-			Command::Redo();
-		}
+		//if (Command::CanRedo())
+		//{
+		//	Command::Redo();
+		//}
 	}
 
 	//auto FontSettings = CurrentSettings->GetFontSettings();
@@ -167,15 +167,15 @@ void GoDUIWindowsInstance::Tick()
 
 		if (ImGui::BeginMenu("Edit"))
 		{
-			if(ImGui::MenuItem("Undo", "Ctrl+Z", nullptr, Command::CanUndo()))
-			{
-				Command::Undo();
-			}
+			//if(ImGui::MenuItem("Undo", "Ctrl+Z", nullptr, Command::CanUndo()))
+			//{
+			//	Command::Undo();
+			//}
 
-			if(ImGui::MenuItem("Redo", "Ctrl+Y", nullptr, Command::CanRedo()))
-			{
-				Command::Redo();
-			}
+			//if(ImGui::MenuItem("Redo", "Ctrl+Y", nullptr, Command::CanRedo()))
+			//{
+			//	Command::Redo();
+			//}
 
 			ImGui::EndMenu();
 		}
@@ -329,7 +329,7 @@ void GoDUIWindowsInstance::CloseCurrentRoot()
 		SwitchRootBlocker->SetBypassModal(false);
 	}
 
-	Command::ClearCommandQueue();
+	//Command::ClearCommandQueue();
 	UiElements.clear();
 
 	ProjectRootPath = "";
@@ -407,7 +407,7 @@ void GoDUIWindowsInstance::GeneralLoadFail(std::exception e)
 void GoDUIWindowsInstance::OnProjectRootPathSet()
 {
 	// Clear prev command queue
-	Command::ClearCommandQueue();
+	//Command::ClearCommandQueue();
 	UiElements.clear();
 
 	// Load CSV files
@@ -525,7 +525,7 @@ void GoDUIWindowsInstance::OnFontChanged()
 void GoDUIWindowsInstance::Exit()
 {
 	// Clear undo/redo command queue.
-	Command::ClearCommandQueue();
+	//Command::ClearCommandQueue();
 
 	// Save settings
 	CurrentSettings->Exit();

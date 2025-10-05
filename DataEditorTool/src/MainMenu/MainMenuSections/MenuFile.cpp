@@ -18,11 +18,11 @@ void MenuFile::Tick()
 
 	const bool AreCSVFilesModified = GoDCSV::CSVDatabase::Get()->AreAnyCSVFilesModified();
 
-	if (ImGui::MenuItem("Set Root Folder", "Ctrl+O"))
+	if (ImGui::MenuItem("Set Root Folder", ImGui::GetKeyChordName(SetRootShortcut)))
 	{
 		SetProjectRootPath();
 	}
-	if (ImGui::MenuItem("Save All", "Ctrl+S", nullptr, IsProjectRootPathSet() && AreCSVFilesModified))
+	if (ImGui::MenuItem("Save All", ImGui::GetKeyChordName(SaveShortcut), nullptr, IsProjectRootPathSet() && AreCSVFilesModified))
 	{
 		SaveAll();
 	}
@@ -41,17 +41,13 @@ void MenuFile::CheckShortcuts()
 	const bool AreCSVFilesModified = GoDCSV::CSVDatabase::Get()->AreAnyCSVFilesModified();
 
 	// Set Project Root shortcut (Ctrl+O)
-	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_O, false) && 
-		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
-			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
+	if (IsChordPressedAndNotRouted(SetRootShortcut))
 	{
 		SetProjectRootPath();
 	}
 
 	// Save shortcut (Ctrl+S)
-	if (ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_S, false) && 
-		(ImGui::IsKeyDown(ImGuiKey::ImGuiKey_LeftCtrl) || 
-			ImGui::IsKeyDown(ImGuiKey::ImGuiKey_RightCtrl)))
+	if (IsChordPressedAndNotRouted(SaveShortcut))
 	{
 		if (IsProjectRootPathSet() && AreCSVFilesModified)
 		{

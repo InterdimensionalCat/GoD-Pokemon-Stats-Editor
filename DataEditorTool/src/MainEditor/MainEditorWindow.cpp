@@ -180,6 +180,11 @@ void MainEditorWindow::OpenNewEditorTab(std::shared_ptr<UiTab> NewTab)
     }
 }
 
+void MainEditorWindow::SatLastFocusedTab(UiTab* NewLastFocusedTab)
+{
+    LastFocusedTab = NewLastFocusedTab;
+}
+
 //std::shared_ptr<GLFWwindow> MainEditorWindow::GetWindow()
 //{
 //    return MainWindowContext->GetManagedWindow();
@@ -203,6 +208,11 @@ std::shared_ptr<FontManager> MainEditorWindow::GetFontManager()
 std::shared_ptr<ModalManager> MainEditorWindow::GetModalManager()
 {
     return MainModalManager;
+}
+
+UiTab* MainEditorWindow::GetLastFocusedTab()
+{
+    return LastFocusedTab;
 }
 
 std::shared_ptr<MainEditorWindow> MainEditorWindow::Get()

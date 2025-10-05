@@ -103,7 +103,7 @@ void BaseStatsInfo::UpdateStat(std::shared_ptr<int32_t> Stat, const std::string&
 	std::string HiddenStatName = std::format("##{}", StatName);
 	if (ImGui::InputInt(HiddenStatName.c_str(), Stat.get()))
 	{
-		Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(shared_from_this(), Stat, PrevVal, *Stat));
+		//Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(shared_from_this(), Stat, PrevVal, *Stat));
 	}
 
 	auto InputIntLength = ImGui::GetItemRectMax().x;

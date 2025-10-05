@@ -21,42 +21,42 @@ void EVYieldInfo::UpdateElement()
 	const int32_t PrevHP = *HPEVYield;
 	if (ImGui::InputInt("HP EV", HPEVYield.get()))
 	{
-		Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), HPEVYield, PrevHP, *HPEVYield));
+		//Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), HPEVYield, PrevHP, *HPEVYield));
 	}
 
 	//ImGui::PushItemWidth(80);
 	const int32_t PrevAtk = *AttackEVYield;
 	if (ImGui::InputInt("Attack EV", AttackEVYield.get()))
 	{
-		Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), AttackEVYield, PrevAtk, *AttackEVYield));
+		//Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), AttackEVYield, PrevAtk, *AttackEVYield));
 	}
 
 	//ImGui::PushItemWidth(80);
 	const int32_t PrevDef = *DefenseEVYield;
 	if (ImGui::InputInt("Defense EV", DefenseEVYield.get()))
 	{
-		Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), DefenseEVYield, PrevDef, *DefenseEVYield));
+		//Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), DefenseEVYield, PrevDef, *DefenseEVYield));
 	}
 
 	//ImGui::PushItemWidth(80);
 	const int32_t PrevSpA = *SpecialAttackEVYield;
 	if (ImGui::InputInt("Sp. Atk EV", SpecialAttackEVYield.get()))
 	{
-		Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), SpecialAttackEVYield, PrevSpA, *SpecialAttackEVYield));
+		//Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), SpecialAttackEVYield, PrevSpA, *SpecialAttackEVYield));
 	}
 
 	//ImGui::PushItemWidth(80);
 	const int32_t PrevSpD = *SpecialDefenseEVYield;
 	if (ImGui::InputInt("Sp. Def EV", SpecialDefenseEVYield.get()))
 	{
-		Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), SpecialDefenseEVYield, PrevSpD, *SpecialDefenseEVYield));
+		//Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), SpecialDefenseEVYield, PrevSpD, *SpecialDefenseEVYield));
 	}
 
 	//ImGui::PushItemWidth(80);
 	const int32_t PrevSpeed = *SpeedEVYield;
 	if(ImGui::InputInt("Speed EV", SpeedEVYield.get()))
 	{
-		Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), SpeedEVYield, PrevSpeed, *SpeedEVYield));
+		//Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), SpeedEVYield, PrevSpeed, *SpeedEVYield));
 	}
 }
 

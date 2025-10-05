@@ -45,7 +45,7 @@ void LevelUpMovesInfo::UpdateElement()
         if (i != 0)
         {
             if (ImGui::ArrowButton(UpArrowName.c_str(), ImGuiDir_Up)) { 
-                Command::PushNewCommandAndExecute(std::make_shared<SwapMovesCommand>(Parent->shared_from_this(), std::static_pointer_cast<LevelUpMovesInfo>(shared_from_this()), i, i - 1));
+                //Command::PushNewCommandAndExecute(std::make_shared<SwapMovesCommand>(Parent->shared_from_this(), std::static_pointer_cast<LevelUpMovesInfo>(shared_from_this()), i, i - 1));
             }
         }
         else {
@@ -61,7 +61,7 @@ void LevelUpMovesInfo::UpdateElement()
         if (i != 18)
         {
             if (ImGui::ArrowButton(DownArrowName.c_str(), ImGuiDir_Down)) {
-                Command::PushNewCommandAndExecute(std::make_shared<SwapMovesCommand>(Parent->shared_from_this(), std::static_pointer_cast<LevelUpMovesInfo>(shared_from_this()), i, i + 1));
+                //Command::PushNewCommandAndExecute(std::make_shared<SwapMovesCommand>(Parent->shared_from_this(), std::static_pointer_cast<LevelUpMovesInfo>(shared_from_this()), i, i + 1));
             }
         }
         else
@@ -113,7 +113,7 @@ void LevelUpMovesInfo::UpdateElement()
         const int32_t PrevLevel = *LevelUpMovesLevels.at(i);
         if (ImGui::InputInt(LevelTextBoxName.c_str(), LevelUpMovesLevels.at(i).get()))
         {
-            Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), LevelUpMovesLevels.at(i), PrevLevel, *LevelUpMovesLevels.at(i)));
+            //Command::PushNewCommandAndExecute(std::make_shared<ModifyValueCommand<int32_t>>(Parent->shared_from_this(), LevelUpMovesLevels.at(i), PrevLevel, *LevelUpMovesLevels.at(i)));
         }
         ImGui::PopItemWidth();
     }
