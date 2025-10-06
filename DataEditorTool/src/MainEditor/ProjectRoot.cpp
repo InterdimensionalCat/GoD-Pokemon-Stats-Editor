@@ -7,6 +7,9 @@
 
 void ProjectRoot::SetProjectRootPath()
 {
+	// TODO: attempt to automatically set the project root
+	// to the last used project root path from settings.
+
 	// Use NFD to open a folder selection dialogue box.
 	NFD_Init();
 
@@ -52,10 +55,6 @@ void ProjectRoot::SetProjectRootPath()
 
 void ProjectRoot::CloseCurrentRoot()
 {
-	// TODO: Clear the command queue once commands are up and running again
-	//Command::ClearCommandQueue();
-	//UiElements.clear();
-
 	// Clear the CSV database
 	GoDCSV::CSVDatabase::Get()->ClearDatabase();
 	auto EditorWindow = MainEditorWindow::Get();
