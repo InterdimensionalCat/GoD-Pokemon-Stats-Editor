@@ -2,7 +2,6 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #define STB_IMAGE_IMPLEMENTATION
-#include "GoD-UI-Windows.h"
 #include "stb_image/stb_image.h"
 
 #define GLFW_INCLUDE_NONE
