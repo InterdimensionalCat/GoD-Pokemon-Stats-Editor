@@ -133,12 +133,25 @@ void MainEditorWindow::Tick()
     MainModalManager->Tick();
 
     // Tick all UiWindows directly after this code to ensure they are all in the top level dockspace.
-    ImGui::DockSpaceOverViewport(0U, NULL, ImGuiDockNodeFlags_None, MainWindowDockspace.get());
+    MainDockspaceId = ImGui::DockSpaceOverViewport(0U, NULL, ImGuiDockNodeFlags_None, MainWindowDockspace.get());
 
-    for (std::shared_ptr<UiTab> EditorTab : EditorTabs)
+    if(PauseUiTickTimer <= 0)
     {
-        EditorTab->Tick();
+		for (std::shared_ptr<UiTab> EditorTab : EditorTabs)
+		{
+			EditorTab->Tick();
+		}
+	}
+    else
+    {
+		PauseUiTickTimer--;
+
+        if (PauseUiTickTimer < 0)
+        {
+			PauseUiTickTimer = 0;
+        }
     }
+
 
     MainFontManager->EndFontForFrame();
 
@@ -164,7 +177,19 @@ void MainEditorWindow::OnProjectRootPathSet()
     EditorTabs.clear();
     std::shared_ptr<PokemonStatsEditor> StatsEditor = std::make_shared<PokemonStatsEditor>(MainWindowDockspace);
     OpenNewEditorTab(StatsEditor);
-    MainWindowContext->MaximizeWindow();
+
+    if (!MainWindowContext->IsWindowMaximized() && EditorTabs.size() != 0)
+    {
+        MainWindowContext->MaximizeWindow();
+
+        // Pause UI ticks for 1 frame to allow window to resize properly.
+		PauseUiTickTimer = 1;
+    }
+}
+
+void MainEditorWindow::OnProjectRootPathClosed()
+{
+    EditorTabs.clear();
 }
 
 void MainEditorWindow::OpenNewEditorTab(std::shared_ptr<UiTab> NewTab)
@@ -183,6 +208,22 @@ void MainEditorWindow::OpenNewEditorTab(std::shared_ptr<UiTab> NewTab)
 void MainEditorWindow::SatLastFocusedTab(UiTab* NewLastFocusedTab)
 {
     LastFocusedTab = NewLastFocusedTab;
+}
+
+void MainEditorWindow::RefreshTabDocksace()
+{
+    auto DockspaceForTabs = GetMainDockspaceId();
+
+	ImGui::DockBuilderRemoveNode(DockspaceForTabs);
+	ImGui::DockBuilderAddNode(DockspaceForTabs);
+	ImGui::DockBuilderSetNodeSize(DockspaceForTabs, ImGui::GetMainViewport()->Size);
+
+    for (std::shared_ptr<UiTab> EditorTab : EditorTabs)
+    {
+        ImGui::DockBuilderDockWindow(EditorTab->GetName().c_str(), DockspaceForTabs);
+    }
+
+    ImGui::DockBuilderFinish(DockspaceForTabs);
 }
 
 //std::shared_ptr<GLFWwindow> MainEditorWindow::GetWindow()
@@ -208,6 +249,11 @@ std::shared_ptr<FontManager> MainEditorWindow::GetFontManager()
 std::shared_ptr<ModalManager> MainEditorWindow::GetModalManager()
 {
     return MainModalManager;
+}
+
+ImGuiID MainEditorWindow::GetMainDockspaceId() const
+{
+    return MainDockspaceId;
 }
 
 UiTab* MainEditorWindow::GetLastFocusedTab()

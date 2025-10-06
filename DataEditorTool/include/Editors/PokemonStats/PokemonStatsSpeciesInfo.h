@@ -31,9 +31,16 @@ private:
 	 * elements do not become invalidated when
 	 * the container is resized
 	 * 
-	 * (this may not be necessasary)
+	 * (this may not be necessary)
+	 * 
+	 * These are static values because we want them to
+	 * stay loaded through new project loads. Attempting
+	 * to reload them every time a new project is loaded
+	 * causes undefined behavior where we may (and probably)
+	 * will fail to open one of the image files (probably because
+	 * its still open in this program).
 	 */
-	std::deque<GLuint> PokefaceData;
+	static std::deque<GLuint> PokefaceData;
 
-	bool bPokefaceDataLoaded = false;
+	static bool bPokefaceDataLoaded;
 };

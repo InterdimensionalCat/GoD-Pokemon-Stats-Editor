@@ -3,6 +3,7 @@
 
 #include "Settings/SettingsSection/SettingsSection.h"
 #include "Font/FontSettings.h"
+#include "Layout/LayoutSettings.h"
 
 AppSettings::AppSettings()
 {
@@ -51,6 +52,16 @@ void AppSettings::Init()
 
 			SettingsStream >> SettingsJson;
 
+			// Add layout sections settings based on the layout settings
+			// found  in the settings json.
+			auto LayoutSettingsArr = LayoutSettings::GenerateTabLayoutSettingsFromJson(SettingsJson);
+
+			for(auto LayoutSection : LayoutSettingsArr)
+			{
+				AddSection(LayoutSection);
+			}
+
+			// Initialize each section from the loaded json.
 			InitSettingsFromJson();
 		}
 	}
@@ -139,9 +150,18 @@ std::shared_ptr<FontSettings> AppSettings::GetFontSettings()
 	return std::dynamic_pointer_cast<FontSettings>(GetSectionByName("Font Settings"));
 }
 
-std::shared_ptr<LayoutSettings> AppSettings::GetLayoutSettings()
+std::shared_ptr<LayoutSettings> AppSettings::GetLayoutSettingsForTab(const std::string& InTabName)
 {
-	return nullptr; //return std::dynamic_pointer_cast<LayoutSettings>(GetSectionByName("Layout Settings"));
+	auto Section = GetSectionByName(std::format("{}-Layout Settings", InTabName));
+
+	if(Section != nullptr)
+	{
+		return std::dynamic_pointer_cast<LayoutSettings>(Section);
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 void AppSettings::AddSection(const std::shared_ptr<SettingsSection> NewSection)
@@ -151,5 +171,10 @@ void AppSettings::AddSection(const std::shared_ptr<SettingsSection> NewSection)
 
 std::shared_ptr<SettingsSection> AppSettings::GetSectionByName(const std::string& SectionName)
 {
+	if(SettingsSections.find(SectionName) == SettingsSections.end())
+	{
+		return nullptr;
+	}
+
 	return SettingsSections.at(SectionName);
 }

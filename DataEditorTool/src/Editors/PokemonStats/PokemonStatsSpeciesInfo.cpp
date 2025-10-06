@@ -13,6 +13,10 @@
 
 #include "Util/TextureLoader.h"
 
+std::deque<GLuint> PokemonStatsSpeciesInfo::PokefaceData;
+
+bool PokemonStatsSpeciesInfo::bPokefaceDataLoaded = false;
+
 PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) : UiSection("Species Info", InParent)
 {
 	const std::string CSVName = "Pokemon Stats";
@@ -161,9 +165,18 @@ void PokemonStatsSpeciesInfo::InitPokefaceData()
 {
 	// TODO: Allow pokeface data to load if some pokeface files are missing,
 	// which will be needed to support custom pokemon additions to the Pokemon Stats.csv file
+
+	if(bPokefaceDataLoaded)
+	{
+		// Pokeface data is already loaded, no need to load it again.
+		ICLogger::Info("Pokeface data already loaded, skipping load.");
+		return;
+	}
+
 	try
 	{
 		ICLogger::Debug("Attempting to load Pokeface data.");
+		PokefaceData.clear();
 		// Attempt to find the Pokeface resource dir, which should be at
 		// "{ToolPath}/Resources/PokeFace/"
 		std::filesystem::path BasePath = std::filesystem::current_path();

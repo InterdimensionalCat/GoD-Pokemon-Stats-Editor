@@ -30,13 +30,13 @@ public:
 
 	void SaveSettingsToJson();
 
+	void AddSection(const std::shared_ptr<SettingsSection> NewSection);
+
 	std::shared_ptr<FontSettings> GetFontSettings();
 
-	std::shared_ptr<LayoutSettings> GetLayoutSettings();
+	std::shared_ptr<LayoutSettings> GetLayoutSettingsForTab(const std::string& InTabName);
 
 private:
-
-	void AddSection(const std::shared_ptr<SettingsSection> NewSection);
 
 	std::shared_ptr<SettingsSection> GetSectionByName(const std::string& SectionName);
 

@@ -10,4 +10,6 @@ public:
 	PokemonStatsEditor(std::shared_ptr<ImGuiWindowClass> InTabDockspace);
 
 	virtual void Init() override;
+
+	virtual void LoadDefaultLayout() override;
 };

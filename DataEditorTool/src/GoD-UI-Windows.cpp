@@ -112,12 +112,12 @@ void GoDUIWindowsInstance::Tick()
 	//	}
 	//}
 
-	auto LayoutSettings = CurrentSettings->GetLayoutSettings();
+	//auto LayoutSettings = CurrentSettings->GetLayoutSettings();
 
-	if (LayoutSettings->GetLayoutChanged())
-	{
-		LayoutSettings->SetActivePresetLayout(LayoutSettings->GetActivePresetLayout(), LayoutSettings->IsActivePresetCustom());
-	}
+	//if (LayoutSettings->GetLayoutChanged())
+	//{
+	//	LayoutSettings->SetActivePresetLayout(LayoutSettings->GetActivePresetLayout(), LayoutSettings->IsActivePresetCustom());
+	//}
 
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -131,10 +131,10 @@ void GoDUIWindowsInstance::Tick()
 	UnsavedProgressBlocker->Tick();
 	SwitchRootBlocker->Tick();
 
-	if (CurrentSettings->GetLayoutSettings()->GetSaveModalActive())
-	{
-		CurrentSettings->GetLayoutSettings()->ShowSaveModal();
-	}
+	//if (CurrentSettings->GetLayoutSettings()->GetSaveModalActive())
+	//{
+	//	CurrentSettings->GetLayoutSettings()->ShowSaveModal();
+	//}
 
 
 	//if (FontSettings->GetFontChanged())
@@ -180,12 +180,12 @@ void GoDUIWindowsInstance::Tick()
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("View"))
-		{
-			//CurrentSettings->GetFontSettings()->DisplayFontMenu();
-			CurrentSettings->GetLayoutSettings()->DisplayLayoutMenu();
-			ImGui::EndMenu();
-		}
+		//if (ImGui::BeginMenu("View"))
+		//{
+		//	//CurrentSettings->GetFontSettings()->DisplayFontMenu();
+		//	CurrentSettings->GetLayoutSettings()->DisplayLayoutMenu();
+		//	ImGui::EndMenu();
+		//}
 
 		ImGui::EndMainMenuBar();
 	}

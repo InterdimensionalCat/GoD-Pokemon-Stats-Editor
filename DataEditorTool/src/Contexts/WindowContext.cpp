@@ -154,6 +154,7 @@ void WindowContext::MaximizeWindow()
 {
     // Maximize the window
     glfwMaximizeWindow(ManagedWindow.get());
+	bWindowMaximized = true;
     //glfwSetWindowAttrib(ManagedWindow.get(), GLFW_MAXIMIZED, GLFW_TRUE);
 }
 
@@ -206,6 +207,11 @@ bool WindowContext::IsContextInitialized() const
 std::shared_ptr<GLFWwindow> WindowContext::GetManagedWindow()
 {
     return ManagedWindow;
+}
+
+bool WindowContext::IsWindowMaximized() const
+{
+    return bWindowMaximized;
 }
 
 void WindowContext::WindowCloseCallback(GLFWwindow* Window)

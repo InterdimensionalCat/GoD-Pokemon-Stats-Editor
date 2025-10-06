@@ -33,9 +33,13 @@ public:
 
 	void OnProjectRootPathSet();
 
+	void OnProjectRootPathClosed();
+
 	void OpenNewEditorTab(std::shared_ptr<UiTab> NewTab);
 
 	void SatLastFocusedTab(UiTab* NewLastFocusedTab);
+
+	void RefreshTabDocksace();
 
 	/** We should try to avoid exposing raw backend structures outside their context objects. */
 	// std::shared_ptr<GLFWwindow> GetWindow();
@@ -47,6 +51,8 @@ public:
 	std::shared_ptr<FontManager> GetFontManager();
 
 	std::shared_ptr<ModalManager> GetModalManager();
+
+	ImGuiID GetMainDockspaceId() const;
 
 	UiTab* GetLastFocusedTab();
 
@@ -62,6 +68,8 @@ private:
 
 	/** Dockspace for Ui tabs. */
 	std::shared_ptr<ImGuiWindowClass> MainWindowDockspace;
+
+	ImGuiID MainDockspaceId;
 
 	/** Main menu */
 	std::shared_ptr<MainMenu> EditorMainMenu;
@@ -81,6 +89,8 @@ private:
 	std::vector<std::shared_ptr<UiTab>> EditorTabs;
 
 	UiTab* LastFocusedTab;
+
+	int32_t PauseUiTickTimer = 0;
 
 	//IcColor ClearColor;
 

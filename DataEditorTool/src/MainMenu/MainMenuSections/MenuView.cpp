@@ -6,6 +6,10 @@
 #include "Settings/AppSettings.h"
 #include "Font/FontSettings.h"
 
+#include "UI/UiTab.h"
+#include "UI/TabLayoutManager.h"
+#include "Layout/LayoutSettings.h"
+
 MenuView::MenuView() : MainMenuSection("View", 2)
 {
 	MainFontManager = DataEditorInstance::Get()->GetMainEditorWindow()->GetFontManager();
@@ -13,8 +17,6 @@ MenuView::MenuView() : MainMenuSection("View", 2)
 
 void MenuView::Tick()
 {
-	//CurrentSettings->GetLayoutSettings()->DisplayLayoutMenu();
-
 	const MergedFont& CurrentFont = MainFontManager->GetCurrentlyLoadedFont();
 	const int32_t MaxFontSize = MainFontManager->GetMaxFontSize();
 	const int32_t MinFontSize = MainFontManager->GetMinFontSize();
@@ -23,7 +25,7 @@ void MenuView::Tick()
 
 	// English font settings menu
 	ImGui::SeparatorText("Font Settings");
-	
+
 	// First option is a selector for the current EN font
 	if (ImGui::BeginMenu("Current EN Font"))
 	{
@@ -103,6 +105,45 @@ void MenuView::Tick()
 			MainFontManager->SetCurrentFontColor(ImColor(RGB[0], RGB[1], RGB[2]));
 		}
 		ImGui::EndMenu();
+	}
+
+	TickLayoutSettings();
+}
+
+void MenuView::TickLayoutSettings()
+{
+	auto FocusedTab = MainEditorWindow::Get()->GetLastFocusedTab();
+
+	if (FocusedTab != nullptr)
+	{
+		auto TabName = FocusedTab->GetName();
+
+		ImGui::SeparatorText(std::format("{} Layout Settings", TabName).c_str());
+
+		auto LayoutSettings = FocusedTab->GetLayoutManager()->GetLayoutSettings();
+		auto ReloadPresetOnStartup = LayoutSettings->GetReloadPresetOnStartup();
+		auto AvailablePresetLayouts = FocusedTab->GetLayoutManager()->GetAvailableLayouts();
+		auto CurrentPresetLayout = LayoutSettings->GetCurrentPreset();
+
+		if (ImGui::BeginMenu("Current Preset"))
+		{
+			for (auto& AvailableLayout : AvailablePresetLayouts)
+			{
+				const bool bSelected = AvailableLayout == CurrentPresetLayout;
+				if (ImGui::MenuItem(AvailableLayout.c_str(), nullptr, bSelected, !bSelected))
+				{
+					LayoutSettings->SetCurrentPreset(AvailableLayout);
+					FocusedTab->GetLayoutManager()->ReloadLayoutNextTick();
+				}
+			}
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::MenuItem("Reload Layout On Startup", "", ReloadPresetOnStartup, true))
+		{
+			LayoutSettings->SetReloadPresetOnStartup(!ReloadPresetOnStartup);
+		}
 	}
 }
 

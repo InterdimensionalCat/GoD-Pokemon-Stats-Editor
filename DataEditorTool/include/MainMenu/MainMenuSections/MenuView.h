@@ -12,6 +12,8 @@ public:
 
 	virtual void Tick() override;
 
+	void TickLayoutSettings();
+
 	virtual void CheckShortcuts() override;
 
 private:

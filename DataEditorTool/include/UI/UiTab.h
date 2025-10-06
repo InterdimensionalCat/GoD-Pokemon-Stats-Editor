@@ -11,6 +11,7 @@
 
 class UiSection;
 class TabCSVState;
+class TabLayoutManager;
 
 class UiTab : public UiObject
 {
@@ -38,7 +39,10 @@ public:
 
 	bool LoadRequiredCSVFiles();
 
+	virtual void LoadDefaultLayout() = 0;
+
 	std::shared_ptr<TabCSVState> GetTabCSVState();
+	std::shared_ptr<TabLayoutManager> GetLayoutManager();
 	const std::vector<std::string>& GetRequiredForEditCSVFiles() const;
 	const std::vector<std::string>& GetRequiredForViewingCSVFiles() const;
 	std::shared_ptr<ImGuiWindowClass> GetSectionDockspace() const;
@@ -63,17 +67,6 @@ protected:
 	 */
 	std::vector<std::string> RequiredForViewingCSVFileNames;
 
-private:
-
-	/** CSV State for this tab, stores info about the current row for each CSV file where data is displayed. */
-	std::shared_ptr<TabCSVState> TabState;
-
-	/**
-	 * Dockspace for the tab as a whole. This should be the dockspace
-	 * of the Main Editor.
-	 */
-	std::shared_ptr<ImGuiWindowClass> TabDockspace;
-
 	/**
 	 * Dockspace for individual UiSections inside this tab. This should be
 	 * unique to each tab.
@@ -82,6 +75,23 @@ private:
 
 	/** Unique identifier for this tab. */
 	ImGuiID UiTabID;
+
+private:
+
+	/** CSV State for this tab, stores info about the current row for each CSV file where data is displayed. */
+	std::shared_ptr<TabCSVState> TabState;
+
+	/** 
+	 * Layout manager for this tab, interfaces with layout settings
+	 * to control the current layout of the tab.
+	 */
+	std::shared_ptr<TabLayoutManager> LayoutManager;
+
+	/**
+	 * Dockspace for the tab as a whole. This should be the dockspace
+	 * of the Main Editor.
+	 */
+	std::shared_ptr<ImGuiWindowClass> TabDockspace;
 
 	/**
 	 * Is this tab active? (as in currently visible on screen.

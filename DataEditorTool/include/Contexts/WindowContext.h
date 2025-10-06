@@ -37,6 +37,8 @@ public:
 
 	std::shared_ptr<GLFWwindow> GetManagedWindow();
 
+	bool IsWindowMaximized() const;
+
 	static void WindowCloseCallback(GLFWwindow* Window);
 
 private:
@@ -59,5 +61,7 @@ private:
 	const uint32_t ShowWindowDelayTicks = 2;
 	uint32_t CurrentWindowDelay = 0;
 	bool bWindowFirstShown = false;
+
+	bool bWindowMaximized = false;
 
 };

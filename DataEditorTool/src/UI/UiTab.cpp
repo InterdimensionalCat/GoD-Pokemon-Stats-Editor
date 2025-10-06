@@ -4,6 +4,7 @@
 #include "imgui/imgui_internal.h"
 
 #include "UI/TabCSVState.h"
+#include "UI/TabLayoutManager.h"
 #include "CSV/CSVDatabase.h"
 #include "CSV/NewCSVData.h"
 #include "MainEditor/MainEditorWindow.h"
@@ -20,10 +21,12 @@ UiTab::UiTab(const std::string& InName, std::shared_ptr<ImGuiWindowClass> InTabD
     UiTabID = ImHashStr(std::format("{}##UiTabDockspace", GetName()).c_str());
 
     TabState = std::make_shared<TabCSVState>(this);
+    LayoutManager = std::make_shared<TabLayoutManager>(this);
 }
 
 void UiTab::Init()
 {
+	LayoutManager->TabOpened();
     Refresh();
 }
 
@@ -37,6 +40,9 @@ void UiTab::Refresh()
 
 void UiTab::Tick()
 {
+    // Update layout if needed.
+	LayoutManager->Tick();
+
     // Ensure Tab state is current
     TabState->Tick();
 
@@ -185,6 +191,11 @@ bool UiTab::LoadRequiredCSVFiles()
 std::shared_ptr<TabCSVState> UiTab::GetTabCSVState()
 {
     return TabState;
+}
+
+std::shared_ptr<TabLayoutManager> UiTab::GetLayoutManager()
+{
+    return LayoutManager;
 }
 
 const std::vector<std::string>& UiTab::GetRequiredForEditCSVFiles() const
