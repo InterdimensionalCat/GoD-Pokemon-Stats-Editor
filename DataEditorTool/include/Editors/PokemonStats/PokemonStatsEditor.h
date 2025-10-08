@@ -15,7 +15,11 @@ class PokemonStatsEditor : public UiTab
 
 public:
 
-	/** Construct a PokemonStatsEditor tab. */
+	/**
+	 * Construct a PokemonStatsEditor tab.
+	 * 
+	 * \param InTabDockspace The main editor's tab dockspace,
+	 */
 	PokemonStatsEditor(std::shared_ptr<ImGuiWindowClass> InTabDockspace);
 
 	/**

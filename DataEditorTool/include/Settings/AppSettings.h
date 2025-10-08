@@ -62,12 +62,16 @@ public:
 
 	/**
 	 * Add a new settings section to the manager.
+	 * 
+	 * \param NewSection The new settings section to add.
 	 */
 	void AddSection(const std::shared_ptr<SettingsSection> NewSection);
 
 	/**
 	 * Get the FontSettings section.
 	 * This will throw if the FontSettings section has not been added.
+	 * 
+	 * \return A shared pointer to the FontSettings section.
 	 */
 	std::shared_ptr<FontSettings> GetFontSettings();
 
@@ -75,6 +79,9 @@ public:
 	 * Get the LayoutSettings section for the specified tab name.
 	 * This will return a nullptr if a LayoutSettings section with the specified
 	 * tab name has not been added.
+	 * 
+	 * \param InTabName The name of the tab to get the LayoutSettings for.
+	 * \return A shared pointer to the LayoutSettings section for the specified tab name, or nullptr if it does not exist.
 	 */
 	std::shared_ptr<LayoutSettings> GetLayoutSettingsForTab(const std::string& InTabName);
 
@@ -84,6 +91,9 @@ private:
 	 * Get the settings section with the specified name.
 	 * This will return a nullptr if a section with the specified
 	 * name has not been added.
+	 * 
+	 * \param SectionName The name of the section to get.
+	 * \return A shared pointer to the settings section with the specified name, or nullptr if it does not exist.
 	 */
 	std::shared_ptr<SettingsSection> GetSectionByName(const std::string& SectionName);
 

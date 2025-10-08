@@ -47,7 +47,11 @@ public:
 	 */
 	void OnProjectRootPathSet();
 
-	/** Get the currently open project root path. */
+	/**
+	 * Get the currently open project root path.
+	 * 
+	 * \return The currently open project root path.
+	 */
 	std::filesystem::path GetProjectRootPath();
 
 	/** Is a valid project root path currently set? */
@@ -56,6 +60,8 @@ public:
 	/**
 	 * Get the global instance of this ProjectRoot
 	 * located on the global DataEditorInstance.
+	 * 
+	 * \return Shared pointer to the global ProjectRoot instance.
 	 */
 	static std::shared_ptr<ProjectRoot> Get();
 

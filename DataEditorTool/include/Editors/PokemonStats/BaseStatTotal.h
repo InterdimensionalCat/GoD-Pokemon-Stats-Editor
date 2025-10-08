@@ -25,16 +25,29 @@ class BaseStatTotal : public UiSingleLineMultiElement
 
 public:
 
-	/** Construct a BaseStatTotal element with the supplied name and parent section. */
+	/**
+	 * Construct a BaseStatTotal element with the supplied name and parent section.
+	 * 
+	 * \param InName Name of this BaseStatTotal element.
+	 * \param InParent Parent section of this BaseStatTotal element.
+	 */
 	BaseStatTotal(
 		const std::string& InName,
 		UiSection* InParent
 	);
 
-	/** Update the displayed stat total to the supplied value. */
+	/**
+	 * Update the displayed stat total to the supplied value.
+	 * 
+	 * \param NewStatTotal The new stat total to display.
+	 */
 	void UpdateStatTotal(int32_t NewStatTotal);
 
-	/** Get the SimpleIntBox element that displays the base stat total. */
+	/**
+	 * Get the SimpleIntBox element that displays the base stat total.
+	 * 
+	 * \return The SimpleIntBox element that displays the base stat total.
+	 */
 	std::shared_ptr<SimpleIntBox> GetIntBox();
 
 private:

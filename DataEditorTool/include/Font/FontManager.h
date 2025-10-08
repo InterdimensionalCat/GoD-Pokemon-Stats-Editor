@@ -80,38 +80,52 @@ public:
 
 	/**
 	 * Get the currently loaded merged font info.
+	 * 
+	 * \return The currently loaded merged font info.
 	 */
 	const MergedFont& GetCurrentlyLoadedFont() const;
 
 	/**
-	 * Get a list of all available EN font filenames
+	 * Get a list of all available EN font filenames.
+	 * 
+	 * \return A list of all available EN font filenames.
 	 */
 	const std::vector<std::string>& GetAvailableENFonts() const;
 
 	/**
-	 * Get a list of all available JP font filenames
+	 * Get a list of all available JP font filenames.
+	 * 
+	 * \return A list of all available JP font filenames.
 	 */
 	const std::vector<std::string>& GetAvailableJPFonts() const;
 
 	/**
 	 * Get the minimum allowed font size.
+	 * 
+	 * \return The minimum allowed font size.
 	 */
 	int32_t GetMinFontSize() const;
 
 	/**
 	 * Get the maximum allowed font size.
+	 * 
+	 * \return The maximum allowed font size.
 	 */
 	int32_t GetMaxFontSize() const;
 
 	/**
 	 * Set the current EN font filename. This will
 	 * cause the current font to be reloaded next frame.
+	 * 
+	 * \param NewFontName The new EN font filename to set.
 	 */
 	void SetCurrentENFont(const std::string& NewFontName);
 
 	/**
 	 * Set the current JP font filename. This will
 	 * cause the current font to be reloaded next frame.
+	 * 
+	 * \param NewFontName The new JP font filename to set.
 	 */
 	void SetCurrentJPFont(const std::string& NewFontName);
 
@@ -119,6 +133,8 @@ public:
 	 * Set the current font size. This does not require
 	 * a font reload as font sizes can be dynamically
 	 * changed in ImGui now.
+	 * 
+	 * \param NewFontSize The new font size to set.
 	 */
 	void SetCurrentFontSize(const int32_t NewFontSize);
 
@@ -126,12 +142,16 @@ public:
 	 * Set the current JP font size multiplier. This does not require
 	 * a font reload as font sizes can be dynamically
 	 * changed in ImGui now.
+	 * 
+	 * \param NewFontSizeMultiplier The new JP font size multiplier to set.
 	 */
 	void SetCurrentJPFontSizeMultiplier(const float NewFontSizeMultiplier);
 
 	/**
 	 * Set the current font color in font settings. This
 	 * does not require a font reload.
+	 * 
+	 * \param NewColor The new font color to set.
 	 */
 	void SetCurrentFontColor(const ImColor& NewColor);
 

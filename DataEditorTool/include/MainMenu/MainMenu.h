@@ -39,6 +39,8 @@ public:
 	/**
 	 * Add a new section to the main menu.
 	 * Sections will be sorted by their priority.
+	 * 
+	 * \param InMenuSection The section to add to the main menu.
 	 */
 	void AddSection(const std::shared_ptr<MainMenuSection>& InMenuSection);
 

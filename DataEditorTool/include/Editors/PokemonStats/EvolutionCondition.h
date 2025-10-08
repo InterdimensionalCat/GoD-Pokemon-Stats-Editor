@@ -50,7 +50,14 @@ class EvolutionCondition : public UiElementSwitcher
 
 public:
 
-	/** Construct an EvolutionCondition with the specified parent EvolutionElement and evolution number. */
+	/**
+	 * Construct an EvolutionCondition with the specified parent EvolutionElement and evolution number.
+	 * 
+	 * \param InName Name of this UiElement.
+	 * \param InParent Parent UiSection of this UiElement.
+	 * \param InParentElement The parent EvolutionElement for this EvolutionCondition.
+	 * \param InEvolutionNumber The evolution number (1-5) for this EvolutionCondition.
+	 */
 	EvolutionCondition(
 		const std::string& InName, 
 		UiSection* InParent,
@@ -61,19 +68,40 @@ public:
 	/** Switch the displayed element to match the currently selected EvolutionMethod */
 	virtual void Refresh() override;
 
-	/** Switch the displayed element to match the specified condition index. */
+	/**
+	 * Switch the displayed element to match the specified condition index.
+	 * 
+	 * \param ConditionIndex The condition index to switch to.
+	 */
 	void SwitchCondition(const int32_t ConditionIndex);
 
-	/** Get the first valid value (which we use as a default) for the condition the condition index. */
+	/**
+	 * Get the first valid value (which we use as a default) for the condition the condition index.
+	 * 
+	 * \param ConditionIndex The condition index to get the default for.
+	 * \return The first valid value for the specified condition index.
+	 */
 	int32_t GetDefaultForCondition(const int32_t ConditionIndex);
 
-	/** Get the CSV file name this element manages. */
+	/**
+	 * Get the CSV file name this element manages.
+	 * 
+	 * \return The CSV file name this element manages.
+	 */
 	std::string GetCSVFileName() const;
 
-	/** Get the column name this element manages. */
+	/**
+	 * Get the column name this element manages.
+	 * 
+	 * \return The column name this element manages.
+	 */
 	std::string GetColumnName() const;
 
-	/** Get the current row this element manages. */
+	/**
+	 * Get the current row this element manages.
+	 * 
+	 * \return The current row this element manages.
+	 */
 	int32_t GetCurrentRow() const;
 
 private:

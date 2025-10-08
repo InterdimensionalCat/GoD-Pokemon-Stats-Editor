@@ -31,13 +31,24 @@ public:
 	/**
 	 * Construct a PokemonStatsLearnedMoves section under the supplied
 	 * PokemonStatsEditor parent tab.
+	 * 
+	 * \param InParent Parent PokemonStatsEditor tab.
 	 */
 	PokemonStatsLearnedMoves(PokemonStatsEditor* InParent);
 
-	/** Get the LevelUpMove Ui element at the specified index. */
+	/**
+	 * Get the LevelUpMove Ui element at the specified index.
+	 * 
+	 * \param Index The index of the LevelUpMove to get.
+	 * \return A shared pointer to the LevelUpMove at the specified index.
+	 */
 	std::shared_ptr<LevelUpMove> GetLevelUpMoveAtIndex(const int32_t Index);
 
-	/** Get a read-only reference to the vector of LevelUpMove Ui elements. */
+	/**
+	 * Get a read-only reference to the vector of LevelUpMove Ui elements.
+	 * 
+	 * \return A read-only reference to the vector of LevelUpMove Ui elements.
+	 */
 	const std::vector<std::shared_ptr<LevelUpMove>>& GetLevelUpMoves() const;
 
 private:

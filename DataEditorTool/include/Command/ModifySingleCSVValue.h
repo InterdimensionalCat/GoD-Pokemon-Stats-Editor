@@ -20,6 +20,11 @@ public:
 	 * 
 	 * The value at the specified Column/Row in the specified CSV file
 	 * will be modified to match the supplied InNewValue when Execute() is called.
+	 * 
+	 * \param InCSVFileName The name of the CSV file to modify.
+	 * \param InCSVFileColumn The column name of the value to modify.
+	 * \param InCSVFileRow The row index of the value to modify.
+	 * \param InNewValue The new value to set at the specified Column/Row.
 	 */
 	ModifySingleCSVValue(
 		const std::string InCSVFileName,
@@ -37,10 +42,18 @@ public:
 	/** Redo this command, re-applying the new value to the specified value in the CSV file. */
 	void Redo() override;
 
-	/** Get the name of this command. */
+	/**
+	 * Get the name of this command.
+	 * 
+	 * \return A short string name for this command.
+	 */
 	std::string GetName() const override;
 
-	/** Get a string representation of the changes this command performs. */
+	/**
+	 * Get a string representation of the changes this command performs.
+	 * 
+	 * \return A string description of this command's changes.
+	 */
 	std::string ToString() const override;
 
 protected:

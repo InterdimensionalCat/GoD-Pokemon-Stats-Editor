@@ -26,10 +26,18 @@ public:
 	/** Redo this command. */
 	virtual void Redo() = 0;
 
-	/** Get the name of this command. */
+	/**
+	 * Get the name of this command.
+	 * 
+	 * \return A short string name for this command.
+	 */
 	virtual std::string GetName() const = 0;
 
-	/** Get a string representation of the changes this command performs. */
+	/**
+	 * Get a string representation of the changes this command performs.
+	 * 
+	 * \return A string description of this command's changes.
+	 */
 	virtual std::string ToString() const = 0;
 
 };

@@ -46,6 +46,8 @@ public:
 
 	/**
 	 * Get the global instance of the DataEditorInstance.
+	 * 
+	 * \return The global instance of the DataEditorInstance.
 	 */
 	static std::shared_ptr<DataEditorInstance> Get();
 
@@ -97,16 +99,22 @@ public:
 
 	/**
 	 * Get the MainEditorWindow instance.
+	 * 
+	 * \return The MainEditorWindow instance.
 	 */
 	std::shared_ptr<MainEditorWindow> GetMainEditorWindow();
 
 	/**
 	 * Get the ProjectRoot manager instance.
+	 * 
+	 * \return The ProjectRoot manager instance.
 	 */
 	std::shared_ptr<ProjectRoot> GetProjectRoot();
 
 	/**
 	 * Get the CSVDatabase instance.
+	 * 
+	 * \return The CSVDatabase instance.
 	 */
 	std::shared_ptr<GoDCSV::CSVDatabase> GetCSVDatabase();
 

@@ -28,6 +28,9 @@ public:
 	 * An optional BypassModalCallback can be provided,
 	 * which will be called if the modal is bypassed
 	 * (for example, if the user chooses to not save changes).
+	 * 
+	 * \param InPopupTopMessage The message to display at the top of the modal.
+	 * \param InBypassModalCallback Optional callback to call if the modal is bypassed.
 	 */
 	BlockUnsavedProgress(const std::string& InPopupTopMessage, const std::function<void()>& InBypassModalCallback);
 

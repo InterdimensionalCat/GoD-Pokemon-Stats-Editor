@@ -22,7 +22,11 @@ class PokemonStatsEvolutionInfo : public UiSection
 
 public:
 
-	/** Construct a PokemonStatsEvolutionInfo section under the supplied PokemonStatsEditor tab. */
+	/**
+	 * Construct a PokemonStatsEvolutionInfo section under the supplied PokemonStatsEditor tab.
+	 * 
+	 * \param InParent Parent PokemonStatsEditor tab for this section.
+	 */
 	PokemonStatsEvolutionInfo(PokemonStatsEditor* InParent);
 
 };

@@ -28,6 +28,9 @@ public:
 	 * An optional BypassModalCallback can be provided,
 	 * which will be called if the user chooses to bypass
 	 * saving the failed files.
+	 * 
+	 * \param InFailedCSVFiles The list of files that failed to save, along with the reason for the failure.
+	 * \param InBypassModalCallback Optional callback to call if the user chooses to bypass saving the failed files.
 	 */
 	SaveFailed(
 		std::vector<std::pair<std::string, std::string>> InFailedCSVFiles, 

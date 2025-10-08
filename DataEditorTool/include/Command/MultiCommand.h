@@ -2,7 +2,7 @@
  * \file   MultiCommand.h
  * \brief  Command that executes multiple sub-commands in sequence.
  * 
- * \author bthomas
+ * \author Bennett Thomas
  * \date   October 2025
  *********************************************************************/
 #pragma once
@@ -24,10 +24,18 @@ public:
 	/** Construct a MultiCommand with the default name "Multi Command". */
 	MultiCommand();
 
-	/** Construct a MultiCommand with the specified name. */
+	/**
+	 * Construct a MultiCommand with the specified name.
+	 * 
+	 * \param InCommandName The name of this MultiCommand.
+	 */
 	MultiCommand(const std::string& InCommandName);
 
-	/** Add a new sub-command to this MultiCommand and execute it immediately. */
+	/**
+	 * Add a new sub-command to this MultiCommand and execute it immediately.
+	 * 
+	 * \param NewCommand The new sub-command to add and execute.
+	 */
 	void AddCommandAndExecute(std::shared_ptr<Command> NewCommand);
 
 	/**
@@ -42,10 +50,18 @@ public:
 	/** Redo all sub-commands in order. */
 	void Redo() override;
 
-	/** Get the name of this MultiCommand. */
+	/**
+	 * Get the name of this MultiCommand.
+	 * 
+	 * \return A short string name for this command.
+	 */
 	std::string GetName() const override;
 
-	/** Get a string representation of each sub-command's action. */
+	/**
+	 * Get a string representation of each sub-command's action.
+	 * 
+	 * \return A string description of this command's changes.
+	 */
 	std::string ToString() const override;
 
 protected:

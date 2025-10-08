@@ -39,6 +39,10 @@ public:
 	 * The InLevelUpMoveNumber is used to identify this element
 	 * within its parent section, and should be unique among
 	 * all LevelUpMove elements in that section.
+	 * 
+	 * \param InName Name of this LevelUpMove element.
+	 * \param InParent Parent PokemonStatsLearnedMoves section.
+	 * \param InLevelUpMoveNumber Index of this LevelUpMove within its parent section.
 	 */
 	LevelUpMove(
 		const std::string& InName,

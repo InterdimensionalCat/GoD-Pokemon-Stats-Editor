@@ -26,12 +26,19 @@ public:
 	/**
 	 * Construct a PokemonStatsTaughtMoves section
 	 * under the supplied PokemonStatsEditor tab.
+	 * 
+	 * \param InParent Parent PokemonStatsEditor tab.
 	 */
 	PokemonStatsTaughtMoves(PokemonStatsEditor* InParent);
 
 private:
 
-	/** Get all the columns in the Pokemon Stats CSV file that correspond to a taught move type (TM, HM, or TutorMove). */
+	/**
+	 * Get all the columns in the Pokemon Stats CSV file that correspond to a taught move type (TM, HM, or TutorMove).
+	 * 
+	 * \param MoveColumnPrefix The prefix of the move column type to search for (e.g. "TM", "HM", or "TutorMove").
+	 * \return A vector of all column names that start with the specified prefix.
+	 */
 	std::vector<std::string> GetMoveColumns(const std::string& MoveColumnPrefix) const;
 
 };

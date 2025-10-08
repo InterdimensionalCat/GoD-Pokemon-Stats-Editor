@@ -65,23 +65,41 @@ public:
 	/** Close the window. */
 	void CloseWindow();
 
-	/** Is the window currently iconified (minimized)? */
+	/**
+	 * Is the window currently iconified (minimized)?
+	 * 
+	 * \return True if the window is iconified, false otherwise.
+	 */
 	bool IsWindowIconified() const;
 
-	/** Is the OpenGL and GLFW context initialized and valid? */
+	/**
+	 * Is the OpenGL and GLFW context initialized and valid?
+	 * 
+	 * \return True if the context is initialized, false otherwise.
+	 */
 	bool IsContextInitialized() const;
 
 	/**
 	 * Get a shared pointer to the managed GLFW window.
 	 * Ideally this should only be called inside MainEditorWindow
 	 * to encapsulate backend specific classes.
+	 * 
+	 * \return Shared pointer to the managed GLFW window.
 	 */
 	std::shared_ptr<GLFWwindow> GetManagedWindow();
 
-	/** Is the window currently maximized? */
+	/**
+	 * Is the window currently maximized?
+	 * 
+	 * \return True if the window is maximized, false otherwise.
+	 */
 	bool IsWindowMaximized() const;
 
-	/** GLFW callback for when the window is closed. */
+	/**
+	 * GLFW callback for when the window is closed.
+	 * 
+	 * \param Window The GLFW window that was closed.
+	 */
 	static void WindowCloseCallback(GLFWwindow* Window);
 
 private:

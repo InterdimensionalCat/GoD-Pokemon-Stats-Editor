@@ -18,6 +18,9 @@ public:
 	/**
 	 * Construct a ChangeRow command that will change the current row
 	 * of the supplied TabCSVState to InNewRow when executed.
+	 * 
+	 * \param InTabState The TabCSVState whose current row will be changed.
+	 * \param InNewRow The row to change to when this command is executed.
 	 */
 	ChangeRow(
 		TabCSVState* InTabState,
@@ -33,10 +36,18 @@ public:
 	/** Redo this command, changing the current row to NewRow again. */
 	void Redo() override;
 
-	/** Get the name of this command. */
+	/**
+	 * Get the name of this command.
+	 * 
+	 * \return The name of this command ("Change Row").
+	 */
 	std::string GetName() const override;
 
-	/** Get a string representation of the changes this command performs. */
+	/**
+	 * Get a string representation of the changes this command performs.
+	 * 
+	 * \return A string of the form "ChangeRow: {PrevRow} -> {NewRow}".
+	 */
 	std::string ToString() const override;
 
 protected: 

@@ -31,6 +31,8 @@ public:
 
 	/**
 	 * Initialize this settings section from the supplied JSON object.
+	 * 
+	 * \param LayoutSettings The JSON object to load the settings from.
 	 */
 	void InitFromJson(const nlohmann::ordered_json& LayoutSettings) override;
 
@@ -41,41 +43,87 @@ public:
 
 	/**
 	 * Save this settings section to the supplied JSON object.
+	 * 
+	 * \param LayoutSettings The JSON object to save the settings to.
 	 */
 	void SaveToJson(nlohmann::ordered_json& LayoutSettings) const override;
 
-	/** Get the name of this settings section. */
+	/**
+	 * Get the name of this settings section.
+	 * 
+	 * \return The name of this settings section.
+	 */
 	static std::string GetSectionName();
 
-	/** Get the current EN font name from settings. */
+	/**
+	 * Get the current EN font name from settings.
+	 * 
+	 * \return The current EN font name from settings.
+	 */
 	std::string GetENFont() const;
 
-	/** Get the current JP font name from settings. */
+	/**
+	 * Get the current JP font name from settings.
+	 * 
+	 * \return The current JP font name from settings.
+	 */
 	std::string GetJPFont() const;
 
-	/** Get the current font size from settings. */
+	/**
+	 * Get the current font size from settings.
+	 * 
+	 * \return The current font size from settings.
+	 */
 	int32_t GetFontSize() const;
 
-	/** Get the current JP font size multiplier from settings. */
+	/**
+	 * Get the current JP font size multiplier from settings.
+	 * 
+	 * \return The current JP font size multiplier from settings.
+	 */
 	float GetJPFontSizeMultiplier() const;
 
-	/** Get the current font color from settings. */
+	/**
+	 * Get the current font color from settings.
+	 * 
+	 * \return The current font color from settings.
+	 */
 	ImColor GetFontColor() const;
 
 
-	/** Set the current EN font name in settings. */
+	/**
+	 * Set the current EN font name in settings.
+	 * 
+	 * \param NewCurrentFont The new EN font name to set in settings.
+	 */
 	void SetENFont(const std::string& NewCurrentFont);
 
-	/** Set the current JP font name in settings. */
+	/**
+	 * Set the current JP font name in settings.
+	 * 
+	 * \param NewCurrentFont The new JP font name to set in settings.
+	 */
 	void SetJPFont(const std::string& NewCurrentFont);
 
-	/** Set the current font size in settings. */
+	/**
+	 * Set the current font size in settings.
+	 * 
+	 * \param NewFontSize The new font size to set in settings.
+	 */
 	void SetFontSize(const int32_t NewFontSize);
 
-	/** Set the current JP font size multiplier in settings. */
+	/**
+	 * Set the current JP font size multiplier in settings.
+	 * 
+	 * \param NewFontSizeMultiplier The new JP font size multiplier to set in settings.
+	 */
 	void SetJPFontSizeMultiplier(const float NewFontSizeMultiplier);
 
-	/** Set the current font color in settings. */
+	/**
+	 * Set the current font color in settings.
+	 * 
+	 * \param NewFontColor The new font color to set in settings.
+	 */
 	void SetFontColor(const ImColor& NewFontColor);
 
 private:

@@ -35,6 +35,8 @@ public:
 	 * This will call the Execute() method on the command,
 	 * and add it to the queue. If there are any commands
 	 * that were undone, they will be deleted from the queue.
+	 * 
+	 * \param NewCommand The command to execute and add to the queue.
 	 */
 	void ExecuteCommand(std::shared_ptr<Command> NewCommand);
 

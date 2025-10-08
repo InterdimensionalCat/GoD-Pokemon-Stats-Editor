@@ -47,6 +47,8 @@ private:
 	 * Is the undo command enabled?
 	 * This will be true if there is at least one command
 	 * that can be undone.
+	 * 
+	 * \return True if there is at least one command that can be undone, false otherwise.
 	 */
 	bool CanUndoLastCommand();
 
@@ -54,6 +56,8 @@ private:
 	 * Is the redo command enabled?
 	 * This will be true if there is at least one command
 	 * that can be redone.
+	 * 
+	 * \return True if there is at least one command that can be redone, false otherwise.
 	 */
 	bool CanRedoLastCommand();
 

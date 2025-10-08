@@ -29,15 +29,29 @@ public:
 	 * String value will just be a string of the integer, the value
 	 * will be an uppercase hex number with a lowercase prefix (0x instead of 0X)
 	 * Example: An InIntValue of 31 would construct the string "31 (0x1F)"
+	 * 
+	 * \param InIntValue The integer to construct this IntHexParenthValue from.
 	 */
 	IntHexParenthValue(const int32_t InIntValue);
 
-	/** Construct an IntHexParenthValue from a string of the format "{Int} (0x{HEX})" */
+	/**
+	 * Construct an IntHexParenthValue from a string of the format "{Int} (0x{HEX})."
+	 * 
+	 * \param InIntHexString The string to parse, must be of the form "{Int} (0x{HEX})"
+	 */
 	IntHexParenthValue(const std::string& InIntHexString);
 
-	/** Set this IntHexParenthValue from the supplied integer. */
+	/**
+	 * Set this IntHexParenthValue from the supplied integer.
+	 * 
+	 * \param InIntValue The integer to set this IntHexParenthValue from.
+	 */
 	void SetFromInt(const int32_t InIntValue);
 
-	/** Returns the integer value of this IntHexParenthValue. */
+	/**
+	 * Returns the integer value of this IntHexParenthValue.
+	 * 
+	 * \return The integer value of this IntHexParenthValue.
+	 */
 	int32_t GetValueAsInt() const;
 };

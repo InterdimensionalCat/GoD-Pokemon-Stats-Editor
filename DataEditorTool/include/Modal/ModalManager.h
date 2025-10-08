@@ -35,10 +35,16 @@ public:
 	/**
 	 * Set the currently active modal to the supplied modal.
 	 * This will replace any currently active modal.
+	 * 
+	 * \param InActiveModal The modal to set as the currently active modal.
 	 */
 	void SetCurrentlyActiveModal(const std::shared_ptr<Modal> InActiveModal);
 
-	/** Returns true if there is a currently active modal. */
+	/**
+	 * Returns true if there is a currently active modal.
+	 * 
+	 * \return True if there is a currently active modal, false otherwise.
+	 */
 	bool WindowBlockedByModal() const;
 
 private:

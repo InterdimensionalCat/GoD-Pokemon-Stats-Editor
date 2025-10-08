@@ -30,7 +30,11 @@ class PokemonStatsBaseStats : public UiSection
 
 public:
 
-	/** Construct a PokemonStatsBaseStats section under the supplied PokemonStatsEditor tab. */
+	/**
+	 * Construct a PokemonStatsBaseStats section under the supplied PokemonStatsEditor tab.
+	 * 
+	 * \param InParent The parent PokemonStatsEditor tab for this section.
+	 */
 	PokemonStatsBaseStats(PokemonStatsEditor* InParent);
 
 	/** Recalculate the Base Stat Total every tick. */

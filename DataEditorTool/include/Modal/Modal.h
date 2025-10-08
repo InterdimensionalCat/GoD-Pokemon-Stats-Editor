@@ -47,6 +47,9 @@ public:
 	 * An optional BypassModalCallback can be provided,
 	 * which will be called if the modal is bypassed
 	 * (for example, if the user chooses to not save changes).
+	 * 
+	 * \param InModalName The name of the modal.
+	 * \param InBypassModalCallback Optional callback to call if the modal is bypassed.
 	 */
 	Modal(const std::string& InModalName, const std::function<void()>& InBypassModalCallback);
 
@@ -56,15 +59,25 @@ public:
 	 */
 	void Tick();
 
-	/** Get the name of this modal. */
+	/**
+	 * Get the name of this modal.
+	 * 
+	 * \return The name of this modal.
+	 */
 	std::string GetModalName() const;
 
-	/** Check if this modal is active or not, only active modals are ticked each frame. */
+	/**
+	 * Check if this modal is active or not, only active modals are ticked each frame.
+	 * 
+	 * \return True if this modal is active, false otherwise.
+	 */
 	bool IsModalActive() const;
 
 	/**
 	 * Set the status of this modal, which will trigger state
 	 * updates the next time Tick() is called.
+	 * 
+	 * \param InStatus The new status to set for this modal.
 	 */
 	void SetModalStatus(const OpenPopupStatus InStatus);
 

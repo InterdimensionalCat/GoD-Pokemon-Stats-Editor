@@ -25,7 +25,17 @@ class EvolutionMethod : public CSVComboBox
 
 public:
 
-	/** Construct an EvolutionMethod element. */
+	/**
+	 * Construct an EvolutionMethod element.
+	 * 
+	 * \param InName Name of this UiElement.
+	 * \param InParent Parent UiSection of this UiElement.
+	 * \param InParentElement The parent EvolutionElement for this EvolutionMethod.
+	 * \param InCSVFileName The name of the CSV file to get the evolution methods from, without the ".csv" extension.
+	 * \param InColumnName The name of the column in the CSV file to get the evolution methods from.
+	 * \param InEntriesListCSVFileName The name of the CSV file to get the entries list from, without the ".csv" extension.
+	 * \param InEntriesListColumnName The name of the column in the entries list CSV file to get the entries from.
+	 */
 	EvolutionMethod
 	(
 		const std::string& InName,
@@ -37,7 +47,16 @@ public:
 		const std::string& InEntriesListColumnName
 	);
 
-	/** Construct an EvolutionMethod element with the ColumnName set to the Element Name. */
+	/**
+	 * Construct an EvolutionMethod element with the ColumnName set to the Element Name.
+	 * 
+	 * \param InName Name of this UiElement.
+	 * \param InParent Parent UiSection of this UiElement.
+	 * \param InParentElement The parent EvolutionElement for this EvolutionMethod.
+	 * \param InCSVFileName The name of the CSV file to get the evolution methods from, without the ".csv" extension.
+	 * \param InEntriesListCSVFileName The name of the CSV file to get the entries list from, without the ".csv" extension.
+	 * \param InEntriesListColumnName The name of the column in the entries list CSV file to get the entries from.
+	 */
 	EvolutionMethod
 	(
 		const std::string& InName,

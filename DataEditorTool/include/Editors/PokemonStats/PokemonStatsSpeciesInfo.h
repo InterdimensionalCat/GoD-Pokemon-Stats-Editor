@@ -25,6 +25,8 @@ public:
 	/**
 	 * Construct a PokemonStatsSpeciesInfo section under the
 	 * specified PokemonStatsEditor parent.
+	 * 
+	 * \param InParent Parent PokemonStatsEditor tab.
 	 */
 	PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent);
 

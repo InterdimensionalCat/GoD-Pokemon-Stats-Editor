@@ -31,6 +31,13 @@ public:
 	/**
 	 * Construct a MergedFont with the supplied parameters,
 	 * including a pointer to the ImGui-generated font data.
+	 * 
+	 * \param InENFontName Name of the font file used for English characters in this merged font.
+	 * \param InJPFontName Name of the font file used for Japanese characters in this merged font.
+	 * \param InFontSize This is the size for EN characters, JP fonts have a multiplier applied to their size specified below.
+	 * \param InJPFontSizeMultiplier Font size multiplier for Japanese characters, this is useful as oftentimes the heights between fonts are not consistent.
+	 * \param InFontColor Color to use when drawing the Font.
+	 * \param InMergedFontData Pointer to the ImGui-generated merged font.
 	 */
 	MergedFont(
 		const std::string& InENFontName,
@@ -43,6 +50,8 @@ public:
 
 	/**
 	 * Get a string representation of this MergedFont.
+	 * 
+	 * \return A string representation of this MergedFont.
 	 */
 	std::string ToString() const;
 

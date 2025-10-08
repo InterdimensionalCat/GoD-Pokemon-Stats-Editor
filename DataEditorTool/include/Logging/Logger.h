@@ -38,42 +38,72 @@ public:
 	 */
 	static void ExitLogger();
 
-	/** Log a trace severity message. */
+	/**
+	 * Log a trace severity message.
+	 * 
+	 * \param FormatString The format string for the message.
+	 * \param FormatArgs The arguments for the format string.
+	 */
 	template <typename... Args>
 	inline static void Trace(const FormatString<Args...> FormatString, Args &&...FormatArgs) 
 	{
 		spdlog::trace(FormatString, std::forward<Args>(FormatArgs)...);
 	}
 
-	/** Log a debug severity message. */
+	/**
+	 * Log a debug severity message.
+	 *
+	 * \param FormatString The format string for the message.
+	 * \param FormatArgs The arguments for the format string.
+	 */
 	template <typename... Args>
 	inline static void Debug(const FormatString<Args...> FormatString, Args &&...FormatArgs) 
 	{
 		spdlog::debug(FormatString, std::forward<Args>(FormatArgs)...);
 	}
 
-	/** Log an info severity message. */
+	/**
+	 * Log an info severity message.
+	 *
+	 * \param FormatString The format string for the message.
+	 * \param FormatArgs The arguments for the format string.
+	 */
 	template <typename... Args>
 	inline static void Info(const FormatString<Args...> FormatString, Args &&...FormatArgs) 
 	{
 		spdlog::info(FormatString, std::forward<Args>(FormatArgs)...);
 	}
 
-	/** Log a warn severity message. */
+	/**
+	 * Log a warn severity message.
+	 *
+	 * \param FormatString The format string for the message.
+	 * \param FormatArgs The arguments for the format string.
+	 */
 	template <typename... Args>
 	inline static void Warn(const FormatString<Args...> FormatString, Args &&...FormatArgs) 
 	{
 		spdlog::warn(FormatString, std::forward<Args>(FormatArgs)...);
 	}
 
-	/** Log an error severity message. */
+	/**
+	 * Log an error severity message.
+	 *
+	 * \param FormatString The format string for the message.
+	 * \param FormatArgs The arguments for the format string.
+	 */
 	template <typename... Args>
 	inline static void Error(const FormatString<Args...> FormatString, Args &&...FormatArgs) 
 	{
 		spdlog::error(FormatString, std::forward<Args>(FormatArgs)...);
 	}
 
-	/** Log a critical severity message. */
+	/**
+	 * Log a critical severity message.
+	 *
+	 * \param FormatString The format string for the message.
+	 * \param FormatArgs The arguments for the format string.
+	 */
 	template <typename... Args>
 	inline static void Critical(const FormatString<Args...> FormatString, Args &&...FormatArgs) 
 	{

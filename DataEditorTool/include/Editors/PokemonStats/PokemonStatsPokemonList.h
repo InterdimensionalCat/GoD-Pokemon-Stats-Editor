@@ -17,7 +17,11 @@ class PokemonStatsPokemonList : public UiSection
 
 public:
 
-	/** Construct a PokemonStatsPokemonList section under the supplied PokemonStatsEditor parent tab. */
+	/**
+	 * Construct a PokemonStatsPokemonList section under the supplied PokemonStatsEditor parent tab.
+	 * 
+	 * \param InParent Parent PokemonStatsEditor tab of this section.
+	 */
 	PokemonStatsPokemonList(PokemonStatsEditor* InParent);
 
 };

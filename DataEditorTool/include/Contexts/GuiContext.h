@@ -30,6 +30,8 @@ public:
 	 * so that the GLFW and OpenGL3 backends can be initialized.
 	 * 
 	 * This will throw if initialization fails.
+	 * 
+	 * \param MainWindowContext A valid and initialized WindowContext.
 	 */
 	void Init(std::shared_ptr<WindowContext> MainWindowContext);
 
@@ -67,7 +69,11 @@ public:
 	 */
 	void DestroyDeviceObjects();
 
-	/** Is the ImGui context and its backends fully initialized? */
+	/**
+	 * Is the ImGui context and its backends fully initialized?
+	 * 
+	 * \return True if the ImGui context and both backends are initialized.
+	 */
 	bool IsContextInitialized() const;
 
 private:

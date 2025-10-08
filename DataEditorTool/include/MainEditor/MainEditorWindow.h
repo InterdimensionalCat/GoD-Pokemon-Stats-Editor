@@ -81,7 +81,9 @@ public:
 	 * Opening a tab can fail if one or more
 	 * required CSV files for the tab are not
 	 * present in the CSV database, or are
-	 * unabled to be loaded.
+	 * unable to be loaded.
+	 * 
+	 * \param NewTab The tab to open.
 	 */
 	void OpenNewEditorTab(std::shared_ptr<UiTab> NewTab);
 
@@ -90,6 +92,8 @@ public:
 	 * 
 	 * This is used so that the main menu bar displays tab
 	 * specific options for the currently focused tab.
+	 * 
+	 * \param NewLastFocusedTab The tab to set as the last focused tab.
 	 */
 	void SatLastFocusedTab(UiTab* NewLastFocusedTab);
 
@@ -101,27 +105,37 @@ public:
 
 	/**
 	 * Get the GuiContext used by this MainEditorWindow.
+	 * 
+	 * \return Shared pointer to the GuiContext.
 	 */
 	std::shared_ptr<GuiContext> GetGuiContext();
 
 	/**
 	 * Get the AppSettings used by this MainEditorWindow.
+	 * 
+	 * \return Shared pointer to the AppSettings.
 	 */
 	std::shared_ptr<AppSettings> GetSettings();
 
 	/**
 	 * Get the FontManager used by this MainEditorWindow.
+	 * 
+	 * \return Shared pointer to the FontManager.
 	 */
 	std::shared_ptr<FontManager> GetFontManager();
 
 	/**
 	 * Get the ModalManager used by this MainEditorWindow.
+	 * 
+	 * \return Shared pointer to the ModalManager.
 	 */
 	std::shared_ptr<ModalManager> GetModalManager();
 
 	/**
 	 * Get the current ID of the main dockspace
 	 * used for UiTabs.
+	 * 
+	 * \return The ImGuiID of the main dockspace.
 	 */
 	ImGuiID GetMainDockspaceId() const;
 
@@ -131,12 +145,16 @@ public:
 	 * Can return nullptr if no tab
 	 * has been focused yet, or if the last
 	 * focused tab was closed.
+	 * 
+	 * \return Pointer to the last focused UiTab, or nullptr if none exists.
 	 */
 	UiTab* GetLastFocusedTab();
 
 	/**
 	 * Get the global instance of this MainEditorWindow located
 	 * on the global DataEditorInstance.
+	 * 
+	 * \return Shared pointer to the global MainEditorWindow instance.
 	 */
 	static std::shared_ptr<MainEditorWindow> Get();
 

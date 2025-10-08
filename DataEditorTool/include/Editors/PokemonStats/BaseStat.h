@@ -30,7 +30,13 @@ class BaseStat : public UiSingleLineMultiElement
 
 public:
 
-	/** Construct a BaseStat element with the supplied stat name and CSV column name. */
+	/**
+	 * Construct a BaseStat element with the supplied stat name and CSV column name.
+	 * 
+	 * \param InStatName The name of the stat to display (e.g. "HP", "Attack", etc).
+	 * \param InParent The parent UiSection for this element.
+	 * \param InStatColumnName The name of the CSV column this stat corresponds to.
+	 */
 	BaseStat(
 		const std::string& InStatName,
 		UiSection* InParent,
@@ -46,10 +52,20 @@ public:
 	/** Update the valid stat range text based on the current value of the StatIntBox. */
 	void UpdateStatRange();
 
-	/** Get a formatted string representing the valid range for this stat. */
+	/**
+	 * Get a formatted string representing the valid range for this stat.
+	 * 
+	 * \param StatLow The minimum valid value for this stat.
+	 * \param StatHigh The maximum valid value for this stat.
+	 * \return A formatted string of the form "({StatLow}-{StatHigh})".
+	 */
 	std::string GetFormattedStatRange(const int32_t StatLow, const int32_t StatHigh);
 
-	/** Get the CSVIntBox used to edit this stat's value. */
+	/**
+	 * Get the CSVIntBox used to edit this stat's value.
+	 * 
+	 * \return A shared pointer to the CSVIntBox used to edit this stat's value.
+	 */
 	std::shared_ptr<CSVIntBox> GetStatIntBox();
 
 private:
