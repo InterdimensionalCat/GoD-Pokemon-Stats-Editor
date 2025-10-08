@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   SimpleProgressBar.h
+ * \brief  UiSingleElement that manages a ProgressBar component.
+ * 
+ * \author Bennett Thomas
+ * \date   September 2025
+ *********************************************************************/
 #pragma once
 #include "UI/UiElement/UiSingleElement.h"
 

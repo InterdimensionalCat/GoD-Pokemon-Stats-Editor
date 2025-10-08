@@ -79,6 +79,6 @@ void UiElementSwitcher::SwitchCurrentlyActiveElement(std::shared_ptr<UiElement> 
 	}
 	else
 	{
-		ICLogger::Warn("UiElementSwitcher attempted to switch to an element not in the switcher.");
+		ICLogger::Warn("UiElementSwitcher attempted to switch to an element not in the switcher: {}", NewActiveElement->GetName());
 	}
 }
