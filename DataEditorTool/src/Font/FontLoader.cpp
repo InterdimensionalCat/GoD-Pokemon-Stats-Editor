@@ -10,6 +10,8 @@ FontLoader::FontLoader() : CustomRanges()
 	BuildCustomRanges();
 }
 
+// TODO: instead of using ImGui's default font, we
+// could embed a font TTF file into the executable.
 ImFont* FontLoader::LoadDefaultFont()
 {
 	// Add default font and build it before returning a pointer to it.
@@ -27,6 +29,7 @@ ImFont* FontLoader::LoadFontFromFileOrDefault(
 	ImFontConfig* Config,
 	const bool bJPFile)
 {
+	ICLogger::Debug("Attempting to load font: {}, size: {}, is JP: {}", FileNameOrDefault, FontSize, bJPFile);
 	// If the default font was passed in just load the default font.
 	const bool bLoadDefault = FileNameOrDefault == "Default";
 	if (bLoadDefault)
@@ -59,10 +62,18 @@ ImFont* FontLoader::LoadFontFromFileOrDefault(
 		Config, 
 		Config->GlyphRanges
 	);
+
+	ICLogger::Debug("Successfully loaded font: {}", FilePath.string());
 }
 
 bool FontLoader::TryLoadFont(MergedFont& FontToLoad)
 {
+	ICLogger::Debug("Attempting to load merged font: EN: {}, JP: {}, Size: {}, JP Multiplier: {}",
+		FontToLoad.ENFontName,
+		FontToLoad.JPFontName,
+		FontToLoad.FontSize,
+		FontToLoad.JPFontSizeMultiplier
+	);
 	bool bLoadingSuccessful = true;
 	ImFontAtlas* FontAtlas = ImGui::GetIO().Fonts;
 	ImFontConfig Config = ImFontConfig();
@@ -180,6 +191,13 @@ bool FontLoader::TryLoadFont(MergedFont& FontToLoad)
 	// after ImGui OpenGL initialization.
 	MainEditorWindow::Get()->GetGuiContext()->DestroyDeviceObjects();
 	MainEditorWindow::Get()->GetGuiContext()->CreateDeviceObjects();
+
+	ICLogger::Debug("Successfully loaded merged font: EN: {}, JP: {}, Size: {}, JP Multiplier: {}",
+		FontToLoad.ENFontName,
+		FontToLoad.JPFontName,
+		FontToLoad.FontSize,
+		FontToLoad.JPFontSizeMultiplier
+	);
 
 	return bLoadingSuccessful;
 }

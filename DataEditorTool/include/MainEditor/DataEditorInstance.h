@@ -1,25 +1,12 @@
-/*******************************************************************
+/*****************************************************************//**
  * \file   DataEditorInstance.h
- * \brief  Global context for the entire data editor tool. Initializes and destroys needed contexts. Contains the main application loop logic.
- * Contains an instance of MainEditorWindow which handles the window functionality and UI containers. (this is the view)
- * Also contains an instance of the loaded CSV data map, which can be used to get or modify csv data values (this is the model and controller)
+ * \brief  Global application instance and application loop.
  * 
  * \author Bennett Thomas
  * \date   August 2025
  *********************************************************************/
 #pragma once
 #include "include.h"
-
-//#include "CSVData/PokemonStats.h"
-//#include "CSVData/Types.h"
-//#include "CSVData/Abilities.h"
-//#include "CSVData/Items.h"
-//#include "CSVData/Moves.h"
-//#include "Command/Command.h"
-//#include "Settings/Settings.h"
-//#include "Util/UnsavedProgressModal.h"
-
-//class PokemonList;
 
 class MainEditorWindow;
 class ProjectRoot;
@@ -29,100 +16,124 @@ namespace GoDCSV
 	class CSVDatabase;
 }
 
+/**
+ * \brief Global application instance and application loop.
+ */
 class DataEditorInstance
 {
 
 public:
 
+	/**
+	 * Construct a DataEditorInstance. This will
+	 * not be valid for use until Init() is called.
+	 * 
+	 * This is publice because std::make_shared requires
+	 * a public constructor, but this should only ever
+	 * be called by CreateInstance().
+	 */
+	DataEditorInstance() = default;
+
+	/**
+	 * Create a new global instance of the DataEditorInstance.
+	 */
 	static void CreateInstance();
 
+	/**
+	 * Destroy the global instance of the DataEditorInstance.
+	 */
 	static void DestroyInstance();
 
+	/**
+	 * Get the global instance of the DataEditorInstance.
+	 */
 	static std::shared_ptr<DataEditorInstance> Get();
 
+	/**
+	 * Initialize the DataEditorInstance and its
+	 * MainEditorWindow, ProjectRootManager,
+	 * and CSVDatabase.
+	 */
 	void Init();
 
+	/**
+	 * Stop the application loop, this
+	 * will cause Exit() to be called
+	 * next loop.
+	 */
 	void Stop();
 
+	/**
+	 * Exit the application,this will Exit the 
+	 * MainEditorWindow and destroy its window context.
+	 */
 	void Exit();
 
+	/**
+	 * Is the application loop currently running?
+	 */
 	bool IsRunning() const;
 
+	/**
+	 * Poll events from the MainEditorWindow.
+	 */
 	void PollEvents();
 
+	/**
+	 * Tick the MainEditorWindow.
+	 */
 	void Tick();
 
+	/**
+	 * Render the MainEditorWindow.
+	 */
 	void Render();
 
+	/**
+	 * The main application loop. This will 
+	 * update input, then tick, then render.
+	 */
 	void ApplicationLoop();
 
+	/**
+	 * Get the MainEditorWindow instance.
+	 */
 	std::shared_ptr<MainEditorWindow> GetMainEditorWindow();
 
+	/**
+	 * Get the ProjectRoot manager instance.
+	 */
 	std::shared_ptr<ProjectRoot> GetProjectRoot();
 
+	/**
+	 * Get the CSVDatabase instance.
+	 */
 	std::shared_ptr<GoDCSV::CSVDatabase> GetCSVDatabase();
 
 private:
 
+	/**
+	 * Main editor window for this DataEditorInstance.
+	 */
 	std::shared_ptr<MainEditorWindow> EditorWindow;
 
+	/**
+	 * Project root manager for this DataEditorInstance.
+	 */
 	std::shared_ptr<ProjectRoot> CurrentProjectRoot;
 
+	/**
+	 * CSV database for this DataEditorInstance.
+	 */
 	std::shared_ptr<GoDCSV::CSVDatabase> EditorCSVDatabase;
 
+	/**
+	 * Global application instance for the tool.
+	 */
 	static std::shared_ptr<DataEditorInstance> Instance;
 
+	/**
+	 * Is the application loop currently running?
+	 */
 	bool Running = true;
-
-public:
-
-	// void SetProjectRootPath();
-
-	// void CloseCurrentRoot();
-
-	// bool Save();
-
-	// void OnCurrentPokemonUpdated(const int32_t NewPokemonIndex, const bool ShouldSave);
-
-	// static void WindowCloseCallback(GLFWwindow* window);
-
-	/*std::shared_ptr<PokemonList> CurrentPokemonList;
-
-	std::vector<std::shared_ptr<UiSection>> UiElements;
-
-	std::filesystem::path GetProjectRootPath();
-
-	std::shared_ptr<PokemonStatsCSV> StatsCSV;
-
-	std::shared_ptr<PokemonTypesCSV> TypesCSV;
-
-	std::shared_ptr<PokemonAbilitiesCSV> AbilitiesCSV;
-
-	std::shared_ptr<PokemonItemsCSV> ItemsCSV;
-
-	std::shared_ptr<PokemonMovesCSV> MovesCSV;
-
-	std::shared_ptr<UnsavedProgressModal> UnsavedProgressBlocker;
-	std::shared_ptr<UnsavedProgressModal> SwitchRootBlocker;
-
-	GLFWwindow* window;
-
-	std::shared_ptr<ImFont> FontTitle;
-	std::shared_ptr<ImFont> FontBody;
-
-	void OnFontChanged();*/
-
-private:
-
-	//void CSVLoadFail(const std::string& FailedCSV);
-
-	//void GeneralLoadFail(std::exception e);
-
-	//bool bProjectRootPathSet = false;
-
-	//void OnProjectRootPathSet();
-
-	//std::filesystem::path ProjectRootPath;
-
-	//std::shared_ptr<AppSettings> CurrentSettings;
 };

@@ -1,12 +1,37 @@
+/*****************************************************************//**
+ * \file   MergedFont.h
+ * \brief  Class that represents a merged font for use in ImGui.
+ * 
+ * \author Bennett Thomas
+ * \date   September 2025
+ *********************************************************************/
 #pragma once
 
+/**
+ * \brief  Class that represents a merged font for use in ImGui.
+ * 
+ * This is organizationally useful as the DataEditorTool needs
+ * five different data points to display a font correctly:
+ * English font, Japanese font, font size, JP font size multiplier,
+ * and font color.
+ * 
+ * It is also necessasary to keep an ImFont* pointer alive
+ * throughout the entire time the font is in use.
+ */
 class MergedFont
 {
 
 public:
 
+	/**
+	 * Construct a default MergedFont with no font data.
+	 */
 	MergedFont() = default;
 
+	/**
+	 * Construct a MergedFont with the supplied parameters,
+	 * including a pointer to the ImGui-generated font data.
+	 */
 	MergedFont(
 		const std::string& InENFontName,
 		const std::string& InJPFontName,
@@ -16,6 +41,9 @@ public:
 		ImFont* InMergedFontData
 	);
 
+	/**
+	 * Get a string representation of this MergedFont.
+	 */
 	std::string ToString() const;
 
 	/**

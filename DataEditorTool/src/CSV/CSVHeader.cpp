@@ -24,6 +24,7 @@ int32_t CSVHeader::GetIndexOfColumn(const std::string& ColumnName) const
 	// Element not found
 	if (It == ColumnNames.end())
 	{
+		ICLogger::Warn("Column name {} not found in CSVHeader", ColumnName);
 		return -1;
 	}
 	else

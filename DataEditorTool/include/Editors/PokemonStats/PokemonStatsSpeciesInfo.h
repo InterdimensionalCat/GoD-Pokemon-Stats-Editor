@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   PokemonStatsSpeciesInfo.h
+ * \brief  UiSection that contains basic species info and misc characteristics
+ * 
+ * \author Bennett Thomas
+ * \date   September 2025
+ *********************************************************************/
 #pragma once
 
 #include "UI/UiSection.h"
@@ -7,21 +14,41 @@ class SimpleImageBox;
 class CSVTextBox;
 typedef unsigned int GLuint;
 
+/**
+ * \brief  UiSection that contains basic species info and misc characteristics
+ */
 class PokemonStatsSpeciesInfo : public UiSection
 {
 
 public:
 
+	/**
+	 * Construct a PokemonStatsSpeciesInfo section under the
+	 * specified PokemonStatsEditor parent.
+	 */
 	PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent);
 
+	/**
+	 * Refresh references to the underlying data this UiObject manages.
+	 * 
+	 * This will update the Pokeface image and species name
+	 * to match the currently selected species in the
+	 * PokemonStatsEditor tab's TabCSVState.
+	 */
 	virtual void Refresh() override;
 
+	/** Load Pokeface data images from disk */
 	void InitPokefaceData();
 
+	/** Calculate the max content size of elements in this section. */
 	void CalculateElementMaxWidth();
 
 private:
+
+	/** Name ID of the current species. */
 	std::shared_ptr<CSVTextBox> NameID;
+
+	/** Pokeface image of the current species. */
 	std::shared_ptr<SimpleImageBox> PokefaceImage;
 
 	/**
@@ -42,5 +69,6 @@ private:
 	 */
 	static std::deque<GLuint> PokefaceData;
 
+	/** Has Pokeface data been loaded yet? */
 	static bool bPokefaceDataLoaded;
 };

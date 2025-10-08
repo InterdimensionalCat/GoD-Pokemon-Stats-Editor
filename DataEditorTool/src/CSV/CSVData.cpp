@@ -1,17 +1,17 @@
 #include "include.h"
-#include "CSV/NewCSVData.h"
+#include "CSV/CSVData.h"
 #include "CSV/CSVLoader.h"
 #include "CSV/CSVHeader.h"
 #include "CSV/CSVRow.h"
 
 using namespace GoDCSV;
 
-NewCSVData::NewCSVData(const std::string& CSVFileName) : FileName(CSVFileName)
+CSVData::CSVData(const std::string& CSVFileName) : FileName(CSVFileName)
 {
 
 }
 
-void NewCSVData::Init()
+void CSVData::Init()
 {
 	try
 	{
@@ -28,7 +28,7 @@ void NewCSVData::Init()
 	}
 }
 
-void NewCSVData::InitFromLoadedData(std::pair<std::vector<std::string>, std::vector<json>> InLoadedData)
+void CSVData::InitFromLoadedData(std::pair<std::vector<std::string>, std::vector<json>> InLoadedData)
 {
 	// Set the header row based on the loaded data.
 	HeaderRow = std::make_shared<CSVHeader>(InLoadedData.first);
@@ -42,7 +42,7 @@ void NewCSVData::InitFromLoadedData(std::pair<std::vector<std::string>, std::vec
 	bLoaded = true;
 }
 
-std::string NewCSVData::Save()
+std::string CSVData::Save()
 {
 	if (!bLoaded)
 	{
@@ -91,7 +91,7 @@ std::string NewCSVData::Save()
 	return "";
 }
 
-std::shared_ptr<const CSVRow> NewCSVData::GetRowAtIndex(const uint32_t RowIndex)
+std::shared_ptr<const CSVRow> CSVData::GetRowAtIndex(const uint32_t RowIndex)
 {
 	if (!bLoaded)
 	{
@@ -102,7 +102,7 @@ std::shared_ptr<const CSVRow> NewCSVData::GetRowAtIndex(const uint32_t RowIndex)
 	return DataRows.at(RowIndex);
 }
 
-std::shared_ptr<const CSVRow> NewCSVData::GetRowByName(const std::string& RowName)
+std::shared_ptr<const CSVRow> CSVData::GetRowByName(const std::string& RowName)
 {
 	if (!bLoaded)
 	{
@@ -129,12 +129,12 @@ std::shared_ptr<const CSVRow> NewCSVData::GetRowByName(const std::string& RowNam
 	return *FoundIt;
 }
 
-std::shared_ptr<const CSVHeader> GoDCSV::NewCSVData::GetHeaderRow() const
+std::shared_ptr<const CSVHeader> GoDCSV::CSVData::GetHeaderRow() const
 {
 	return HeaderRow;
 }
 
-std::vector<bool> NewCSVData::GetBoolColumn(const std::string& ColumnName)
+std::vector<bool> CSVData::GetBoolColumn(const std::string& ColumnName)
 {
 	if (!bLoaded)
 	{
@@ -151,7 +151,7 @@ std::vector<bool> NewCSVData::GetBoolColumn(const std::string& ColumnName)
 	return BoolsInColumn;
 }
 
-std::vector<float> NewCSVData::GetFloatColumn(const std::string& ColumnName)
+std::vector<float> CSVData::GetFloatColumn(const std::string& ColumnName)
 {
 	if (!bLoaded)
 	{
@@ -168,7 +168,7 @@ std::vector<float> NewCSVData::GetFloatColumn(const std::string& ColumnName)
 	return FloatsInColumn;
 }
 
-std::vector<int32_t> NewCSVData::GetIntColumn(const std::string& ColumnName)
+std::vector<int32_t> CSVData::GetIntColumn(const std::string& ColumnName)
 {
 	if (!bLoaded)
 	{
@@ -185,7 +185,7 @@ std::vector<int32_t> NewCSVData::GetIntColumn(const std::string& ColumnName)
 	return IntsInColumn;
 }
 
-std::vector<std::string> NewCSVData::GetStringColumn(const std::string& ColumnName)
+std::vector<std::string> CSVData::GetStringColumn(const std::string& ColumnName)
 {
 	if (!bLoaded)
 	{
@@ -202,12 +202,12 @@ std::vector<std::string> NewCSVData::GetStringColumn(const std::string& ColumnNa
 	return StringsInColumn;
 }
 
-std::string NewCSVData::GetName() const
+std::string CSVData::GetName() const
 {
 	return FileName;
 }
 
-void NewCSVData::SetField(
+void CSVData::SetField(
 	const std::string& ColumnName, 
 	const int32_t RowIndex, 
 	const std::variant<bool, float, int32_t, std::string> NewValue
@@ -245,12 +245,12 @@ void NewCSVData::SetField(
 	}
 }
 
-bool NewCSVData::HasCSVFileBeenModified() const
+bool CSVData::HasCSVFileBeenModified() const
 {
 	return bModified;
 }
 
-bool GoDCSV::NewCSVData::DoesCSVFileExist() const
+bool GoDCSV::CSVData::DoesCSVFileExist() const
 {
 	fs::path CSVFilePath = CSVLoader::GetCSVFileDir();
 	CSVFilePath /= FileName;
@@ -264,7 +264,7 @@ bool GoDCSV::NewCSVData::DoesCSVFileExist() const
 	return true;
 }
 
-bool GoDCSV::NewCSVData::IsCSVFileLoaded() const
+bool GoDCSV::CSVData::IsCSVFileLoaded() const
 {
 	return bLoaded;
 }

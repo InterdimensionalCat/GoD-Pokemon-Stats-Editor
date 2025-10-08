@@ -12,6 +12,7 @@ void GuiContext::Init(std::shared_ptr<WindowContext> MainWindowContext)
 {
     try
     {
+		ICLogger::Debug("Initializing Gui Context...");
         // Setup Dear ImGui context.
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -44,6 +45,8 @@ void GuiContext::Init(std::shared_ptr<WindowContext> MainWindowContext)
             throw std::exception("ImGui OpenGL impl initialization failed.");
         }
 
+        // ImGui style tweaks used for debugging:
+
 		// Space between two elements inside a single item.
         // ImGui::GetStyle().ItemInnerSpacing.x = 100.f;
   
@@ -52,6 +55,8 @@ void GuiContext::Init(std::shared_ptr<WindowContext> MainWindowContext)
 
         // Space between the window border and its content on either side.
         // ImGui::GetStyle().WindowPadding.x = 100.f;
+
+        // Style debugging end
 
         ICLogger::Debug(
             "Successfully loaded ImGui version {} with platform backend {} and renderer backend {}",
@@ -65,10 +70,13 @@ void GuiContext::Init(std::shared_ptr<WindowContext> MainWindowContext)
         Exit();
         throw e;
     }
+
+	ICLogger::Debug("GuiContext initialized.");
 }
 
 void GuiContext::Exit()
 {
+	ICLogger::Debug("Exiting Gui Context...");
     // Shutdown the ImGui renderer backend.
     if (bImpl_OpenGL3_Initialized)
     {

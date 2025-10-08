@@ -6,7 +6,7 @@
 #include "UI/TabCSVState.h"
 #include "UI/TabLayoutManager.h"
 #include "CSV/CSVDatabase.h"
-#include "CSV/NewCSVData.h"
+#include "CSV/CSVData.h"
 #include "MainEditor/MainEditorWindow.h"
 
 /** TODO: recalc all sizes in a tab when the tab becomes active or the font type/size changes */

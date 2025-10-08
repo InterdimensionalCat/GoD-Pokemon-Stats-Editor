@@ -2,7 +2,7 @@
 #include "CSV/StaticCSVFiles.h"
 
 #include "CSV/CSVDatabase.h"
-#include "CSV/NewCSVData.h"
+#include "CSV/CSVData.h"
 #include "CSV/StringTypes/ParenthValueString.h"
 #include "CSV/StringTypes/EntryNameString.h"
 
@@ -23,6 +23,8 @@ LoadedCSVData StaticCSVFiles::LoadLevelUpRateDatabase()
 	// Slow (3):       Medium Slow
 	// Fast (4):       Fast
 	// Very Slow (5):  Slow
+
+	ICLogger::Info("Loading static LevelUpRate database");
 
 	std::vector<ParenthValueString> LevelUpRateEntries;
 
@@ -57,6 +59,8 @@ LoadedCSVData StaticCSVFiles::LoadGenderRatioDatabase()
 	// However, interestingly, 87.5% Female Pokemon are so
 	// uncommonly made, that in Gen 3 no Pokemon use this
 	// gender ratio yet.
+
+	ICLogger::Debug("Loading static GenderRatio database");
 
 	std::vector<ParenthValueString> GenderRatioEntries;
 
@@ -94,6 +98,8 @@ LoadedCSVData StaticCSVFiles::LoadEvolutionMethodDatabase()
 	// Max Beauty (15): Evolves when Beauty is raised to the param value,  Param: The beauty value needed to evolve
 	// Level Up With Key Item (16): Used to evolve Espeon/Umbreon,         Param: Key Item ID (item 350 and after) + 150, (516 for Espeon, 517 for Umbreon).
 
+	ICLogger::Debug("Loading static EvolutionMethod database");
+
 	std::vector<ParenthValueString> EvolutionMethodEntries;
 
 	EvolutionMethodEntries.push_back(ParenthValueString("None (0)"));
@@ -121,6 +127,8 @@ LoadedCSVData StaticCSVFiles::LoadEvolutionStoneDatabase()
 {
 	// Evolution stones:
 
+	ICLogger::Debug("Loading static EvolutionStone database");
+
 	std::vector<ParenthValueString> EvolutionStoneEntries;
 
 	EvolutionStoneEntries.push_back(ParenthValueString("SUN STONE (93)"));
@@ -141,6 +149,9 @@ LoadedCSVData StaticCSVFiles::LoadKeyItemDatabase()
 	// item ID for each key item, but rather a secondary ID that is
 	// just the original ID + 150, so for example, the SAFE KEY is
 	// normally item ID 350, but for the key item evo condition its 500
+
+	ICLogger::Debug("Loading static KeyItem database");
+
 	std::vector<ParenthValueString> KeyItemEntries;
 
 	KeyItemEntries.push_back(ParenthValueString("SAFE KEY (500)"));

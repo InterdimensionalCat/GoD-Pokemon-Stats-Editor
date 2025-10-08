@@ -1,22 +1,30 @@
+/*****************************************************************//**
+ * \file   CSVDatabase.h
+ * \brief  Database containing all CSV files in the current project root.
+ * 
+ * \author Bennett Thomas
+ * \date   August 2025
+ *********************************************************************/
 #pragma once
 
 namespace GoDCSV
 {
-	class NewCSVData;
+	class CSVData;
 
-	/** CSVType type must either be a NewCSVData or derive from NewCSVData */
-	template <typename CSVType>
-	concept NewCSVDataOrSubclass =
-		std::same_as<CSVType, NewCSVData> ||
-		std::derived_from<CSVType, NewCSVData>;
-
+	/**
+	 * \brief  Database containing all CSV files in the current project root.
+	 */
 	class CSVDatabase
 	{
-
 		using LoadedCSVData = std::pair<std::vector<std::string>, std::vector<json>>;
 		
 	public:
 
+		/**
+		 * Construct a CSVDatabase.
+		 * This does not load or find any CSV files
+		 * until OnProjectRootPathSet is called.
+		 */
 		CSVDatabase() = default;
 
 		/**
@@ -34,7 +42,7 @@ namespace GoDCSV
 		/**
 		* Get the CSV file with the specified name from the Database.
 		*/
-		std::shared_ptr<NewCSVData> GetCSVFile(const std::string& CSVFileName);
+		std::shared_ptr<CSVData> GetCSVFile(const std::string& CSVFileName);
 
 		/** Return whether or not the current root contains all the given CSV files. */
 		bool RootContainsAllCSVFiles(const std::vector<std::string>& CSVFileNames) const;
@@ -66,8 +74,20 @@ namespace GoDCSV
 		 */
 		void ClearDatabase();
 
+		/**
+		 * Load the CSV file with the specified name from disk into the database.
+		 * If the file is already loaded, this will do nothing.
+		 * If the file is not in the database, this will add it to the database
+		 * and then load it.
+		 */
 		void LoadCSVFile(const std::string& CSVFileName);
 		
+		/**
+		 * Load a CSV file from already loaded data, bypassing the CSVLoader.
+		 * If the file is already loaded, this will do nothing.
+		 * If the file is not in the database, this will add it to the database
+		 * and then load it.
+		 */
 		void LoadCSVFileFromData(
 			const std::string& CSVFileName,
 			LoadedCSVData LoadedData
@@ -76,12 +96,12 @@ namespace GoDCSV
 		/** DEBUG COMMANDS: USE FOR TESTING ONLY */
 		
 		/** Load every CSV file in the database. */
-		void LoadAllCSVFiles();
+		//void LoadAllCSVFiles();
 
 		/** Save every CSV file in the database. */
-		void SaveAllCSVFiles();
+		//void SaveAllCSVFiles();
 
-		std::map<std::string, std::shared_ptr<NewCSVData>>& GetDatabaseMap();
+		//std::map<std::string, std::shared_ptr<CSVData>>& GetDatabaseMap();
 
 		/** DEBUG COMMAND END */
 
@@ -91,7 +111,7 @@ namespace GoDCSV
 	private:
 
 		/** Database of all loaded CSV files. */
-		std::map<std::string, std::shared_ptr<NewCSVData>> CSVDatabaseMap;
+		std::map<std::string, std::shared_ptr<CSVData>> CSVDatabaseMap;
 	};
 }
 

@@ -1,6 +1,6 @@
 #include "include.h"
 #include "CSV/CSVDatabase.h"
-#include "CSV/NewCSVData.h"
+#include "CSV/CSVData.h"
 #include "CSV/CSVLoader.h"
 #include "CSV/StaticCSVFiles.h"
 
@@ -29,7 +29,7 @@ void CSVDatabase::OnProjectRootPathSet()
                 // If this is a file with the ".csv" extension, add it to the database
                 std::string FileName = File.path().stem().string();
                 ICLogger::Debug("Found CSV file: {}.csv", FileName);
-                CSVDatabaseMap.emplace(FileName, std::make_shared<NewCSVData>(FileName));
+                CSVDatabaseMap.emplace(FileName, std::make_shared<CSVData>(FileName));
             }
         }
     }
@@ -43,32 +43,39 @@ void CSVDatabase::LoadStaticDatabases()
 
 	// Load LevelUpRate database.
 	const auto LevelUpRateData = StaticCSVFiles::LoadLevelUpRateDatabase();
-	CSVDatabaseMap.emplace("LevelUpRate", std::make_shared<NewCSVData>("LevelUpRate"));
+	CSVDatabaseMap.emplace("LevelUpRate", std::make_shared<CSVData>("LevelUpRate"));
 	CSVDatabaseMap.at("LevelUpRate")->InitFromLoadedData(LevelUpRateData);
 
 	// Load GenderRatio database.
 	const auto GenderRatioData = StaticCSVFiles::LoadGenderRatioDatabase();
-	CSVDatabaseMap.emplace("GenderRatio", std::make_shared<NewCSVData>("GenderRatio"));
+	CSVDatabaseMap.emplace("GenderRatio", std::make_shared<CSVData>("GenderRatio"));
 	CSVDatabaseMap.at("GenderRatio")->InitFromLoadedData(GenderRatioData);
 
 	// Load EvolutionMethod database.
 	const auto EvolutionMethodData = StaticCSVFiles::LoadEvolutionMethodDatabase();
-	CSVDatabaseMap.emplace("EvolutionMethod", std::make_shared<NewCSVData>("EvolutionMethod"));
+	CSVDatabaseMap.emplace("EvolutionMethod", std::make_shared<CSVData>("EvolutionMethod"));
 	CSVDatabaseMap.at("EvolutionMethod")->InitFromLoadedData(EvolutionMethodData);
 
 	// Load EvolutionStone database.
 	const auto EvolutionStoneData = StaticCSVFiles::LoadEvolutionStoneDatabase();
-	CSVDatabaseMap.emplace("EvolutionStone", std::make_shared<NewCSVData>("EvolutionStone"));
+	CSVDatabaseMap.emplace("EvolutionStone", std::make_shared<CSVData>("EvolutionStone"));
 	CSVDatabaseMap.at("EvolutionStone")->InitFromLoadedData(EvolutionStoneData);
 
 	// Load KeyItem database.
 	const auto KeyItemData = StaticCSVFiles::LoadKeyItemDatabase();
-	CSVDatabaseMap.emplace("KeyItem", std::make_shared<NewCSVData>("KeyItem"));
+	CSVDatabaseMap.emplace("KeyItem", std::make_shared<CSVData>("KeyItem"));
 	CSVDatabaseMap.at("KeyItem")->InitFromLoadedData(KeyItemData);
 }
 
-std::shared_ptr<GoDCSV::NewCSVData> CSVDatabase::GetCSVFile(const std::string& CSVFileName)
+std::shared_ptr<GoDCSV::CSVData> CSVDatabase::GetCSVFile(const std::string& CSVFileName)
 {
+	// Return null if the file is not in the database.
+    if (!CSVDatabaseMap.contains(CSVFileName))
+    {
+		ICLogger::Warn("Attempted to get CSV file {}.csv which does not exist in the database, returning nullptr", CSVFileName);
+        return nullptr;
+	}
+
 	return CSVDatabaseMap.at(CSVFileName);
 }
 
@@ -83,6 +90,7 @@ bool CSVDatabase::RootContainsAllCSVFiles(const std::vector<std::string>& CSVFil
 
         if (!bContainsAllFiles)
         {
+			ICLogger::Warn("Current root does not contain CSV file {}.csv", CSVFileName);
             break;
         }
     }
@@ -106,7 +114,6 @@ std::vector<std::string> GoDCSV::CSVDatabase::GetAllModifiedCSVFileNames()
 
 bool GoDCSV::CSVDatabase::AreAnyCSVFilesModified()
 {
-
     for (auto& [Key, CSVFile] : CSVDatabaseMap)
     {
         if (CSVFile->HasCSVFileBeenModified())
@@ -150,6 +157,7 @@ std::vector<std::pair<std::string, std::string>> GoDCSV::CSVDatabase::SaveSelect
         catch (const std::exception& e)
         {
             // If saving a particular CSV file fails, then return that file name + why it failed.
+			ICLogger::Error("Saving CSV file {}.csv has failed: {}", FileName, e.what());
             FailedFilesWithReasons.push_back({ FileName, e.what() });
         }
     }
@@ -171,6 +179,12 @@ void GoDCSV::CSVDatabase::ClearDatabase()
 
 void GoDCSV::CSVDatabase::LoadCSVFile(const std::string& CSVFileName)
 {
+    if (!IsCSVFileInDatabase(CSVFileName))
+    {
+        CSVDatabaseMap.emplace(CSVFileName, std::make_shared<CSVData>(CSVFileName));
+        ICLogger::Warn("CSV File {}.csv not found in database, creating a new database entry for it", CSVFileName);
+	}
+
     auto CSVFile = CSVDatabaseMap.at(CSVFileName);
 
     if (!CSVFile->IsCSVFileLoaded())
@@ -210,7 +224,7 @@ void CSVDatabase::LoadCSVFileFromData(const std::string& CSVFileName, std::pair<
 {
     if (!IsCSVFileInDatabase(CSVFileName))
     {
-		CSVDatabaseMap.emplace(CSVFileName, std::make_shared<NewCSVData>(CSVFileName));
+		CSVDatabaseMap.emplace(CSVFileName, std::make_shared<CSVData>(CSVFileName));
         ICLogger::Debug("Static CSV File {}.csv not found in database, creating a new database entry for it", CSVFileName);
     }
 
@@ -240,26 +254,26 @@ void CSVDatabase::LoadCSVFileFromData(const std::string& CSVFileName, std::pair<
 	}
 }
 
-void CSVDatabase::LoadAllCSVFiles()
-{
-    for (auto& [Key, CSVFile] : CSVDatabaseMap)
-    {
-        LoadCSVFile(Key);
-    }
-}
-
-void GoDCSV::CSVDatabase::SaveAllCSVFiles()
-{
-    for (auto& [Key, CSVFile] : CSVDatabaseMap)
-    {
-        CSVFile->Save();
-    }
-}
-
-std::map<std::string, std::shared_ptr<NewCSVData>>& GoDCSV::CSVDatabase::GetDatabaseMap()
-{
-    return CSVDatabaseMap;
-}
+//void CSVDatabase::LoadAllCSVFiles()
+//{
+//    for (auto& [Key, CSVFile] : CSVDatabaseMap)
+//    {
+//        LoadCSVFile(Key);
+//    }
+//}
+//
+//void GoDCSV::CSVDatabase::SaveAllCSVFiles()
+//{
+//    for (auto& [Key, CSVFile] : CSVDatabaseMap)
+//    {
+//        CSVFile->Save();
+//    }
+//}
+//
+//std::map<std::string, std::shared_ptr<CSVData>>& GoDCSV::CSVDatabase::GetDatabaseMap()
+//{
+//    return CSVDatabaseMap;
+//}
 
 std::shared_ptr<CSVDatabase> CSVDatabase::Get()
 {

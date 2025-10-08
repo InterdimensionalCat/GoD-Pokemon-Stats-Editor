@@ -84,5 +84,6 @@ void ICLogger::InitLogger()
 void ICLogger::ExitLogger()
 {
 	Instance->CleanUpOldLogs();
+	ICLogger::Debug("Shutting down logger.");
 	spdlog::shutdown();
 }

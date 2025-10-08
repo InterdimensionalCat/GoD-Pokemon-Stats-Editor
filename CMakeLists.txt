@@ -93,6 +93,9 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 # Link OpenGL libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
 
+# Add the docs subdirectory, which contains the Doxygen configuration
+add_subdirectory("${PROJECT_SOURCE_DIR}/Docs")
+
 # Precompiled header configurations:
 
 # Include the precompiled header include.h

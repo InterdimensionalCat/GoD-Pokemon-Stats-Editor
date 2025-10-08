@@ -1,11 +1,28 @@
+/*****************************************************************//**
+ * \file   ParenthValueString.h
+ * \brief  Class that parses and generates strings of the format "{String} ({Value})"
+ * 
+ * \author Bennett Thomas
+ * \date   September 2025
+ *********************************************************************/
 #pragma once
 
-/** Storage for a string with the format "{String} ({Value})". */
+/**
+ * \brief  Class that parses and generates strings of the format "{String} ({Value})"
+ * 
+ * This class can parse strings of the form "{String} ({Value})",
+ * where {String} can be any string (including spaces), and
+ * {Value} can be any string (including spaces, but not parentheses).
+ * It can also generate such strings from a given String and Value.
+ */
 class ParenthValueString
 {
 
 public:
 
+	/**
+	 * Construct a default ParenthValueString with empty String and Value.
+	 */
 	ParenthValueString() = default;
 
 	/**
@@ -16,10 +33,16 @@ public:
 	/** Construct a ParenthValueString from the supplied InString and InVvalue. */
 	ParenthValueString(const std::string& InString, const std::string& InValue);
 
+	/** Set the String portion of this ParenthValueString. */
 	void SetString(const std::string& InNewString);
+
+	/** Set the Value portion of this ParenthValueString. */
 	void SetValue(const std::string& InNewValue);
 
+	/** Returns the String portion of this ParenthValueString. */
 	std::string GetString() const;
+
+	/** Returns the Value portion of this ParenthValueString. */
 	std::string GetValue() const;
 
 	/** Returns a string of the form "{String} ({Value})". */
@@ -27,8 +50,10 @@ public:
 
 private:
 
+	/** The string portion of this ParenthValueString. */
 	std::string String = "";
 
+	/** The value portion of this ParenthValueString. */
 	std::string Value = "";
 
 };

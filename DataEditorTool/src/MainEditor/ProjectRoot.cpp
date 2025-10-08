@@ -2,7 +2,7 @@
 #include "MainEditor/ProjectRoot.h"
 #include "MainEditor/DataEditorInstance.h"
 #include "MainEditor/MainEditorWindow.h"
-#include "CSV/NewCSVData.h"
+#include "CSV/CSVData.h"
 #include "CSV/CSVDatabase.h"
 
 void ProjectRoot::SetProjectRootPath()
@@ -56,6 +56,7 @@ void ProjectRoot::SetProjectRootPath()
 void ProjectRoot::CloseCurrentRoot()
 {
 	// Clear the CSV database
+	ICLogger::Info("Closing current project root: {}", ProjectRootPath.string());
 	GoDCSV::CSVDatabase::Get()->ClearDatabase();
 	auto EditorWindow = MainEditorWindow::Get();
 	EditorWindow->OnProjectRootPathClosed();

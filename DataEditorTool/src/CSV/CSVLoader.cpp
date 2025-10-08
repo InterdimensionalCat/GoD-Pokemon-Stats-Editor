@@ -24,10 +24,10 @@ LoadedCSVData CSVLoader::TryLoadCSV(const std::string& CSVFileName)
 	std::shared_ptr<csv::CSVReader> ItemCSVReader;
 	csv::CSVFormat ItemCSVFormat;
 
-	// GoD tool files are comma ',' seperated,
+	// GoD tool files are comma ',' separated,
 	// and the header row is always the first row.
 	// However, the quoting scheme is strange and inconsistent,
-	// so we need to handle commas escaped with qoutes manually.
+	// so we need to handle commas escaped with quotes manually.
 	// This means that we disable quotes for the csv reader, and keep
 	// rows with variable columns. We will then consolidate those
 	// rows with variable columns in ProcessRow.
@@ -64,7 +64,7 @@ LoadedCSVData CSVLoader::TryLoadCSV(const std::string& CSVFileName)
 		throw std::exception("CSV file {} could not be parsed, the file may not be a valid CSV file.");
 	}
 
-	// If no exceptions occured then the CSV file was loaded successfully.
+	// If no exceptions occurred then the CSV file was loaded successfully.
 	ICLogger::Debug("CSV file {}.csv loaded successfully, Num Columns: {}, Num Rows: {}", CSVFileName, HeaderRow.size(), DataRows.size());
 
 	return LoadedCSVData{ HeaderRow, DataRows };
@@ -80,7 +80,7 @@ void CSVLoader::TrySaveCSV(const std::string& CSVFileName, LoadedCSVData CSVData
 	auto& HeaderRow = CSVData.first;
 	auto& DataRows = CSVData.second;
 
-	// This delim writer will make a CSV file delimeted by commas. It will use "~" as the
+	// This delim writer will make a CSV file delimited by commas. It will use "~" as the
 	// quote character, but quotes should never actually be used.
 	std::ofstream CSVStream(CSVFilePath);
 	csv::DelimWriter<std::ofstream, ',', '~', true> CSVWriter(CSVStream);
@@ -115,7 +115,7 @@ void CSVLoader::TrySaveCSV(const std::string& CSVFileName, LoadedCSVData CSVData
 		CSVWriter << RowFields;
 	}
 
-	/** If no exceptions occured the CSV file saved successfully */
+	/** If no exceptions occurred the CSV file saved successfully */
 	ICLogger::Debug("CSV file {}.csv saved successfully", CSVFileName);
 }
 
@@ -150,9 +150,9 @@ json CSVLoader::ProcessRow(csv::CSVRow& Row, std::vector<std::string> HeaderRow,
 		}
 
 		// Otherwise the row is bigger than the header, there should be 1 or more quoted strings with commas.
-		ICLogger::Debug("Row {} has too many fields, there could be a quoted string with a comma.", RowNum);
+		ICLogger::Trace("Row {} has too many fields, there could be a quoted string with a comma.", RowNum);
 
-		// This will concatinate
+		// This will concatenate
 		FixEscapedCommasInRow(Row, HeaderRow, RowNum, NextRow, CurrentField);
 
 	}
@@ -195,24 +195,24 @@ void CSVLoader::FixEscapedCommasInRow(csv::CSVRow& Row, std::vector<std::string>
 		RowKey++;
 
 		// Count the number of quotes in the field.
-		int32_t NumQuote = CountQuoteOccurances(PotentialQuoteData);
+		int32_t NumQuote = CountQuoteOccurrences(PotentialQuoteData);
 
 		// If the num quotes is odd (and not zero) then we know this is a string that was cut off due to a comma
 		if (NumQuote % 2 != 0 && NumQuote != 0)
 		{
 			ICLogger::Trace("Found field with mismatched quotes: {}", PotentialQuoteData);
 
-			// Keep concatinating fields until the num quotes is even again.
+			// Keep concatenating fields until the num quotes is even again.
 			// This is needed because we could have a field with two escaped commas, which
 			// would look like this:
 			// Field 1: "This is a,
 			// Field 2: field with,
 			// Field 3: two commas"
 			// The intended field is "This is a, field with, two commas", but if we only
-			// concatinate Field 1 and 2, we won't achieve that result. However, after
-			// concatinating those two fields, the combined field will still only have 1
+			// concatenate Field 1 and 2, we won't achieve that result. However, after
+			// concatenating those two fields, the combined field will still only have 1
 			// quote, so we can check for this case by re-checking the number of quotes
-			// and continuing to concatinate until we have an even number of quotes.
+			// and continuing to concatenate until we have an even number of quotes.
 			while (NumQuote % 2 != 0 && NumQuote != 0)
 			{
 				// Get the next quote and combine them.
@@ -229,9 +229,9 @@ void CSVLoader::FixEscapedCommasInRow(csv::CSVRow& Row, std::vector<std::string>
 				ICLogger::Trace("Field concatinated: {}", PotentialQuoteData);
 
 				// If this is the full original field, 
-				// then the occurances of quote will be even, 
-				// if not then we need to concatinate more fields.
-				NumQuote = CountQuoteOccurances(PotentialQuoteData);
+				// then the occurrences of quote will be even, 
+				// if not then we need to concatenate more fields.
+				NumQuote = CountQuoteOccurrences(PotentialQuoteData);
 			}
 
 			ICLogger::Trace("Field with escaped comma(s) fixed: {}", PotentialQuoteData);
@@ -246,9 +246,9 @@ void CSVLoader::FixEscapedCommasInRow(csv::CSVRow& Row, std::vector<std::string>
 	}
 }
 
-int32_t CSVLoader::CountQuoteOccurances(const std::string& PotentialQuoteString)
+int32_t CSVLoader::CountQuoteOccurrences(const std::string& PotentialQuoteString)
 {
-	// count occurances of " character
+	// count occurrences of " character
 	int32_t NumQuote = 0;
 	for (auto character : PotentialQuoteString)
 	{

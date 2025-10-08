@@ -125,6 +125,7 @@ void MenuView::TickLayoutSettings()
 		auto AvailablePresetLayouts = FocusedTab->GetLayoutManager()->GetAvailableLayouts();
 		auto CurrentPresetLayout = LayoutSettings->GetCurrentPreset();
 
+		// Display the current preset layout menu
 		if (ImGui::BeginMenu("Current Preset"))
 		{
 			for (auto& AvailableLayout : AvailablePresetLayouts)
@@ -140,6 +141,7 @@ void MenuView::TickLayoutSettings()
 			ImGui::EndMenu();
 		}
 
+		// Show a toggleable menu item for reloading the preset on startup
 		if (ImGui::MenuItem("Reload Layout On Startup", "", ReloadPresetOnStartup, true))
 		{
 			LayoutSettings->SetReloadPresetOnStartup(!ReloadPresetOnStartup);

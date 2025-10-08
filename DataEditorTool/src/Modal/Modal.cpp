@@ -52,16 +52,6 @@ void Modal::Tick()
     }
 }
 
-void Modal::OnModalMadeActive()
-{
-
-}
-
-void Modal::DisplayModal()
-{
-
-}
-
 bool Modal::IsModalActive() const
 {
     return PopupStatus != OpenPopupStatus::Inactive;

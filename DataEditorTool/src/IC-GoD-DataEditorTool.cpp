@@ -22,7 +22,7 @@ void RunApplication()
 	// Run application loop.
 	DataEditorInstance::Get()->ApplicationLoop();
 
-	// Destory the application instance, which allows
+	// Destroy the application instance, which allows
 	// various contexts to be destroyed, and ends
 	// the logging session.
 	DataEditorInstance::Get()->DestroyInstance();

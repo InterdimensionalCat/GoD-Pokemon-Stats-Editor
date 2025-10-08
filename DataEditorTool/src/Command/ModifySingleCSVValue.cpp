@@ -2,7 +2,7 @@
 #include "Command/ModifySingleCSVValue.h"
 
 #include "CSV/CSVDatabase.h"
-#include "CSV/NewCSVData.h"
+#include "CSV/CSVData.h"
 #include "CSV/CSVRow.h"
 
 ModifySingleCSVValue::ModifySingleCSVValue(
@@ -23,13 +23,13 @@ ModifySingleCSVValue::ModifySingleCSVValue(
 
 void ModifySingleCSVValue::Execute()
 {
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(CSVFileName);
+	std::shared_ptr<GoDCSV::CSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(CSVFileName);
 	CSVData->SetField(CSVFileColumn, CSVFileRow, NewValue);
 }
 
 void ModifySingleCSVValue::Undo()
 {
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(CSVFileName);
+	std::shared_ptr<GoDCSV::CSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(CSVFileName);
 	CSVData->SetField(CSVFileColumn, CSVFileRow, PrevValue);
 }
 
@@ -59,7 +59,7 @@ std::string ModifySingleCSVValue::ToString() const
 
 void ModifySingleCSVValue::UpdatePrevValue()
 {
-	std::shared_ptr<GoDCSV::NewCSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(CSVFileName);
+	std::shared_ptr<GoDCSV::CSVData> CSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(CSVFileName);
 
 	auto CurrentRowData = CSVData->GetRowAtIndex(CSVFileRow);
 	if (std::holds_alternative<bool>(NewValue))

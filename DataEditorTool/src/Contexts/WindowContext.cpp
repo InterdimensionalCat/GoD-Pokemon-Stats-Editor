@@ -93,6 +93,8 @@ void WindowContext::Init()
 
     // Center the window before we show it.
     CenterWindow();
+
+	ICLogger::Debug("Window context successfully initialized.");
 }
 
 void WindowContext::Exit()
@@ -221,7 +223,8 @@ void WindowContext::WindowCloseCallback(GLFWwindow* Window)
 
 void WindowContext::TrySetWindowIcon()
 {
-    // TODO: set the exe's icon during building using cmake
+    // TODO: set the exe's from the .ico file
+    // built into the executable.
     try
     {
         ICLogger::Debug("Attempting to load window icon.");
@@ -266,7 +269,7 @@ void WindowContext::TrySetWindowIcon()
         }
 
         glfwSetWindowIcon(ManagedWindow.get(), 1, IconImage.get()->ImageData.get());
-        ICLogger::Info("Successfully loaded window icon!");
+        ICLogger::Debug("Successfully loaded window icon!");
     }
     catch (const std::exception& e)
     {

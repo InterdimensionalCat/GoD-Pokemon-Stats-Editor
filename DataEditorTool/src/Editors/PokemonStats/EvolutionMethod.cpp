@@ -59,6 +59,12 @@ void EvolutionMethod::UiComponentUpdated()
 
 	if(GetManagedValue() != SelectedValue)
 	{
+		// If the selected method has changed, we need to update
+		// the evolution condition in the parent EvolutionElement
+		// to an appropriate default condition for the selected method.
+		// We will do this with a MultiCommand so that the change
+		// to the method and the change to the condition can be undone/redone
+		// as a single action.
 		std::shared_ptr<MultiCommand> EvolutionChangeCommand = std::make_shared<MultiCommand>("Change evolution method");
 
 		EvolutionChangeCommand->AddCommandAndExecute(std::make_shared<ModifySingleCSVValue>(

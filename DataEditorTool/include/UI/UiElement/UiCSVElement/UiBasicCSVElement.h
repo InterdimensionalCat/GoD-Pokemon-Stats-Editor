@@ -3,13 +3,13 @@
 
 #include "UI/TabCSVState.h"
 #include "CSV/CSVDatabase.h"
-#include "CSV/NewCSVData.h"
+#include "CSV/CSVData.h"
 #include "CSV/CSVRow.h"
 #include "Command/ModifySingleCSVValue.h"
 
 class UiComponent;
 
-/** CSV data will only contain int32_ts, floats, std::strings, and bools */
+/** \brief   CSV data will only contain ints, floats, std::strings, and bools */
 template <typename CSVPrimitiveType>
 concept PrimitiveTypeSupportedByCSV =
 std::same_as<CSVPrimitiveType, bool> ||

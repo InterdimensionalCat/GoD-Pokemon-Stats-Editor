@@ -14,6 +14,7 @@ FontManager::FontManager()
 
 void FontManager::Init()
 {
+	ICLogger::Debug("Initializing FontManager...");
 	// Get a handle to the font settings since we will need to reference them every frame.
 	MainFontSettings = DataEditorInstance::Get()->GetMainEditorWindow()->GetSettings()->GetFontSettings();
 
@@ -28,11 +29,13 @@ void FontManager::Init()
 	SetCurrentFontSize(MainFontSettings->GetFontSize());
 	SetCurrentJPFontSizeMultiplier(MainFontSettings->GetJPFontSizeMultiplier());
 	SetCurrentFontColor(MainFontSettings->GetFontColor());
+
+	ICLogger::Debug("FontManager initialized.");
 }
 
 void FontManager::FindAvailableFonts()
 {
-
+	ICLogger::Trace("Finding available fonts...");
 	AvailableENFonts.clear();
 	AvailableJPFonts.clear();
 
@@ -111,6 +114,7 @@ void FontManager::EndFontForFrame()
 
 void FontManager::SaveCurrentFontToFontSettings()
 {
+	ICLogger::Debug("Saving current font to FontSettings: {}", CurrentlyLoadedFont.ToString());
 	MainFontSettings->SetENFont(CurrentlyLoadedFont.ENFontName);
 	MainFontSettings->SetJPFont(CurrentlyLoadedFont.JPFontName);
 	MainFontSettings->SetFontSize(CurrentlyLoadedFont.FontSize);

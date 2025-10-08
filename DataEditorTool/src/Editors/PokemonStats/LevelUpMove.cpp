@@ -61,7 +61,8 @@ void LevelUpMove::Tick()
 
 	//ImGui::DebugDrawItemRect();
 
-	// Rotate elements based on the dragged element if a drag/drop was completed
+	// Rotate elements based on the dragged element if a drag/drop was completed,
+	// using a multi-command to group all the changes into one undo/redo step.
 	if (ImGui::BeginDragDropTarget())
 	{
 		if (const ImGuiPayload* Payload = ImGui::AcceptDragDropPayload("LevelUpMovesSwap"))

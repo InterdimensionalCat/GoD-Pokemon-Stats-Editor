@@ -6,8 +6,6 @@
 #include "UI/UiElement/UiCSVElement/IntElement/CSVIntBox.h"
 #include "UI/UiElement/UiSimpleElement/IntElement/SimpleIntBox.h"
 
-
-
 PokemonStatsBaseStats::PokemonStatsBaseStats(PokemonStatsEditor* InParent) : UiSection("Base Stats", InParent)
 {
 	const std::string CSVName = "Pokemon Stats";

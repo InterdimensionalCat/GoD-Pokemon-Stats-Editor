@@ -15,13 +15,13 @@ void CommandQueue::ExecuteCommand(std::shared_ptr<Command> NewCommand)
 	int32_t OldCommandsIndex = UndoQueue.size() - 1;
 	while (CurrentCommand < OldCommandsIndex)
 	{
-		ICLogger::Info("Undone command removed: {}: {}", UndoQueue.at(OldCommandsIndex)->GetName(), UndoQueue.at(OldCommandsIndex)->ToString());
+		ICLogger::Debug("Undone command removed: {}: {}", UndoQueue.at(OldCommandsIndex)->GetName(), UndoQueue.at(OldCommandsIndex)->ToString());
 		UndoQueue.pop_back();
 		OldCommandsIndex--;
 	}
 
 	// Execute the new command before adding it to the queue.
-	ICLogger::Info("Executing new Command: {}: {}", NewCommand->GetName(), NewCommand->ToString());
+	ICLogger::Debug("Executing new Command: {}: {}", NewCommand->GetName(), NewCommand->ToString());
 	NewCommand->Execute();
 
 	// Push the new command and update the current command value.
@@ -49,7 +49,7 @@ void CommandQueue::Undo()
 
 	// Show a notification that we performed an undo operation.
 	auto InfoNotifTitle = std::format("Undo: {}", CommandToUndo->GetName());
-	ICLogger::Info("{}", InfoNotifTitle);
+	ICLogger::Debug("{}", InfoNotifTitle);
 	ICLogger::PushInfoNotification(InfoNotifTitle, 2000, "Undoing: {}", CommandToUndo->ToString());
 }
 
@@ -71,7 +71,7 @@ void CommandQueue::Redo()
 
 	// Show a notification that we performed a redo operation.
 	auto InfoNotifTitle = std::format("Redo: {}", CommandToRedo->GetName());
-	ICLogger::Info("{}", InfoNotifTitle);
+	ICLogger::Debug("{}", InfoNotifTitle);
 	ICLogger::PushInfoNotification(InfoNotifTitle, 2000, "Redoing: {}", CommandToRedo->ToString());
 }
 

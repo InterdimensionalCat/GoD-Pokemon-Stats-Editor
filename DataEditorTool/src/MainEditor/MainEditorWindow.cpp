@@ -19,13 +19,13 @@ void MainEditorWindow::Init()
         MainWindowContext = std::make_shared<WindowContext>();
 
         // Try to init the Window context (currently GLFW + GLAD openGL)
-        // This will throw if initalization fails.
+        // This will throw if initialization fails.
         MainWindowContext->Init();
 
         MainGuiContext = std::make_shared<GuiContext>();
 
         // Try to init the Gui context (currently ImGui with GLFW and OpenGL 3)
-        // This requires a valid WindowContext and will throw if initalization fails.
+        // This requires a valid WindowContext and will throw if initialization fails.
         MainGuiContext->Init(MainWindowContext);
     }
     catch (const std::exception& e)
@@ -54,10 +54,7 @@ void MainEditorWindow::Init()
     MainWindowDockspace->ClassId = ImHashStr("IC_MainWindowDockspace");
     MainWindowDockspace->DockingAllowUnclassed = false;
 
-    // TODO: Add initial tabs?
-    // TilesetEditorWindowElement = std::make_shared<TilesetEditorTab>(EditorTabsDockspace);
-
-    // EditorTabs.push_back(TilesetEditorWindowElement);
+	ICLogger::Debug("Main Editor Window initialized successfully.");
 }
 
 void MainEditorWindow::Exit()
@@ -68,8 +65,6 @@ void MainEditorWindow::Exit()
 
     // Shutdown settings, this will save our current settings to a file.
     MainAppSettings->Exit();
-
-
 
     // Terminate the window context and close the window
     if (MainWindowContext != nullptr)
@@ -225,11 +220,6 @@ void MainEditorWindow::RefreshTabDocksace()
 
     ImGui::DockBuilderFinish(DockspaceForTabs);
 }
-
-//std::shared_ptr<GLFWwindow> MainEditorWindow::GetWindow()
-//{
-//    return MainWindowContext->GetManagedWindow();
-//}
 
 std::shared_ptr<GuiContext> MainEditorWindow::GetGuiContext()
 {

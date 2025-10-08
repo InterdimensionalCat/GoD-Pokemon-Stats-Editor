@@ -18,8 +18,15 @@ void ModalManager::Tick()
 
 void ModalManager::SetCurrentlyActiveModal(const std::shared_ptr<Modal> InActiveModal)
 {
+	ICLogger::Debug("Setting currently active modal to {}", InActiveModal->GetModalName());
+
+	if (CurrentlyActiveModal != nullptr)
+	{
+		ICLogger::Debug("Resetting previously active modal {}", CurrentlyActiveModal->GetModalName());
+	}
 	CurrentlyActiveModal.reset();
 	CurrentlyActiveModal = InActiveModal;
+
 	CurrentlyActiveModal->SetModalStatus(OpenPopupStatus::ShouldOpen);
 }
 

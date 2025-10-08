@@ -1,18 +1,34 @@
+/*****************************************************************//**
+ * \file   FontLoader.h
+ * \brief  Helper class for loading and merging fonts for ImGui
+ * 
+ * \author Bennett Thomas
+ * \date   September 2025
+ *********************************************************************/
 #pragma once
 
 class MergedFont;
 
+/**
+ * \brief  Helper class for loading and merging fonts for ImGui.
+ */
 class FontLoader
 {
 
 public:
 
+	/**
+	 * Construct a FontLoader.
+	 * This will automatically build new custom ranges
+	 * for Japanese characters and the Male/Female symbol,
+	 * both of which are needed to display some CSV values.
+	 */
 	FontLoader();
 
 	/**
 	 * Attempt to load the supplied merged font.
 	 * This will load the EN/JP font files contained
-	 * In the MergedFont paramater, or the default font
+	 * In the MergedFont parameter, or the default font
 	 * if "Default" is supplied.
 	 * 
 	 * Returns true if loading succeeded, false otherwise.
@@ -41,12 +57,35 @@ private:
 		ImFontConfig* Config, 
 		const bool bJPFile);
 
+	/**
+	 * Build the custom ranges needed for Japanese characters
+	 * and the Male/Female symbol.
+	 */
 	void BuildCustomRanges();
 
+	/**
+	 * Attempt to find the EN font file with the given name.
+	 * This will search the "Fonts/EN" directory and will throw
+	 * if the font file could not be found or if the directory
+	 * does not exist.
+	 */
 	fs::path TryGetENFontFile(const std::string& FontFileName);
 
+	/**
+	 * Attempt to find the JP font file with the given name.
+	 * This will search the "Fonts/JP" directory and will throw
+	 * if the font file could not be found or if the directory
+	 * does not exist.
+	 */
 	fs::path TryGetJPFontFile(const std::string& FontFileName);
 
+	/**
+	 * Attempt to find the font file with the given name
+	 * in the directory for the given language code.
+	 * This will search the "Fonts/{Lang}" directory and will throw
+	 * if the font file could not be found or if the directory
+	 * does not exist.
+	 */
 	fs::path TryGetLangFontFile(const std::string& FontFileName, const std::string& Lang);
 
 	/**
