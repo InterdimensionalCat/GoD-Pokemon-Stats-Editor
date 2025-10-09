@@ -53,6 +53,7 @@ void CSVIntHexComboBox::Refresh()
 	IntHexParenthValue ManagedValueIntHex = IntHexParenthValue(GetManagedValue());
 	int32_t ManagedIntVal = ManagedValueIntHex.GetValueAsInt();
 
+	// Get all entries as ParenthValueStrings.
 	const auto& EntriesList = ComboBoxComponent->GetEntriesList();
 
 	std::vector<ParenthValueString> EntriesAsParenthValues;
@@ -63,6 +64,7 @@ void CSVIntHexComboBox::Refresh()
 		EntriesAsParenthValues.push_back(ParenthValueString(Entry));
 	}
 
+	// Find the ParenthValueString whose value matches the int value of the managed value.
 	auto EntryMatchingIntItr = std::find_if(
 	EntriesAsParenthValues.begin(), 
 	EntriesAsParenthValues.end(),
@@ -72,6 +74,7 @@ void CSVIntHexComboBox::Refresh()
 		}
 	);
 
+	// If we found a matching entry, set it as the selected entry.
 	if (EntryMatchingIntItr != EntriesAsParenthValues.end())
 	{
 		ComboBoxComponent->SetSelectedEntry(std::distance(EntriesAsParenthValues.begin(), EntryMatchingIntItr));

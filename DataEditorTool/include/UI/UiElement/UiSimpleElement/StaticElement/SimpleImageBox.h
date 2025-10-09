@@ -10,7 +10,9 @@
 
 class ImageBox;
 
-
+/**
+ * \brief  UiSingleElement that manages an ImageBox component.
+ */
 class SimpleImageBox : public UiSingleElement
 {
 

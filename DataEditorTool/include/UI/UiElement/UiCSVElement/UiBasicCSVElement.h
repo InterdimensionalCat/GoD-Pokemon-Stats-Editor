@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   UiBasicCSVElement.h
+ * \brief  UiCSVElement that displays and edits a single primitive value from a specified column in a CSV file.
+ * 
+ * \author Bennett Thomas
+ * \date   September 2025
+ *********************************************************************/
 #pragma once
 #include "UI/UiElement/UiCSVElement/UiCSVElement.h"
 
@@ -18,10 +25,27 @@ std::same_as<CSVPrimitiveType, int32_t> ||
 std::same_as<CSVPrimitiveType, std::string>;
 
 template <PrimitiveTypeSupportedByCSV CSVPrimitiveType>
+/**
+ * \brief  UiCSVElement that displays and edits a single primitive value from a specified column in a CSV file.
+ * 
+ * Contains a ManagedValue of the specified primitive type
+ * that serves as a buffer between the UI component and the CSV file.
+ * When this managed value is updated, the corresponding value in the CSV file
+ * is updated via a ModifySingleCSVValue command pushed to the tab's command queue.
+ */
 class UiBasicCSVElement : public UiCSVElement
 {
 public:
 
+	/**
+	 * Construct a UiBasicCSVElement with the supplied name, parent section,
+	 * CSV file name, and column name.
+	 *
+	 * \param InName Name of this UiBasicCSVElement.
+	 * \param InParent Parent section of this UiBasicCSVElement.
+	 * \param InCSVFileName The name of the CSV file to display data from, without the ".csv" extension.
+	 * \param InColumnName The name of the column in the CSV file to display data from.
+	 */
 	UiBasicCSVElement(
 		const std::string& InName, 
 		UiSection* InParent,
@@ -32,6 +56,14 @@ public:
 
 	}
 
+	/**
+	 * Construct a UiBasicCSVElement with the supplied name, parent section,
+	 * and CSV file name. The column name will be set to the same value as the name.
+	 *
+	 * \param InName Name of this UiBasicCSVElement.
+	 * \param InParent Parent section of this UiBasicCSVElement.
+	 * \param InCSVFileName The name of the CSV file to display data from, without the ".csv" extension.
+	 */
 	UiBasicCSVElement(
 		const std::string& InName,
 		UiSection* InParent,
@@ -41,17 +73,32 @@ public:
 
 	}
 
+	/**
+	 * Refresh references to the underlying data this UiObject manages.
+	 * 
+	 * For a UiCSVElement, this refresh the ManagedValue to match the current
+	 * value in the CSV file. This will allow the element to stay up to date if
+	 * other UiElements modify the same CSV field.
+	 */
 	virtual void Refresh() override
 	{
 		UpdateManagedValueFromCSV();
 	}
 
-	/** Explicitly instantiated below. */
+	/**
+	 * Update the managed value to match the current value of this
+	 * field in the CSV file.
+	 * 
+	 * This is explicitly instantiated in the .cpp file for
+	 * each valid CSVPrimitiveType.
+	 */
 	void UpdateManagedValueFromCSV();
 
 	/**
 	 * Set the managed value to a new value and update the value of the
-	 * CSV field this element currently manages.
+	 * CSV field this element currently manages via a ModifySingleCSVValue command.
+	 * 
+	 * \param NewValue The new value to set the managed value to.
 	 */
 	void SetManagedValue(const CSVPrimitiveType& NewValue)
 	{
@@ -71,6 +118,11 @@ public:
 		}
 	}
 
+	/**
+	 * Get the value this UiBasicCSVElement manages.
+	 * 
+	 * \return The value this UiBasicCSVElement manages.
+	 */
 	CSVPrimitiveType GetManagedValue() const
 	{
 		return ManagedValue;
@@ -78,5 +130,6 @@ public:
 
 private:
 
+	/* The primitive value this UiBasicCSVElement manages. */
 	CSVPrimitiveType ManagedValue;
 };

@@ -15,7 +15,7 @@ namespace nlohmann
 
     template<>
     /**
-	 * \struct adl_serializer
+	 * \struct adl_serializer<ImColor, void>
      * \brief  Serialize an ImColor to/from JSON.
      */
     struct adl_serializer<ImColor, void> {

@@ -68,12 +68,6 @@ void UiComponent::Tick()
 	}
 }
 
-void UiComponent::DisplayComponent()
-{
-	// Implementation left intentionally blank. Implement
-	// in subclasses.
-}
-
 void UiComponent::ComponentUpdated()
 {
 	ParentElement->UiComponentUpdated();
@@ -137,11 +131,6 @@ bool UiComponent::IsDisabled() const
 {
 	return bIsDisabled;
 }
-
-//float UiComponent::GetLabelSize() const
-//{
-//	return ImGui::CalcTextSize(GetName().c_str()).x;
-//}
 
 bool UiComponent::HasLabel() const
 {

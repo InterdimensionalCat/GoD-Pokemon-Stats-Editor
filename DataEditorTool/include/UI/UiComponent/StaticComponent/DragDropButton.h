@@ -1,4 +1,11 @@
-﻿#pragma once
+﻿/*****************************************************************//**
+ * \file   DragDropButton.h
+ * \brief  UiComponent that displays a button which can be dragged.
+ * 
+ * \author Bennett Thomas
+ * \date   September 2025
+ *********************************************************************/
+#pragma once
 #include "include.h"
 #include "UI/UiComponent/UiComponent.h"
 #include "UI/UiElement/UiSingleElement.h"
@@ -6,11 +13,26 @@
 
 
 template <typename T>
+/**
+ * \brief  UiComponent that displays a button which can be dragged.
+ * 
+ * The template type T is the type of the payload that will be sent when
+ * a DragDropTarget receives the payload from this DragDropButton.
+ */
 class DragDropButton : public UiComponent
 {
 
 public:
 
+	/**
+	 * \brief Construct a DragDropButton with the supplied name, parent element,
+	 * drag drop payload, and drag drop name.
+	 * 
+	 * \param InName Name of this DragDropButton.
+	 * \param InParent Parent UiSingleElement of this DragDropButton.
+	 * \param InDragDropPayload The payload to be sent when this button is dragged.
+	 * \param InDragDropName The name of the drag drop payload.
+	 */
 	DragDropButton
 	(
 		const std::string& InName,
@@ -27,6 +49,13 @@ public:
 		SetMinContentSizeFromStringLength(1);
 	}
 
+	/**
+	 * \brief Display this DragDropButton using ImGui.
+	 * 
+	 * This will display a button with the name of this DragDropButton,
+	 * and allow it to be dragged. When dragged, it will send the
+	 * DragDropPayload to any DragDropTarget that accepts it.
+	 */
 	virtual void DisplayComponent() override
 	{
 		auto DragDropButtonName = std::format("↕{}", GetInvisibleName());
@@ -43,11 +72,21 @@ public:
 		}
 	}
 
+	/**
+	 * \brief Set the text to be displayed when this DragDropButton is dragged.
+	 * 
+	 * \param PreviewText The text to be displayed when this DragDropButton is dragged.
+	 */
 	void SetDragDropPreviewText(const std::string& PreviewText)
 	{
 		DragDropPreviewText = PreviewText;
 	}
 
+	/**
+	 * \brief Calculate the internal space required by this DragDropButton.
+	 * 
+	 * \return The internal space required by this DragDropButton.
+	 */
 	virtual float CalculateInternalSpace() const override
 	{
 		float InternalSize = 0.f;
@@ -62,10 +101,13 @@ public:
 
 private:
 
+	/** Text to be displayed when this button is being dragged. */
 	std::string DragDropPreviewText = "";
 
+	/** Name of the drag drop payload. */
 	std::string DragDropName = "";
 
+	/** Payload to be sent when this button is dragged. */
 	T DragDropPayload;
 
 };
