@@ -410,3 +410,8 @@ OpenCover/
 CMakeSettings.json
 Resources/Fonts/MonoLisa-Medium.ttf
 Resources/Fonts/MonoLisa-Regular.ttf
+
+# Archive and ISO files
+*.zip
+*.rar
+*.iso

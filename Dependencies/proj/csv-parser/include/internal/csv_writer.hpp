@@ -315,6 +315,10 @@ namespace csv {
                 }
             }
 
+            // IC_CHANGE: disable quoting when writing to a CSV
+            quote_escape = false;
+            // IC_CHANGE END
+
             if (!quote_escape) {
                 if (quote_minimal) return std::string(in);
                 else {
