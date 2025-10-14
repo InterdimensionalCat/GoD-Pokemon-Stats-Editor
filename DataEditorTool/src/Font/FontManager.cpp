@@ -96,6 +96,7 @@ void FontManager::CheckForFontChanged()
 			ICLogger::Warn("Failed to load font: {}", CurrentlyLoadedFont.ToString());
 		}
 
+		MainEditorWindow::Get()->ForceRecalculateSizeConstraints();
 		bShouldReloadFont = false;
 	}
 }
@@ -184,6 +185,8 @@ void FontManager::SetCurrentFontSize(const int32_t NewFontSize)
 		"Font Size Changed to {}",
 		NewFontSize
 	);
+
+	MainEditorWindow::Get()->ForceRecalculateSizeConstraints();
 }
 
 void FontManager::SetCurrentJPFontSizeMultiplier(const float NewFontSizeMultiplier)

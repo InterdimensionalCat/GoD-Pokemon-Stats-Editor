@@ -1,9 +1,9 @@
 #include "include.h"
-#include "UI/UiComponent/BoolComponent/CheckBox.h"
+#include "UI/UiComponent/BoolComponent/RadioButton.h"
 #include "UI/UiElement/UiSingleElement.h"
 #include "UI/UiSize/UiSize.h"
 
-CheckBox::CheckBox
+RadioButton::RadioButton
 (
 	const std::string& InName,
 	UiSingleElement* InParent
@@ -14,29 +14,30 @@ CheckBox::CheckBox
 	SetMinContentSizeFromString("");
 }
 
-void CheckBox::DisplayComponent()
+void RadioButton::DisplayComponent()
 {
-	// Show an checkbox.
-	if (ImGui::Checkbox(GetName().c_str(), &bBoolBuffer))
+	// Show a RadioButton.
+	if (ImGui::RadioButton(GetName().c_str(), bBoolBuffer))
 	{
+		bBoolBuffer = !bBoolBuffer;
 		ComponentUpdated();
 	}
 }
 
-float CheckBox::CalculateInternalSpace() const
+float RadioButton::CalculateInternalSpace() const
 {
-	// Since CheckBoxes are square, the size of a checkbox
+	// Since RadioButtons are square, the size of a RadioButton
 	// is the vertical frame padding * 2 plus the font height.
 	// This is equivalent to GetFrameHeight().
 	return ImGui::GetFrameHeight();
 }
 
-void CheckBox::SetBoolBuffer(const bool InBufferVal)
+void RadioButton::SetBoolBuffer(const bool InBufferVal)
 {
 	bBoolBuffer = InBufferVal;
 }
 
-bool CheckBox::GetBoolBuffer() const
+bool RadioButton::GetBoolBuffer() const
 {
 	return bBoolBuffer;
 }

@@ -39,9 +39,6 @@ public:
 	 */
 	virtual void Refresh() override;
 
-	/** Load Pokeface data images from disk */
-	void InitPokefaceData();
-
 	/** Calculate the max content size of elements in this section. */
 	void CalculateElementMaxWidth();
 
@@ -69,8 +66,8 @@ private:
 	 * will fail to open one of the image files (probably because
 	 * its still open in this program).
 	 */
-	static std::deque<GLuint> PokefaceData;
+	//static std::deque<GLuint> PokefaceData;
 
 	/** Has Pokeface data been loaded yet? */
-	static bool bPokefaceDataLoaded;
+	//static bool bPokefaceDataLoaded;
 };

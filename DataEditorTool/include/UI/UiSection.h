@@ -80,4 +80,7 @@ private:
 
 	/** All UiElements contained in this section. */
 	std::vector<std::shared_ptr<UiElement>> UiElements;
+
+	/** Cached available space in the section, used for calculating constrained sizes. */
+	float SpaceAvailable = 0.0f;
 };

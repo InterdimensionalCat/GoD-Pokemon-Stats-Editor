@@ -42,7 +42,6 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif()
 
 # Enable debug mode
-# TODO: make sure I never use the debug_mode definition from before
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     set(MESSAGE_QUIET ON)
     message(STATUS "[INFO]: Building on debug mode; IC_DEBUG defined")
