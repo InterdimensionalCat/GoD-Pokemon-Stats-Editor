@@ -15,7 +15,7 @@ void UiObject::Tick()
 	// Implement in subclasses.
 }
 
-std::string UiObject::GetName() const
+const std::string& UiObject::GetName() const
 {
 	return Name;
 }

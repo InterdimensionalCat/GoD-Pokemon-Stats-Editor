@@ -49,8 +49,11 @@ public:
 	 * UiElement: the label name.
 	 * 
 	 * \return Name of this UiObject.
+	 * \note return type changed to const ref to avoid copies. Due to
+	 * the number of times this gets called in a frame we spend a non-trivial
+	 * amount of time copying strings otherwise.
 	 */
-	std::string GetName() const;
+	const std::string& GetName() const;
 
 	/**
 	 * Return the name of this UiObject, but
@@ -58,7 +61,7 @@ public:
 	 * it if it doesn't already have 
 	 * "##" somewhere in the name.
 	 * 
-	 * \return Name of this UiObject with "##" prepended if not already present.
+	 * \return Name of this UiObject with "##" perpended if not already present.
 	 */
 	std::string GetInvisibleName() const;
 

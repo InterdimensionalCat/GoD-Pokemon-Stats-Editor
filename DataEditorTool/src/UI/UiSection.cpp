@@ -5,6 +5,7 @@
 #include "UI/TabCSVState.h"
 #include "UI/UiSize/UiSyncedSize.h"
 #include "UI/UiSize/UiConstrainedSize.h"
+#include "MainEditor/MainEditorWindow.h"
 
 UiSection::UiSection(const std::string& InName, UiTab* InParent) :
 	UiObject(InName, InParent),
@@ -42,10 +43,12 @@ void UiSection::Tick()
 	// which we will then use to push the correct item width at draw time.
 	CalculateElementConstrainedSizes();
 
+	//ImGui::PushID(GetName().c_str());
 	for(std::shared_ptr<UiElement> UiElement : UiElements)
 	{
 		UiElement->Tick();
 	}
+	//ImGui::PopID();
 
 	ImGui::End();
 }
@@ -54,15 +57,20 @@ void UiSection::CalculateElementConstrainedSizes()
 {
 	CalculateSyncedSize();
 
-	const float SpaceAvailable = ImGui::GetContentRegionAvail().x;
+	const float NewSpaceAvailable = ImGui::GetContentRegionAvail().x;
 
-	for (std::shared_ptr<UiElement> UiElement : UiElements)
+	if(NewSpaceAvailable != SpaceAvailable || MainEditorWindow::Get()->ShouldRecalculateSizeConstraints())
 	{
-		// Calculate the constrained size for each element in this section.
-		UiElement->CalculateConstrainedSize(
-			std::make_shared<UiConstrainedSize>(SpaceAvailable),
-			SyncedSize
-		);
+		SpaceAvailable = NewSpaceAvailable;
+
+		for (std::shared_ptr<UiElement> UiElement : UiElements)
+		{
+			// Calculate the constrained size for each element in this section.
+			UiElement->CalculateConstrainedSize(
+				std::make_shared<UiConstrainedSize>(SpaceAvailable),
+				SyncedSize
+			);
+		}
 	}
 }
 

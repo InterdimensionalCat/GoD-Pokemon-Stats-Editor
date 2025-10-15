@@ -104,6 +104,18 @@ public:
 	void RefreshTabDocksace();
 
 	/**
+	 * Force recalculation of size constraints
+	 * for all tabs. This is needed when changing
+	 * fonts, as different fonts have different
+	 * character sizes, which can cause some UI elements
+	 * to be too small or too large for their contents.
+	 * 
+	 * This should be called after changing fonts,
+	 * and before the next ImGui frame is rendered.
+	 */
+	void ForceRecalculateSizeConstraints();
+
+	/**
 	 * Get the GuiContext used by this MainEditorWindow.
 	 * 
 	 * \return Shared pointer to the GuiContext.
@@ -149,6 +161,14 @@ public:
 	 * \return Pointer to the last focused UiTab, or nullptr if none exists.
 	 */
 	UiTab* GetLastFocusedTab();
+
+	/**
+	 * Should we recalculate size constraints
+	 * for all tabs this frame?
+	 * 
+	 * \return True if we should recalculate size constraints, false otherwise.
+	 */
+	bool ShouldRecalculateSizeConstraints() const;
 
 	/**
 	 * Get the global instance of this MainEditorWindow located
@@ -199,4 +219,7 @@ private:
 
 	/** Timer to pause UI ticks for a few frames when opening a new tab. */
 	int32_t PauseUiTickTimer = 0;
+
+	/** Should we recalculate size constraints for all tabs next frame? */
+	bool bShouldRecalculateSizeConstraints = false;
 };

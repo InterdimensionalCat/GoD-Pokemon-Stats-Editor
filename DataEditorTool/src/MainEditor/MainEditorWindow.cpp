@@ -11,6 +11,7 @@
 #include "Contexts/GuiContext.h"
 #include "UI/UiTab.h"
 #include "Editors/PokemonStats/PokemonStatsEditor.h"
+#include "Editors/LearnedMoves/LearnedMovesEditor.h"
 
 void MainEditorWindow::Init()
 {
@@ -104,6 +105,13 @@ void MainEditorWindow::Tick()
     // Set font
     MainFontManager->SetupFontForFrame();
 
+    bool bSizeConstraintsRecalculated = false;
+
+    if (ShouldRecalculateSizeConstraints())
+    {
+		bSizeConstraintsRecalculated = true;
+    }
+
     // Tick Main Menu, this will display the menu sections at the top of the window.
     // This will also check for keyboard shortcuts corresponding to active menu section options.
     EditorMainMenu->Tick();
@@ -152,6 +160,11 @@ void MainEditorWindow::Tick()
 
     // End the ImGui frame.
     MainGuiContext->EndTick();
+
+    if(bSizeConstraintsRecalculated)
+	{
+        bShouldRecalculateSizeConstraints = false;
+    }
 }
 
 void MainEditorWindow::Render()
@@ -172,6 +185,9 @@ void MainEditorWindow::OnProjectRootPathSet()
     EditorTabs.clear();
     std::shared_ptr<PokemonStatsEditor> StatsEditor = std::make_shared<PokemonStatsEditor>(MainWindowDockspace);
     OpenNewEditorTab(StatsEditor);
+
+	std::shared_ptr<LearnedMovesEditor> MovesEditor = std::make_shared<LearnedMovesEditor>(MainWindowDockspace);
+	OpenNewEditorTab(MovesEditor);
 
     if (!MainWindowContext->IsWindowMaximized() && EditorTabs.size() != 0)
     {
@@ -221,6 +237,11 @@ void MainEditorWindow::RefreshTabDocksace()
     ImGui::DockBuilderFinish(DockspaceForTabs);
 }
 
+void MainEditorWindow::ForceRecalculateSizeConstraints()
+{
+    bShouldRecalculateSizeConstraints = true;
+}
+
 std::shared_ptr<GuiContext> MainEditorWindow::GetGuiContext()
 {
     return MainGuiContext;
@@ -249,6 +270,11 @@ ImGuiID MainEditorWindow::GetMainDockspaceId() const
 UiTab* MainEditorWindow::GetLastFocusedTab()
 {
     return LastFocusedTab;
+}
+
+bool MainEditorWindow::ShouldRecalculateSizeConstraints() const
+{
+    return bShouldRecalculateSizeConstraints;
 }
 
 std::shared_ptr<MainEditorWindow> MainEditorWindow::Get()
