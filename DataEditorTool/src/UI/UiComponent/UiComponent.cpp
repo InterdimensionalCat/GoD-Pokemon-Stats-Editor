@@ -3,8 +3,6 @@
 #include "UI/UiElement/UiSingleElement.h"
 #include "UI/UiSize/UiSize.h"
 
-int UiComponent::ComponentIDCounter = 0;
-
 UiComponent::UiComponent(
 	const std::string& InName,
 	UiSingleElement* InParent,
@@ -58,9 +56,7 @@ void UiComponent::Tick()
 	if (IsDisabled())
 	{
 		ImGui::BeginDisabled();
-		ImGui::PushID(GetNextComponentID());
 		DisplayComponent();
-		ImGui::PopID();
 
 		// IsDisabled might change during Tick, so we must ensure this
 		// gets called regardless of the value of IsDisabled after tick.
@@ -68,9 +64,7 @@ void UiComponent::Tick()
 	}
 	else
 	{
-		ImGui::PushID(GetNextComponentID());
 		DisplayComponent();
-		ImGui::PopID();
 	}
 }
 
@@ -147,14 +141,4 @@ float UiComponent::CalculateInternalSpace() const
 {
 	// Implementation intentionally blank, override in subclasses.
 	return 0.f;
-}
-
-int UiComponent::GetNextComponentID()
-{
-	return ComponentIDCounter++;
-}
-
-void UiComponent::ResetComponentIDCounter()
-{
-	ComponentIDCounter = 0;
 }

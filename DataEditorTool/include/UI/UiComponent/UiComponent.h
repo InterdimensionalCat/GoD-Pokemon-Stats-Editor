@@ -171,10 +171,6 @@ public:
 	 */
 	virtual float CalculateInternalSpace() const;
 
-	static int GetNextComponentID();
-
-	static void ResetComponentIDCounter();
-
 protected:
 
 	/* Parent UiSingleElement of this UiComponent. */
@@ -197,7 +193,5 @@ private:
 
 	/* Should this UiComponent be disabled (grayed out)? */
 	bool bIsDisabled = false;
-
-	static int ComponentIDCounter;
 
 };

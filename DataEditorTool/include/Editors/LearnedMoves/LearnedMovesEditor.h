@@ -9,6 +9,8 @@
 
 #include "UI/UiTab.h"
 
+class LearnedMovesLearnsetsFilters;
+
  /** \brief  UiTab for editing the TM, HM, and Move Tutor moves learned by Pokemon. */
 class LearnedMovesEditor : public UiTab
 {
@@ -32,4 +34,10 @@ public:
 	 * Load the default layout for the LearnedMovesEditor tab.
 	 */
 	virtual void LoadDefaultLayout() override;
+
+	std::shared_ptr<LearnedMovesLearnsetsFilters> GetLearnedMovesFiltersSection();
+
+private:
+
+	std::shared_ptr<LearnedMovesLearnsetsFilters> LearnedMovesFiltersSection;
 };

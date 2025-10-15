@@ -1,33 +1,44 @@
 #include "include.h"
 #include "Editors/LearnedMoves/LearnedMovesLearnsets.h"
 #include "Editors/LearnedMoves/LearnedMovesEditor.h"
+#include "Editors/LearnedMoves/LearnedMovesLearnsetsFilters.h"
 
 #include "UI/UiElement/UiMultiElement/UiSingleLineMultiElement.h"
 #include "UI/UiElement/UiMultiElement/UiTable.h"
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleImageBox.h"
 #include "UI/UiElement/UiCSVElement/StringElement/CSVTextBox.h"
 #include "UI/UiElement/UiCSVElement/BoolElement/CSVRadioButton.h"
+#include "UI/UiElement/UiCSVElement/BoolElement/CSVCheckbox.h"
+#include "UI/UiElement/UiSimpleElement/StringElement/SimpleTextBox.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleText.h"
 #include "Pokeface/PokefaceData.h"
 
 #include "CSV/CSVDatabase.h"
 #include "CSV/CSVData.h"
 #include "CSV/CSVHeader.h"
 
-LearnedMovesLearnsets::LearnedMovesLearnsets(LearnedMovesEditor* InParent) : UiSection("Pokemon Learnsets", InParent)
+LearnedMovesLearnsets::LearnedMovesLearnsets(LearnedMovesEditor* InParent) :
+	UiSection("Pokemon Learnsets", InParent),
+	ParentEditor(InParent)
 {
 	const std::string CSVName = "Pokemon Stats";
 
 	// Add a Learnset element for each Pokemon in the "Pokemon Stats" CSV file.
 	const auto& CSVDatabase = GoDCSV::CSVDatabase::Get();
 	auto NewEntriesList = CSVDatabase->GetCSVFile(CSVName)->GetStringColumn("Entry Name");
+
 	LearnsetsTable = std::make_shared<UiTable>("Learnsets Table", this);
 
 	// Set up column 1: Pokeface and Pokemon Name
 	const auto& PokefaceDataIds = PokefaceData::GetPokefaceData();
 	LearnsetsTable->AddNewColumn("Pokemon");
-	for(int32_t RowIndex = 0; RowIndex < NewEntriesList.size(); ++RowIndex)
+	for (int32_t RowIndex = 0; RowIndex < NewEntriesList.size(); ++RowIndex)
 	{
-		auto CurrentPokemonMultiElement = std::make_shared<UiSingleLineMultiElement>("##Learnsets-CurrentPokemon", this);
+		auto CurrentPokemonMultiElement = std::make_shared<UiSingleLineMultiElement>(
+			std::format("##{}", NewEntriesList.at(RowIndex)),
+			this
+		);
+
 		auto PokefaceName = std::format("##Learnsets-Pokeface-{}", RowIndex);
 		auto PokefaceImage = std::make_shared<SimpleImageBox>(PokefaceName, this);
 		PokefaceImage->SetImageSize(ImGui::GetFrameHeight());
@@ -38,7 +49,7 @@ LearnedMovesLearnsets::LearnedMovesLearnsets(LearnedMovesEditor* InParent) : UiS
 		}
 
 		auto PokemonName = std::make_shared<CSVTextBox>(
-			std::format("##Learnsets-PokemonName-{}", RowIndex),
+			std::format("##Learnsets-PokemonName-{}", NewEntriesList.at(RowIndex)),
 			this,
 			"Pokemon Stats",
 			"Entry Name"
@@ -48,6 +59,7 @@ LearnedMovesLearnsets::LearnedMovesLearnsets(LearnedMovesEditor* InParent) : UiS
 		PokemonName->SetShouldSyncRowToCSVState(false);
 		PokemonName->SetMinFromLongestString(GoDCSV::CSVDatabase::Get()->GetCSVFile("Pokemon Stats")->GetStringColumn("Entry Name"));
 		PokemonName->SetIsFixedSize(true);
+		PokemonName->SetDisabled(true);
 
 		CurrentPokemonMultiElement->AddElement(PokefaceImage);
 		CurrentPokemonMultiElement->AddElement(PokemonName);
@@ -61,14 +73,14 @@ LearnedMovesLearnsets::LearnedMovesLearnsets(LearnedMovesEditor* InParent) : UiS
 	for (auto& TMMove : TMMoveColumns)
 	{
 		LearnsetsTable->AddNewColumn(TMMove);
-		for(int32_t RowIndex = 0; RowIndex < NewEntriesList.size(); ++RowIndex)
+		for (int32_t RowIndex = 0; RowIndex < NewEntriesList.size(); ++RowIndex)
 		{
 			auto TMName = std::format("##{}Learnsets-{}", TMMove, RowIndex);
-			auto TMMoveElement = std::make_shared<CSVRadioButton>(TMName, this, CSVName, TMMove);
+			auto TMMoveElement = std::make_shared<CSVCheckbox>(TMName, this, CSVName, TMMove);
 			TMMoveElement->SetCurrentRow(RowIndex);
 			TMMoveElement->SetShouldSyncRowToCSVState(false);
 			LearnsetsTable->AddElement(TMMoveElement);
-		}	
+		}
 
 	}
 
@@ -80,7 +92,7 @@ LearnedMovesLearnsets::LearnedMovesLearnsets(LearnedMovesEditor* InParent) : UiS
 		for (int32_t RowIndex = 0; RowIndex < NewEntriesList.size(); ++RowIndex)
 		{
 			auto HMName = std::format("##{}Learnsets-{}", HMMove, RowIndex);
-			auto HMMoveElement = std::make_shared<CSVRadioButton>(HMName, this, CSVName, HMMove);
+			auto HMMoveElement = std::make_shared<CSVCheckbox>(HMName, this, CSVName, HMMove);
 			HMMoveElement->SetCurrentRow(RowIndex);
 			HMMoveElement->SetShouldSyncRowToCSVState(false);
 			LearnsetsTable->AddElement(HMMoveElement);
@@ -100,7 +112,7 @@ LearnedMovesLearnsets::LearnedMovesLearnsets(LearnedMovesEditor* InParent) : UiS
 		for (int32_t RowIndex = 0; RowIndex < NewEntriesList.size(); ++RowIndex)
 		{
 			auto TutorName = std::format("##{}Learnsets-{}", TutorMove, RowIndex);
-			auto TutorMoveElement = std::make_shared<CSVRadioButton>(TutorName, this, CSVName, TutorMove);
+			auto TutorMoveElement = std::make_shared<CSVCheckbox>(TutorName, this, CSVName, TutorMove);
 			TutorMoveElement->SetCurrentRow(RowIndex);
 			TutorMoveElement->SetShouldSyncRowToCSVState(false);
 			LearnsetsTable->AddElement(TutorMoveElement);
@@ -114,6 +126,16 @@ LearnedMovesLearnsets::LearnedMovesLearnsets(LearnedMovesEditor* InParent) : UiS
 void LearnedMovesLearnsets::Refresh()
 {
 	UiSection::Refresh();
+}
+
+void LearnedMovesLearnsets::Tick()
+{
+	UiSection::Tick();
+
+	auto LearnsetFilters = ParentEditor->GetLearnedMovesFiltersSection();
+
+	LearnsetsTable->SetRowFilter(LearnsetFilters->GetPokemonFilterText());
+	LearnsetsTable->SetColumnFilter(LearnsetFilters->GetMoveFilterText());
 }
 
 std::vector<std::string> LearnedMovesLearnsets::GetMoveColumns(const std::string& MoveColumnPrefix) const

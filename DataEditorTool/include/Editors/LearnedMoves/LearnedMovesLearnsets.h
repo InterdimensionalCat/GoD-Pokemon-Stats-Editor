@@ -23,8 +23,11 @@ public:
 
 	void Refresh() override;
 
+	void Tick() override;
 
 private:
+
+	LearnedMovesEditor* ParentEditor;
 
 	/**
 	 * Get all the columns in the Pokemon Stats CSV file that correspond to a taught move type (TM, HM, or TutorMove).

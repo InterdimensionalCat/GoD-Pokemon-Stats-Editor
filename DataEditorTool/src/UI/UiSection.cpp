@@ -43,10 +43,12 @@ void UiSection::Tick()
 	// which we will then use to push the correct item width at draw time.
 	CalculateElementConstrainedSizes();
 
+	//ImGui::PushID(GetName().c_str());
 	for(std::shared_ptr<UiElement> UiElement : UiElements)
 	{
 		UiElement->Tick();
 	}
+	//ImGui::PopID();
 
 	ImGui::End();
 }

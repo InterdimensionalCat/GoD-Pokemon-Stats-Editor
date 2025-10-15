@@ -116,7 +116,7 @@ void MainEditorWindow::Tick()
     // This will also check for keyboard shortcuts corresponding to active menu section options.
     EditorMainMenu->Tick();
 
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
     // Notifications style setup
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f); // Disable round borders

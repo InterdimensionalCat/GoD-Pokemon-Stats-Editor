@@ -33,6 +33,11 @@ void UiTable::Tick()
 
 		for (int32_t Index = 1; Index < ColumnNames.size(); Index++)
 		{
+			if (ColumnFilter.IsActive() && !ColumnFilter.PassFilter(ColumnNames.at(Index).c_str()) && Index != 0)
+			{
+				continue;
+			}
+
 			ImGui::TableSetupColumn(ColumnNames.at(Index).c_str(), ColumnFlags);
 		}
 
@@ -40,15 +45,30 @@ void UiTable::Tick()
 
 		ImGui::TableAngledHeadersRow(); // Draw angled headers for all columns with the ImGuiTableColumnFlags_AngledHeader flag.
 		ImGui::TableHeadersRow();       // Draw remaining headers and allow access to context-menu and other functions.
-		
+
 		// Display rows, but clip any rows that shouldn't be visible.
 		ImGuiListClipper Clipper;
 		Clipper.Begin(TableColumns.at(0).size(), ImGui::GetFrameHeightWithSpacing());
 
 		while (Clipper.Step())
 		{
-			for (int32_t RowIndex = Clipper.DisplayStart; RowIndex < Clipper.DisplayEnd; RowIndex++)
+			int32_t SkippedRows = 0;
+			for (int32_t RowIndex = Clipper.DisplayStart; RowIndex < Clipper.DisplayEnd + SkippedRows; RowIndex++)
 			{
+				if (RowFilter.IsActive() && !RowFilter.PassFilter(TableColumns.at(0).at(RowIndex)->GetName().c_str()))
+				{
+					SkippedRows++;
+
+					if(RowIndex + SkippedRows >= TableColumns.at(0).size())
+					{
+						break;
+					}
+					else
+					{
+						continue;
+					}
+				}
+
 				ImGui::TableNextRow(0, ImGui::GetFrameHeightWithSpacing());
 				ImGui::AlignTextToFramePadding();
 
@@ -63,9 +83,16 @@ void UiTable::Tick()
 
 				bHovered |= (ImGui::IsMouseHoveringRect(RowRect.Min, RowRect.Max, false));
 
+				int32_t SkippedColumns = 0;
 				for (int32_t ColumnIndex = 0; ColumnIndex < TableColumns.size(); ColumnIndex++)
 				{
-					ImGui::TableSetColumnIndex(ColumnIndex);
+					if (ColumnFilter.IsActive() && !ColumnFilter.PassFilter(ColumnNames.at(ColumnIndex).c_str()) && ColumnIndex != 0)
+					{
+						SkippedColumns++;
+						continue;
+					}
+
+					ImGui::TableSetColumnIndex(ColumnIndex - SkippedColumns);
 					TableColumns.at(ColumnIndex).at(RowIndex)->Tick();
 					if (bHovered && ColumnIndex == 0)
 					{
@@ -94,4 +121,28 @@ void UiTable::AddNewColumn(const std::string& ColumnName)
 {
 	TableColumns.emplace_back();
 	ColumnNames.push_back(ColumnName);
+}
+
+void UiTable::SetRowFilter(const std::string& FilterString)
+{
+	RowFilter.Clear();
+	RowFilter.InputBuf[0] = '\0';
+	RowFilter.Build();
+	if (!FilterString.empty())
+	{
+		strncpy_s(RowFilter.InputBuf, FilterString.c_str(), sizeof(RowFilter.InputBuf));
+		RowFilter.Build();
+	}
+}
+
+void UiTable::SetColumnFilter(const std::string& FilterString)
+{
+	ColumnFilter.Clear();
+	ColumnFilter.InputBuf[0] = '\0';
+	ColumnFilter.Build();
+	if (!FilterString.empty())
+	{
+		strncpy_s(ColumnFilter.InputBuf, FilterString.c_str(), sizeof(ColumnFilter.InputBuf));
+		ColumnFilter.Build();
+	}
 }

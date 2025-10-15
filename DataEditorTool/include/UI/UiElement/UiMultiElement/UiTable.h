@@ -24,6 +24,10 @@ public:
 
 	void AddNewColumn(const std::string& ColumnName);
 
+	void SetRowFilter(const std::string& FilterString);
+
+	void SetColumnFilter(const std::string& FilterString);
+
 private:
 
 	std::shared_ptr<UiSize> TableSize;
@@ -31,4 +35,8 @@ private:
 	std::vector<std::string> ColumnNames;
 
 	std::vector<std::vector<std::shared_ptr<UiElement>>> TableColumns;
+
+	ImGuiTextFilter RowFilter;
+
+	ImGuiTextFilter ColumnFilter;
 };

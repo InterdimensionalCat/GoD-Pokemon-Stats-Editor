@@ -119,9 +119,6 @@ void GuiContext::BeginTick()
     //    ICLogger::Debug("ImGui ItemInnerSpacing:  (x: {}, y: {})", Style.ItemInnerSpacing.x, Style.ItemInnerSpacing.y);
     //    bShownImGuiDebugInfo = true;
     //}
-
-    // Reset the current ID counter for UiComponents.
-	UiComponent::ResetComponentIDCounter();
 }
 
 void GuiContext::EndTick()
