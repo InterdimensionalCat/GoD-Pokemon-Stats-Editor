@@ -1,6 +1,7 @@
 #include "include.h"
 #include "Contexts/GuiContext.h"
 #include "Contexts/WindowContext.h"
+#include "UI/UiComponent/UiComponent.h"
 
 // GLFW backend includes. Ideally these should not be included outside of
 // Context cpp files.
@@ -129,15 +130,7 @@ void GuiContext::BeginTick()
 	//	ICLogger::Error("ImGui Exception caught: {}", e.what());
 	//}
 
-	//// IM_ASSERT_USER_ERROR check.
-	//try
-	//{
-	//	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, 0.f);
-	//}
-	//catch (const ImGuiException& e)
-	//{
-	//	ICLogger::Error("ImGui Exception caught: {}", e.what());
-	//}
+
 }
 
 void GuiContext::EndTick()

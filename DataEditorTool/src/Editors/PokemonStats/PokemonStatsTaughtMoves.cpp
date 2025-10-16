@@ -52,7 +52,7 @@ PokemonStatsTaughtMoves::PokemonStatsTaughtMoves(PokemonStatsEditor* InParent) :
 	auto TutorSectionDivider = std::make_shared<SimpleSectionDivider>("Tutor Moves", this);
 	TaughtMovesGrid->AddElement(TutorSectionDivider, false);
 
-	auto TutorMoveColumns = GetMoveColumns("TutorMove0");
+	auto TutorMoveColumns = GetMoveColumns("TutorMove");
 
 	// Tutor moves are out of order in the CSV file, so we
 	// need to sort them lexographically

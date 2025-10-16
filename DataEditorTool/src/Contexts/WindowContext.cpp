@@ -67,7 +67,6 @@ void WindowContext::Init()
         auto GLVersion = glGetString(GL_VERSION);
         std::string GLVersionString = std::string((const char*)GLVersion);
 
-        // TODO: show openGL and glad version here (if possible) (glad version = 0.1.36)
         ICLogger::Debug("Successfully loaded OpenGL version {} using GLAD version {}", GLVersionString, "0.1.36");
 
         // Set the window close callback to the Main Editor's attempt window close function.

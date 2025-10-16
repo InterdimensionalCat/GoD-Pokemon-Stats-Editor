@@ -2,8 +2,8 @@
  * \file   PokemonStatsLearnedMoves.h
  * \brief  UiSection for editing a Pokemon's level-up and egg moves.
  * 
- * \author bthomas
- * \date   October 2025
+ * \author Bennett Thomas
+ * \date   September 2025
  *********************************************************************/
 #pragma once
 

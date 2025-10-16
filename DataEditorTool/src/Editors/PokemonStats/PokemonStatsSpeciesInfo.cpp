@@ -2,7 +2,6 @@
 #include "Editors/PokemonStats/PokemonStatsSpeciesInfo.h"
 
 #include "Editors/PokemonStats/PokemonStatsEditor.h"
-
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleSectionDivider.h"
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleImageBox.h"
 #include "UI/UiElement/UiCSVElement/StringElement/CSVTextBox.h"
@@ -10,19 +9,12 @@
 #include "UI/UiElement/UiCSVElement/IntElement/CSVIntBox.h"
 #include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
 #include "UI/UiElement/UiCSVElement/IntElement/CSVIntSlider.h"
-
 #include "Util/TextureLoader.h"
-
-std::deque<GLuint> PokemonStatsSpeciesInfo::PokefaceData;
-
-bool PokemonStatsSpeciesInfo::bPokefaceDataLoaded = false;
+#include "Pokeface/PokefaceData.h"
 
 PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) : UiSection("Species Info", InParent)
 {
 	const std::string CSVName = "Pokemon Stats";
-
-	// Attempt to load Pokeface data. If loading fails we will just not display Pokeface images.
-	InitPokefaceData();
 
 	// Add the top level species info elements.
 
@@ -31,9 +23,12 @@ PokemonStatsSpeciesInfo::PokemonStatsSpeciesInfo(PokemonStatsEditor* InParent) :
 
 	// Pokeface Image: This is just the image of a Pokemon that is shown in the hp bar in battle
 	PokefaceImage = std::make_shared<SimpleImageBox>("##PokefaceImage", this);
-	if (bPokefaceDataLoaded)
+
+	const auto& PokefaceDataIds = PokefaceData::GetPokefaceData();
+
+	if (!PokefaceDataIds.empty())
 	{
-		PokefaceImage->SetTexture(PokefaceData.at(0));
+		PokefaceImage->SetTexture(PokefaceDataIds.at(0));
 	}
 
 	AddElement(Species);
@@ -180,92 +175,12 @@ void PokemonStatsSpeciesInfo::Refresh()
 
 	// Set the correct PokeFace image based
 	// on the current row.
-	if (bPokefaceDataLoaded)
+
+	const auto& PokefaceDataIds = PokefaceData::GetPokefaceData();
+
+	if(!PokefaceDataIds.empty())
 	{
-		PokefaceImage->SetTexture(PokefaceData.at(GetParent()->GetTabCSVState()->GetCurrentRow()));
-	}
-}
-
-void PokemonStatsSpeciesInfo::InitPokefaceData()
-{
-	// TODO: Allow pokeface data to load if some pokeface files are missing,
-	// which will be needed to support custom pokemon additions to the Pokemon Stats.csv file
-
-	if(bPokefaceDataLoaded)
-	{
-		// Pokeface data is already loaded, no need to load it again.
-		ICLogger::Info("Pokeface data already loaded, skipping load.");
-		return;
-	}
-
-	try
-	{
-		ICLogger::Debug("Attempting to load Pokeface data.");
-		PokefaceData.clear();
-		// Attempt to find the Pokeface resource dir, which should be at
-		// "{ToolPath}/Resources/PokeFace/"
-		std::filesystem::path BasePath = std::filesystem::current_path();
-		BasePath /= "Resources";
-		BasePath /= "PokeFace";
-
-		if (!std::filesystem::is_directory(BasePath))
-		{
-			// If the Pokeface directory is not found throw an error
-			std::string ErrorMessage = std::format("{} is not a directory", BasePath.string());
-			throw std::exception(ErrorMessage.c_str());
-			return;
-		}
-
-		// Get the list of Pokemon, which we can convert into Pokeface data file names
-		auto PokemonStatsCSV = GoDCSV::CSVDatabase::Get()->GetCSVFile("Pokemon Stats");
-		auto PokemonList = PokemonStatsCSV->GetStringColumn("Entry Name");
-
-		// Resize the PokefaceData list to be the same size as PokemonList, since
-		// we will need to set texture ids to the index directly.
-		PokefaceData = std::deque<GLuint>(PokemonList.size(), 0);
-
-		// Attempt to load a pokeface data file for each Pokemon list entry.
-		for (uint32_t Index = 0; Index < PokemonList.size(); Index++)
-		{
-			// Get the PokeFace file name, it will be of the format
-			// "face_{3 digit int}.png"
-			// Example: "face_002.png" is Ivysaur's Pokeface.
-			const std::string FileName = std::format("face_{:03}.png", Index);
-
-			std::filesystem::path PathToFace = BasePath / FileName;
-			if (!std::filesystem::exists(PathToFace))
-			{
-				// If the Pokeface file doesn't exist, throw an error and stop loading
-				std::string ErrorMessage = std::format("Pokeface file {} not found", FileName);
-				throw std::exception(ErrorMessage.c_str());
-				return;
-			}
-
-			int Width = 0;
-			int Height = 0;
-
-			// Attempt to load the pokeface image file, its Width/Height will be stored in the supplied
-			// Width and height variables.
-			bool Success = LoadTextureFromFile(PathToFace.string().c_str(), &PokefaceData.at(Index), &Width, &Height);
-			if (Success)
-			{
-				ICLogger::Trace("Successfully loaded Pokeface image {}", FileName);
-			}
-			else
-			{
-				std::string ErrorMessage = std::format("Error loading Pokeface image {}, is this a valid image file?", FileName);
-				throw std::exception(ErrorMessage.c_str());
-				break;
-			}
-		}
-
-		bPokefaceDataLoaded = true;
-		ICLogger::Debug("Pokeface data loading successful!");
-	}
-	catch (const std::exception& e)
-	{
-		PokefaceData.clear();
-		ICLogger::PushErrorNotification("Pokeface data will not be displayed", 10000, "Error Loading Pokeface data: {}", e.what());
+		PokefaceImage->SetTexture(PokefaceDataIds.at(GetParent()->GetTabCSVState()->GetCurrentRow()));
 	}
 }
 
