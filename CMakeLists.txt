@@ -33,6 +33,15 @@ set(DEPENDENCY_DIR "${PROJECT_SOURCE_DIR}/Dependencies")
 # Add resource files to the build
 FILE(COPY ${RESOURCE_DIR} DESTINATION "${CMAKE_BINARY_DIR}")
 
+if(WIN32)
+    message(STATUS "CMake version is ${CMAKE_VERSION}")
+else()
+    message(STATUS "The C++ compiler version is: ${CMAKE_CXX_COMPILER_VERSION}")
+    message(STATUS "CMake version is ${CMAKE_VERSION}")
+    set(CMAKE_CXX_STANDARD 23)
+    set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+endif()
+
 # Add source files to the build and source include directories
 add_subdirectory("${PROJECT_SOURCE_DIR}/DataEditorTool")
 
@@ -82,6 +91,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE nfd)
 # Add CSVParser as a CMAKE subdir and link it
 add_subdirectory(${DEPENDENCY_DIR}/proj/csv-parser)
 target_link_libraries(${PROJECT_NAME} PRIVATE csv)
+
+target_include_directories(${PROJECT_NAME} PUBLIC "${DEPENDENCY_DIR}/proj/csv-parser/include")
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
