@@ -11,6 +11,31 @@
 #endif // IC_DEBUG
 #endif // _WIN32
 
+void OnProgramTerminated()
+{
+	// Called when the program is terminated unexpectedly.
+	// Otherwise known as a crash.
+	ICLogger::Critical("Uncaught exception has triggered a crash!");
+
+	std::exception_ptr CurrentExceptionPtr = std::current_exception();
+	try
+	{
+		std::rethrow_exception(CurrentExceptionPtr);
+	} catch (const std::exception& e) 
+	{
+		ICLogger::Critical("Uncaught exception: {}", e.what());
+	}
+
+	DataEditorInstance::Get()->DestroyInstance();
+
+	// TODO: Attempt to dump any unsaved data to a recovery log here.
+	// TODO: Save a crash log with trace logging information and a call stack here. (std::stacktrace in C++23)
+
+	ICLogger::ExitLoggerAfterCrash();
+
+	std::abort();
+}
+
 void RunApplication()
 {
 	// Create an instance of the application.
@@ -32,6 +57,9 @@ void RunApplication()
 int main(int argc, char* args[])
 {
 	std::cout.flush();
+
+	// Set a custom crash handler.
+	std::set_terminate(OnProgramTerminated);
 
 	/** Initialize logger. */
 	ICLogger::InitLogger();

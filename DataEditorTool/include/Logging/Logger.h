@@ -39,6 +39,14 @@ public:
 	static void ExitLogger();
 
 	/**
+	 * Shutdown the global logger instance due to a crash that
+	 * is about to terminate the program.
+	 * 
+	 * Old log files will not be deleted in this case.
+	 */
+	static void ExitLoggerAfterCrash();
+
+	/**
 	 * Log a trace severity message.
 	 * 
 	 * \param FormatString The format string for the message.

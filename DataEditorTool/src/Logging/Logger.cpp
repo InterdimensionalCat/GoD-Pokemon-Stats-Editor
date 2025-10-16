@@ -87,3 +87,9 @@ void ICLogger::ExitLogger()
 	ICLogger::Debug("Shutting down logger.");
 	spdlog::shutdown();
 }
+
+void ICLogger::ExitLoggerAfterCrash()
+{
+	ICLogger::Critical("Shutting down logger after handling crash.");
+	spdlog::shutdown();
+}

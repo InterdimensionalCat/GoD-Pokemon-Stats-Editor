@@ -65,6 +65,8 @@ using json = nlohmann::json;
  * imgui includes
  * imgui is a GUI library.
  */
+#include "Contexts/CustomImConfig.h" // Custom config for ImGui
+
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif // IMGUI_DEFINE_MATH_OPERATORS
