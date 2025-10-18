@@ -26,7 +26,7 @@ public:
 
 	/**
 	 * Initialize the LearnedMovesEditor tab,
-	 * creating all UiSections used in the Pokemon Stats Editor.
+	 * creating all UiSections used in the Taught Moves Editor.
 	 */
 	virtual void Init() override;
 
