@@ -80,6 +80,8 @@ public:
 	 */
 	virtual void UiComponentUpdated() override;
 
+	void SetSizeConstraintsDisabled(const bool bInDisableSizeConstraints);
+
 	/**
 	 * Get the index of the currently selected entry in the ComboBox.
 	 * 
@@ -107,4 +109,5 @@ private:
 	/* The name of the column in the entries list CSV file to get ComboBox entries from. */
 	std::string EntriesListColumnName;
 
+	bool bDisableSizeConstraints = false;
 };

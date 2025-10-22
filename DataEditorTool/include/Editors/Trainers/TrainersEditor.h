@@ -27,11 +27,17 @@ public:
 	 */
 	virtual void LoadDefaultLayout() override;
 
+	std::string GetTrainerCSVFileName() const;
+
+	std::string GetTrainerPokemonCSVFileName() const;
+
+	std::string GetTrainerAICSVFileName() const;
+
 private:
 
 	std::string TrainerCSVFileName = "Trainer DeckData_Story.bin";
 
-	std::string TrainerPokemonCSVFileName = "Trainer Pokemon DeckData_Colosseum.bin";
+	std::string TrainerPokemonCSVFileName = "Trainer Pokemon DeckData_Story.bin";
 
 	std::string TrainerAICSVFileName = "Trainer AI DeckData_Story.bin";
 

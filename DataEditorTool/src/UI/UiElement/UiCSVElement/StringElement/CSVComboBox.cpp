@@ -50,14 +50,25 @@ void CSVComboBox::Refresh()
 	// Refresh the current value this combo box manages.
 	UiBasicCSVElement::Refresh();
 	auto ComboBoxStringVal = GetManagedValue();
+	ParenthValueString ComboBoxStringParenthValue(ComboBoxStringVal);
 
 	const auto& EntriesList = ComboBoxComponent->GetEntriesList();
-	// Ensure the Selected entry index is up to date
-	auto SelectedEntryItr = std::find(EntriesList.begin(), EntriesList.end(), ComboBoxStringVal);
 
-	if (SelectedEntryItr != EntriesList.end())
+	std::vector<ParenthValueString> EntriesAsParenthValues;
+
+	for (auto& Entry : EntriesList)
 	{
-		ComboBoxComponent->SetSelectedEntry(std::distance(EntriesList.begin(), SelectedEntryItr));
+		EntriesAsParenthValues.push_back(ParenthValueString(Entry));
+	}
+
+	// Ensure the Selected entry index is up to date
+	auto SelectedEntryItr = std::find_if(EntriesAsParenthValues.begin(), EntriesAsParenthValues.end(), [ComboBoxStringParenthValue](const ParenthValueString& Elt) {
+		return Elt.GetValue() == ComboBoxStringParenthValue.GetValue();
+	});
+
+	if (SelectedEntryItr != EntriesAsParenthValues.end())
+	{
+		ComboBoxComponent->SetSelectedEntry(std::distance(EntriesAsParenthValues.begin(), SelectedEntryItr));
 	}
 	else
 	{
@@ -77,6 +88,12 @@ void CSVComboBox::Refresh()
 void CSVComboBox::UiComponentUpdated()
 {
 	SetManagedValue(ComboBoxComponent->GetEntriesList().at(GetSelectedEntry()));
+}
+
+void CSVComboBox::SetSizeConstraintsDisabled(const bool bInDisableSizeConstraints)
+{
+	bDisableSizeConstraints = bInDisableSizeConstraints;
+	UpdateEntriesList();
 }
 
 uint32_t CSVComboBox::GetSelectedEntry() const
@@ -104,4 +121,9 @@ void CSVComboBox::UpdateEntriesList()
 	}
 
 	ComboBoxComponent->SetEntriesList(NewEntriesList);
+
+	if (bDisableSizeConstraints)
+	{
+		ComboBoxComponent->SetMinContentSizeFromStringLength(0);
+	}
 }

@@ -56,7 +56,7 @@ public:
 	 */
 	std::string GetTextBoxBuffer() const;
 
-private:
+protected:
 
 	/* The string buffer used by this TextBox. */
 	std::string TextBoxBuffer = "---";

@@ -76,6 +76,26 @@ LoadedCSVData StaticCSVFiles::LoadGenderRatioDatabase()
 	return CreateLoadedDataFromParenthValueList(GenderRatioEntries, "Ratio");
 }
 
+LoadedCSVData StaticCSVFiles::LoadGenderDatabase()
+{
+	// Gender Documentation:
+	// Male (0)
+	// Female (1)
+	// Genderless (2)
+	// Random (255)
+
+	ICLogger::Debug("Loading static Gender database");
+
+	std::vector<ParenthValueString> GenderEntries;
+
+	GenderEntries.push_back(ParenthValueString("Male (0)"));
+	GenderEntries.push_back(ParenthValueString("Female (1)"));
+	GenderEntries.push_back(ParenthValueString("Genderless (2)"));
+	GenderEntries.push_back(ParenthValueString("Random (255)"));
+
+	return CreateLoadedDataFromParenthValueList(GenderEntries, "Gender");
+}
+
 LoadedCSVData StaticCSVFiles::LoadEvolutionMethodDatabase()
 {
 	// Evolution Method Documentation:

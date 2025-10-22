@@ -51,6 +51,11 @@ void CSVDatabase::LoadStaticDatabases()
 	CSVDatabaseMap.emplace("GenderRatio", std::make_shared<CSVData>("GenderRatio"));
 	CSVDatabaseMap.at("GenderRatio")->InitFromLoadedData(GenderRatioData);
 
+	// Load Gender database.
+	const auto GenderData = StaticCSVFiles::LoadGenderDatabase();
+    CSVDatabaseMap.emplace("Gender", std::make_shared<CSVData>("Gender"));
+    CSVDatabaseMap.at("Gender")->InitFromLoadedData(GenderData);
+
 	// Load EvolutionMethod database.
 	const auto EvolutionMethodData = StaticCSVFiles::LoadEvolutionMethodDatabase();
 	CSVDatabaseMap.emplace("EvolutionMethod", std::make_shared<CSVData>("EvolutionMethod"));

@@ -34,6 +34,14 @@ namespace GoDCSV
 		static LoadedCSVData LoadGenderRatioDatabase();
 
 		/**
+		/**
+		 * Load the hard-coded Gender database.
+		 *
+		 * \return The loaded Gender database.
+		 */
+		static LoadedCSVData LoadGenderDatabase();
+
+		/**
 		 * Load the hard-coded EvolutionMethod database.
 		 * 
 		 * \return The loaded EvolutionMethod database.
