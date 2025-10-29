@@ -88,7 +88,7 @@ public:
 	 * \param bRemoveQuotes If true, any quotes surrounding {EntryName} will be removed
 	 * \return A ParenthValueString with String = {EntryName} and Value = {EntryNum}
 	 */
-	ParenthValueString ToParenthValueString(const bool bRemoveQuotes = true) const;
+	ParenthValueString ToParenthValueString(const bool bRemoveQuotes = true, int32_t NumSpaces = 1) const;
 
 private:
 

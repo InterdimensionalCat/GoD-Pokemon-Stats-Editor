@@ -42,6 +42,11 @@ public:
 	void Tick() override;
 
 	/**
+	 * Refresh the currently active child UiElement.
+	 */
+	void Refresh() override;
+
+	/**
 	 * Calculate the constrained size of this UiElementSwitcher,
 	 * and calculate the constrained size of all child UiElements.
 	 * 

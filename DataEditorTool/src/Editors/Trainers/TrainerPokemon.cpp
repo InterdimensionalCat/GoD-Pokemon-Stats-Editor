@@ -2,15 +2,22 @@
 #include "Editors/Trainers/TrainerPokemon.h"
 #include "Editors/Trainers/TrainersEditorTrainerPokemon.h"
 #include "Editors/Trainers/TrainersEditor.h"
+#include "Pokeface/PokefaceData.h"
+#include "CSV/StringTypes/IntHexParenthValue.h"
+#include "CSV/StringTypes/ParenthValueString.h"
+#include "UI/TabCSVState.h"
+#include "UI/UiSize/UiConstrainedSize.h"
 #include "UI/UiElement/UiMultiElement/UiChildWindow.h"
 #include "UI/UiElement/UiMultiElement/UiGroup.h"
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleImageBox.h"
-#include "Pokeface/PokefaceData.h"
 #include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
 #include "UI/UiElement/UiCSVElement/IntElement/CSVIntBox.h"
 #include "UI/UiElement/UiCSVElement/IntElement/CSVIntSlider.h"
 #include "UI/UiElement/UiCSVElement/BoolElement/CSVCheckbox.h"
+#include "UI/UiElement/UiCSVElement/StringElement/CSVIntHexComboBox.h"
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleText.h"
+#include "UI/UiElement/UiMultiElement/UiElementSwitcher.h"
+
 
 TrainerPokemon::TrainerPokemon(
 	const std::string& InName,
@@ -28,37 +35,124 @@ TrainerPokemon::TrainerPokemon(
 	InitMovesGroup();
 	InitMiscGroup();
 
+	for(auto& CSVElement : RowElements)
+	{
+		CSVElement->SetShouldSyncRowToCSVState(false);
+	}
+
 	AddElement(PokefaceGroup);
 	AddElement(PokemonInfoGroup);
 	AddElement(IVsGroup);
 	AddElement(EVsGroup);
 	AddElement(MovesGroup);
 	AddElement(MiscGroup);
-	SetCurrentRow(1);
+	//SetCurrentRow(1);
 }
 
 void TrainerPokemon::Refresh()
 {
+	// TEMP: update row directly from CSV file
+	auto TrainersCSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(
+		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName()
+	);
+
+	auto CurrentTrainerRow = TrainersCSVData->GetRowAtIndex(ParentTrainerPokemon->GetParentEditor()->GetTabCSVState()->GetCurrentRow());
+	
+	IntHexParenthValue PartyPokemonID = CurrentTrainerRow->GetStringAtColumn(
+		std::format("Pokemon {}", PartyIndex)
+	);
+
+	const bool bPrevIsShadowPokemon = IsShadowPokemon;
+
+	IsShadowPokemon = CurrentTrainerRow->GetBoolAtColumn(
+		std::format("Pokemon {} is shadow id", PartyIndex)
+	);
+
+	if(IsShadowPokemon)
+	{
+		CurrentPokemonSwitcher->SwitchCurrentlyActiveElement(CurrentShadowPokemonComboBox);
+		CurrentShadowPokemonComboBox->Refresh();
+		auto ShadowPokemonCSVFile = GoDCSV::CSVDatabase::Get()->GetCSVFile("Shadow Pokemon");
+		auto ShadowPokemonRow = ShadowPokemonCSVFile->GetRowAtIndex(CurrentShadowPokemonComboBox->GetSelectedEntry());
+		ParenthValueString TrainerPokemonID = ShadowPokemonRow->GetStringAtColumn("Pokemon Index In Story Deck");
+		SetCurrentRow(stoi(TrainerPokemonID.GetValue()));
+	}
+	else
+	{
+		CurrentPokemonSwitcher->SwitchCurrentlyActiveElement(CurrentPokemonComboBox);
+		CurrentPokemonComboBox->Refresh();
+		SetCurrentRow(CurrentPokemonComboBox->GetSelectedEntry());
+	}
+
 	// Set the correct PokeFace image based
 	// on the current row.
 	const auto& PokefaceDataIds = PokefaceData::GetPokefaceData();
 
 	if (!PokefaceDataIds.empty())
 	{
-		PokefaceImage->SetTexture(PokefaceDataIds.at(GetCurrentRow()));
+		auto TrainerPokemonCSVData = GoDCSV::CSVDatabase::Get()->GetCSVFile(
+			ParentTrainerPokemon->GetParentEditor()->GetTrainerPokemonCSVFileName()
+		);
+
+		auto CurrentPokemonRow = TrainerPokemonCSVData->GetRowAtIndex(GetCurrentRow());
+		ParenthValueString SpeciesID = CurrentPokemonRow->GetStringAtColumn("Species");
+		PokefaceImage->SetTexture(PokefaceDataIds.at(stoi(SpeciesID.GetValue())));	
 	}
 
 	UiMultiElement::Refresh();
 }
 
+void TrainerPokemon::Tick()
+{
+
+	//auto RectMin = ImGui::GetCursorPos();
+	UiMultiElement::Tick();
+	//auto RectMax = ImGui::GetCursorPos();
+
+	//if (IsShadowPokemon)
+	//{
+	//	ImDrawList* DrawList = ImGui::GetWindowDrawList();
+	//	DrawList->AddRectFilled(
+	//		RectMin,
+	//		RectMax + ImVec2(ImGui::GetContentRegionAvail().x, 0),
+	//		ImGui::GetColorU32(ImVec4(1.f, 0.0f, 0.0f, 0.2f))
+	//	);
+	//}
+}
+
+void TrainerPokemon::CalculateConstrainedSize(
+	const std::shared_ptr<const UiConstrainedSize>& ParentConstrainedSize,
+	const std::shared_ptr<const UiSize>& ParentSizeConstraints
+)
+{
+	UpdatePokefaceImageSize();
+	UiSingleLineMultiElement::CalculateConstrainedSize(ParentConstrainedSize, ParentSizeConstraints);
+}
+
 void TrainerPokemon::SetCurrentRow(const int32_t InRow)
 {
-	CurrentRow = InRow;
+	if (CurrentRow != InRow)
+	{
+		CurrentRow = InRow;
+
+		for(auto& CSVElement : RowElements)
+		{
+			CSVElement->SetCurrentRow(CurrentRow);
+		}
+	}
 }
 
 int32_t TrainerPokemon::GetCurrentRow() const
 {
 	return CurrentRow;
+}
+
+void TrainerPokemon::UpdatePokefaceImageSize()
+{
+	if (PokefaceImage)
+	{
+		PokefaceImage->SetImageSize(ImGui::GetFrameHeightWithSpacing() * 4 + ImGui::CalcTextSize("Pokemon Info").y + ImGui::GetStyle().ItemSpacing.y - 1);
+	}
 }
 
 void TrainerPokemon::InitPokefaceGroup()
@@ -69,7 +163,7 @@ void TrainerPokemon::InitPokefaceGroup()
 	PokefaceGroup->SetIsFixedSize(true);
 
 	PokefaceImage = std::make_shared<SimpleImageBox>("##PokefaceImage", ParentTrainerPokemon);
-	PokefaceImage->SetShouldOverrideSyncedSize(false);
+	PokefaceImage->SetShouldOverrideSyncedSize(true);
 
 	const auto& PokefaceDataIds = PokefaceData::GetPokefaceData();
 	if (!PokefaceDataIds.empty())
@@ -77,8 +171,46 @@ void TrainerPokemon::InitPokefaceGroup()
 		PokefaceImage->SetTexture(PokefaceDataIds.at(0));
 	}
 
-	PokefaceImage->SetImageSize(ImGui::GetFrameHeightWithSpacing() * 6);
+	UpdatePokefaceImageSize();
+
+	CurrentPokemonSwitcher = std::make_shared<UiElementSwitcher>(
+		std::format("##CurrentPokemonSwitcher{}", PartyIndex),
+		ParentTrainerPokemon
+	);
+
+	CurrentPokemonComboBox = std::make_shared<CSVIntHexComboBox>(
+		std::format("##CurrentPokemon{}", PartyIndex),
+		ParentTrainerPokemon,
+		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName(),
+		std::format("Pokemon {}", PartyIndex),
+		ParentTrainerPokemon->GetParentEditor()->GetTrainerPokemonCSVFileName(),
+		"Entry Name"
+	);
+
+	CurrentShadowPokemonComboBox = std::make_shared<CSVIntHexComboBox>(
+		std::format("##CurrentShadowPokemon{}", PartyIndex),
+		ParentTrainerPokemon,
+		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName(),
+		std::format("Pokemon {}", PartyIndex),
+		"Shadow Pokemon",
+		"Entry Name"
+	);
+
+	CurrentPokemonSwitcher->AddElement(CurrentPokemonComboBox);
+	CurrentPokemonSwitcher->AddElement(CurrentShadowPokemonComboBox);
+
+	auto ShadowPokemonCheckbox = std::make_shared<CSVCheckbox>(
+		std::format("Shadow Pokemon?##{}", PartyIndex),
+		ParentTrainerPokemon,
+		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName(),
+		std::format("Pokemon {} is shadow id", PartyIndex)
+	);
+	ShadowPokemonCheckbox->SetIsFixedSize(true);
+	ShadowPokemonCheckbox->SetShouldOverrideSyncedSize(true);
+
 	PokefaceGroup->AddElement(PokefaceImage);
+	PokefaceGroup->AddElement(CurrentPokemonSwitcher);
+	PokefaceGroup->AddElement(ShadowPokemonCheckbox);
 }
 
 void TrainerPokemon::InitPokemonInfoGroup()
@@ -137,6 +269,11 @@ void TrainerPokemon::InitPokemonInfoGroup()
 		"Pokemon AI Roles",
 		"Entry Name"
 	);
+
+	// Needed because for some reason AI role entries have two spaces between the
+	// string and value.
+	AiRoleComboBox->SetEntriesNumWhitespace(2);
+
 	AiRoleComboBox->SetSizeConstraintsDisabled(true);
 	RowElements.push_back(AiRoleComboBox);
 
@@ -188,7 +325,7 @@ void TrainerPokemon::InitIVsGroup()
 		"IVs Speed"
 	};
 
-	for(int32_t i = 0; i < IVsNames.size(); i++)
+	for (int32_t i = 0; i < IVsNames.size(); i++)
 	{
 		InitIVElement(IVsNames[i], IVsColumns[i]);
 	}
@@ -267,11 +404,17 @@ void TrainerPokemon::InitEVElement(const std::string& ItemName, const std::strin
 
 void TrainerPokemon::InitMovesGroup()
 {
+
 	MovesGroup = std::make_shared<UiGroup>("Moves Group", ParentTrainerPokemon);
 	MovesGroup->SetSameLine(true);
 
 	auto MovesText = std::make_shared<SimpleText>("Moves", ParentTrainerPokemon);
 	MovesGroup->AddElement(MovesText);
+
+	for (int32_t MoveIndex = 1; MoveIndex <= 4; MoveIndex++)
+	{
+		InitMoveElement(MoveIndex);
+	}
 
 	auto GenderComboBox = std::make_shared<CSVComboBox>(
 		std::format("Gender##{}", PartyIndex),
@@ -291,15 +434,13 @@ void TrainerPokemon::InitMovesGroup()
 		"Nature",
 		"Entry Name"
 	);
+
+	NatureComboBox->SetStartWithCapitalLetter(true);
+
 	RowElements.push_back(NatureComboBox);
 
 	MovesGroup->AddElement(GenderComboBox);
 	MovesGroup->AddElement(NatureComboBox);
-
-	for (int32_t MoveIndex = 1; MoveIndex <= 4; MoveIndex++)
-	{
-		InitMoveElement(MoveIndex);
-	}
 }
 
 void TrainerPokemon::InitMoveElement(int32_t MoveIndex)

@@ -14,6 +14,8 @@ class SimpleImageBox;
 class UiGroup;
 class CSVComboBox;
 class CSVIntBox;
+class CSVIntHexComboBox;
+class UiElementSwitcher;
 
 class TrainerPokemon : public UiSingleLineMultiElement
 {
@@ -33,17 +35,26 @@ public:
 
 	void Refresh() override;
 
+	void Tick() override;
+
+	virtual void CalculateConstrainedSize(
+		const std::shared_ptr<const UiConstrainedSize>& ParentConstrainedSize,
+		const std::shared_ptr<const UiSize>& ParentSizeConstraints
+	) override;
+
 	void SetCurrentRow(const int32_t InRow);
 
 	int32_t GetCurrentRow() const;
 
 private:
 
+	void UpdatePokefaceImageSize();
+
 	TrainersEditorTrainerPokemon* ParentTrainerPokemon;
 
 	int32_t PartyIndex = 0;
 
-	int32_t CurrentRow = 0;
+	int32_t CurrentRow = -1;
 
 	std::vector<std::shared_ptr<UiCSVElement>> RowElements;
 
@@ -51,6 +62,10 @@ private:
 	std::shared_ptr<UiGroup> PokefaceGroup;
 	/** Pokeface image of the current trainer's Pokemon. */
 	std::shared_ptr<SimpleImageBox> PokefaceImage;
+	std::shared_ptr<UiElementSwitcher> CurrentPokemonSwitcher;
+	std::shared_ptr<CSVIntHexComboBox> CurrentPokemonComboBox;
+	std::shared_ptr<CSVIntHexComboBox> CurrentShadowPokemonComboBox;
+
 
 	void InitPokemonInfoGroup();
 	std::shared_ptr<UiGroup> PokemonInfoGroup;
@@ -70,4 +85,6 @@ private:
 	void InitMiscGroup();
 	void InitComboRoleElement(const std::string& ComboName, int32_t RoleNum);
 	std::shared_ptr<UiGroup> MiscGroup;
+
+	bool IsShadowPokemon = false;
 };

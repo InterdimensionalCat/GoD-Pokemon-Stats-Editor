@@ -33,7 +33,7 @@ void UiChildWindow::Tick()
 
 	// Begin the child window
 	//ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_WindowBg]);
-	//ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(1.f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_WindowBg] + ImVec4(0.f, 0.2f, 0.4f, 1.f));
 	//ImGui::GetStyle().Colors[ImGuiCol_ChildBg] = ImGui::GetStyle().Colors[ImGuiCol_WindowBg] + ImVec4(0.f, 0.2f, 0.4f, 1.f);
 	auto WindowHeight = ImGui::GetFrameHeightWithSpacing() * GetNumLines();// + ImGui::GetStyle().ScrollbarSize;
 	if (ImGui::BeginChild(GetInvisibleName().c_str(), ImVec2(ConstrainedSize->GetConstrainedSize(), WindowHeight), 0, 0))
@@ -43,7 +43,7 @@ void UiChildWindow::Tick()
 		// End the child window
 	}
 	ImGui::EndChild();
-	//ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
 
 

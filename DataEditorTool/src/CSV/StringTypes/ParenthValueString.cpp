@@ -5,7 +5,7 @@ ParenthValueString::ParenthValueString(const std::string& InParenthValue)
 {
 	// Find the last occurances of '(' and ')', between these characters should
 	// be the value string
-	size_t LastOpenParenth   = InParenthValue.rfind('(');
+	size_t LastOpenParenth = InParenthValue.rfind('(');
 	size_t LastClosedParenth = InParenthValue.rfind(')');
 
 	// If either '(' or ')' was not found, or if ')' was before '(' then this
@@ -31,16 +31,20 @@ ParenthValueString::ParenthValueString(const std::string& InParenthValue)
 		// However we need to trim the whitespace between the String and the value
 		String = InParenthValue.substr(0, LastOpenParenth);
 		size_t LastCharBeforeWhitespace = String.find_last_not_of(' ');
-		
+
 		// If any whitespace was found, remove it
 		if (LastCharBeforeWhitespace != std::string::npos)
 		{
+			NumWhitespace = (String.length() - 1) - LastCharBeforeWhitespace;
 			String.erase(LastCharBeforeWhitespace + 1);
 		}
 	}
 }
 
-ParenthValueString::ParenthValueString(const std::string& InString, const std::string& InValue) : String(InString), Value(InValue)
+ParenthValueString::ParenthValueString(const std::string& InString, const std::string& InValue, int32_t InNumWhitespace) :
+	String(InString),
+	Value(InValue),
+	NumWhitespace(InNumWhitespace)
 {
 
 }
@@ -67,5 +71,6 @@ std::string ParenthValueString::GetValue() const
 
 std::string ParenthValueString::GetParenthValueString() const
 {
-	return std::format("{} ({})", String, Value);
+	const std::string WhitespaceString = std::string(NumWhitespace, ' ');
+	return std::format("{}{}({})", String, WhitespaceString, Value);
 }

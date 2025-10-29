@@ -102,6 +102,23 @@ public:
 	 */
 	void SetManagedValue(const CSVPrimitiveType& NewValue)
 	{
+		if constexpr(std::same_as<CSVPrimitiveType, std::string>)
+		{
+			auto NewValueStr = NewValue;
+			auto ManagedValueStr = ManagedValue;
+
+			if (NewValueStr.length() == ManagedValueStr.length())
+			{
+				for (size_t i = 0; i < NewValueStr.length(); ++i)
+				{
+					if (NewValueStr[i] != ManagedValueStr[i])
+					{
+						ICLogger::Info("CSV string value change detected at index {}: '{}' -> '{}'", i, ManagedValueStr[i], NewValueStr[i]);
+					}
+				}
+			}
+		}
+
 		// Don't bother updating the CSV file and marking it dirty
 		// If we are just setting the same value
 		if (NewValue != ManagedValue)

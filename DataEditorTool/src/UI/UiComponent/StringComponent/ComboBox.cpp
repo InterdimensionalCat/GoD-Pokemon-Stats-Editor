@@ -133,7 +133,28 @@ void ComboBox::SetSelectedEntry(const uint32_t NewSelectedEntry)
 void ComboBox::SetEntriesList(const std::vector<std::string>& InEntriesList)
 {
 	EntriesList = InEntriesList;
+
+	// Process each entry based on the supplied flags
+	for (std::string& Entry : EntriesList)
+	{
+		// Start with a capital letter if requested
+		if (bStartWithCapitalLetter && !Entry.empty())
+		{
+			// Make the whole string lowercase first
+			std::transform(Entry.begin(), Entry.end(), Entry.begin(), [](unsigned char c) { return std::tolower(c); });
+
+			// Then capitalize the first letter
+			Entry[0] = static_cast<char>(std::toupper(Entry[0]));
+		}
+	}
+
 	SetMinContentSizeFromEntriesList();
+}
+
+void ComboBox::SetStartWithCapitalLetter(const bool InStartWithCapitalLetter)
+{
+	bStartWithCapitalLetter = InStartWithCapitalLetter;
+	SetEntriesList(EntriesList);
 }
 
 uint32_t ComboBox::GetSelectedEntry() const

@@ -98,21 +98,21 @@ std::string EntryNameString::GetEntryNameString() const
 	return std::format("{}{}- {}", EntryName, WhitespaceString, EntryNum);
 }
 
-ParenthValueString EntryNameString::ToParenthValueString(const bool bRemoveQuotes) const
+ParenthValueString EntryNameString::ToParenthValueString(const bool bRemoveQuotes, int32_t NumSpaces) const
 {
 	if (bRemoveQuotes)
 	{
 		std::string EntryNameNoQuotes = EntryName;
 
-		// Remove all occurances of '"' in the EntryName string
+		// Remove all occurrences of '"' in the EntryName string
 		EntryNameNoQuotes.erase(
 			std::remove(EntryNameNoQuotes.begin(), EntryNameNoQuotes.end(), '"'), 
 			EntryNameNoQuotes.end());
 
-		return ParenthValueString(EntryNameNoQuotes, EntryNum);
+		return ParenthValueString(EntryNameNoQuotes, EntryNum, NumSpaces);
 	}
 	else
 	{
-		return ParenthValueString(EntryName, EntryNum);
+		return ParenthValueString(EntryName, EntryNum, NumSpaces);
 	}
 }

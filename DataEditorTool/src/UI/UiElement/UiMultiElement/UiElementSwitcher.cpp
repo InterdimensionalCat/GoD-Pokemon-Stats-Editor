@@ -27,6 +27,18 @@ void UiElementSwitcher::Tick()
 	}
 }
 
+void UiElementSwitcher::Refresh()
+{
+	if (CurrentlyActiveElement.get() != nullptr)
+	{
+		CurrentlyActiveElement->Refresh();
+	}
+	else
+	{
+		ICLogger::Warn("UiElementSwitcher {} has no active element to refresh.", GetName());
+	}
+}
+
 void UiElementSwitcher::CalculateConstrainedSize(const std::shared_ptr<const UiConstrainedSize>& ParentConstrainedSize, const std::shared_ptr<const UiSize>& ParentSizeConstraints)
 {
 	// Recalculate the synced size between all possible
@@ -76,6 +88,7 @@ void UiElementSwitcher::SwitchCurrentlyActiveElement(std::shared_ptr<UiElement> 
 	{
 		CurrentlyActiveElement = *FoundEltIt;
 		CurrentlyActiveElementIndex = std::distance(UiElements.begin(), FoundEltIt);
+		Refresh();
 	}
 	else
 	{

@@ -7,7 +7,7 @@
 
 TrainersEditor::TrainersEditor(std::shared_ptr<ImGuiWindowClass> InTabDockspace) : UiTab("Story Trainers Editor", InTabDockspace)
 {
-	RequiredForEditCSVFileNames = { TrainerCSVFileName, TrainerPokemonCSVFileName };
+	RequiredForEditCSVFileNames = { TrainerCSVFileName, TrainerPokemonCSVFileName, "Shadow Pokemon" };
 
 	// TODO: allow for editing of Trainer AI data in the trainers editor.
 	RequiredForViewingCSVFileNames = { TrainerAICSVFileName, "Pokemon Stats", "Pokemon AI Roles", "Nature" };
