@@ -32,9 +32,9 @@ public:
 	/**
 	 * Initialize this settings section from the supplied JSON object.
 	 * 
-	 * \param LayoutSettings The JSON object to load the settings from.
+	 * \param FontSettings The JSON object to load the settings from.
 	 */
-	void InitFromJson(const nlohmann::ordered_json& LayoutSettings) override;
+	void InitFromJson(const nlohmann::ordered_json& FontSettings) override;
 
 	/**
 	 * Initialize this settings section from default values.
@@ -44,9 +44,9 @@ public:
 	/**
 	 * Save this settings section to the supplied JSON object.
 	 * 
-	 * \param LayoutSettings The JSON object to save the settings to.
+	 * \param FontSettings The JSON object to save the settings to.
 	 */
-	void SaveToJson(nlohmann::ordered_json& LayoutSettings) const override;
+	void SaveToJson(nlohmann::ordered_json& FontSettings) const override;
 
 	/**
 	 * Get the name of this settings section.

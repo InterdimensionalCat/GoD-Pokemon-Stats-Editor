@@ -106,3 +106,5 @@ private:
 	/** Map of settings section name to settings section pointer. */
 	std::map<std::string, std::shared_ptr<SettingsSection>> SettingsSections;
 };
+
+

@@ -2,13 +2,16 @@
 #include "Settings/AppSettings.h"
 
 #include "Settings/SettingsSection/SettingsSection.h"
+#include "Settings/SettingsSection/GeneralSettingsSection.h"
 #include "Font/FontSettings.h"
 #include "Layout/LayoutSettings.h"
 
 AppSettings::AppSettings()
 {
 	//AddSection(LayoutSettings);
+	AddSection(std::make_shared<GeneralSettings>());
 	AddSection(std::make_shared<FontSettings>());
+	
 }
 
 void AppSettings::Init()
