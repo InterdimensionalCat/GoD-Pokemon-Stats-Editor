@@ -8,6 +8,7 @@
 #pragma once
 
 class FontSettings;
+class GeneralSettings;
 class LayoutSettings;
 class SettingsSection;
 
@@ -74,6 +75,14 @@ public:
 	 * \return A shared pointer to the FontSettings section.
 	 */
 	std::shared_ptr<FontSettings> GetFontSettings();
+
+	/**
+	 * Get the GeneralSettings section.
+	 * This will throw if the GeneralSettings section has not been added.
+	 *
+	 * \return A shared pointer to the GeneralSettings section.
+	 */
+	std::shared_ptr<GeneralSettings> GetGeneralSettings();
 
 	/**
 	 * Get the LayoutSettings section for the specified tab name.

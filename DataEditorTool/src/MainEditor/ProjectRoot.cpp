@@ -4,6 +4,8 @@
 #include "MainEditor/MainEditorWindow.h"
 #include "CSV/CSVData.h"
 #include "CSV/CSVDatabase.h"
+#include "Settings/SettingsSection/GeneralSettingsSection.h"
+#include "Settings/AppSettings.h"
 
 void ProjectRoot::SetProjectRootPath()
 {
@@ -34,6 +36,10 @@ void ProjectRoot::SetProjectRootPath()
 			ICLogger::Info("Previous project root still open, closing it: {}", ProjectRootPath.string());
 			CloseCurrentRoot();
 		}
+
+		// Updates the last known good project root path in Settings
+		auto GeneralSettings = MainEditorWindow::Get()->GetSettings()->GetGeneralSettings();
+		GeneralSettings->SetRootPath(PathStr);
 
 		ProjectRootPath = PathStr;
 		bProjectRootPathSet = true;

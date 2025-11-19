@@ -153,6 +153,11 @@ std::shared_ptr<FontSettings> AppSettings::GetFontSettings()
 	return std::dynamic_pointer_cast<FontSettings>(GetSectionByName("Font Settings"));
 }
 
+std::shared_ptr<GeneralSettings> AppSettings::GetGeneralSettings()
+{
+	return std::dynamic_pointer_cast<GeneralSettings>(GetSectionByName("General Settings"));
+}
+
 std::shared_ptr<LayoutSettings> AppSettings::GetLayoutSettingsForTab(const std::string& InTabName)
 {
 	auto Section = GetSectionByName(std::format("{}-Layout Settings", InTabName));
