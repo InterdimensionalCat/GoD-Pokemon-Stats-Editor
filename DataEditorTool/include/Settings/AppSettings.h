@@ -76,6 +76,7 @@ public:
 	std::shared_ptr<FontSettings> GetFontSettings();
 
 	/**
+
 	 * Get the LayoutSettings section for the specified tab name.
 	 * This will return a nullptr if a LayoutSettings section with the specified
 	 * tab name has not been added.
