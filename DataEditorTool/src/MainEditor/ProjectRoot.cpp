@@ -28,22 +28,7 @@ void ProjectRoot::SetProjectRootPath()
 		// If a valid result is output, set
 		// the Root path equal to the selected folder
 		std::string PathStr(OutPath.get());
-		ICLogger::Info("Setting new project root: {}", PathStr);
-
-		if (bProjectRootPathSet)
-		{
-			// If a project root was already set, close it first.
-			ICLogger::Info("Previous project root still open, closing it: {}", ProjectRootPath.string());
-			CloseCurrentRoot();
-		}
-
-		// Updates the last known good project root path in Settings
-		auto GeneralSettings = MainEditorWindow::Get()->GetSettings()->GetGeneralSettings();
-		GeneralSettings->SetRootPath(PathStr);
-
-		ProjectRootPath = PathStr;
-		bProjectRootPathSet = true;
-		OnProjectRootPathSet();
+		OpenProjectRootPath(PathStr);
 	}
 	else if (Result == NFD_CANCEL)
 	{
@@ -57,6 +42,26 @@ void ProjectRoot::SetProjectRootPath()
 	}
 
 	// NFD::Guard will automatically quit NFD.
+}
+
+void ProjectRoot::OpenProjectRootPath(std::string PathStr)
+{
+	ICLogger::Info("Setting new project root: {}", PathStr);
+
+	if (bProjectRootPathSet)
+	{
+		// If a project root was already set, close it first.
+		ICLogger::Info("Previous project root still open, closing it: {}", ProjectRootPath.string());
+		CloseCurrentRoot();
+	}
+
+	// Updates the last known good project root path in Settings
+	auto GeneralSettings = MainEditorWindow::Get()->GetSettings()->GetGeneralSettings();
+	GeneralSettings->SetRootPath(PathStr);
+
+	ProjectRootPath = PathStr;
+	bProjectRootPathSet = true;
+	OnProjectRootPathSet();
 }
 
 void ProjectRoot::CloseCurrentRoot()

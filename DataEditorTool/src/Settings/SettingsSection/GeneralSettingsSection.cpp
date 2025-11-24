@@ -4,7 +4,7 @@
 GeneralSettings::GeneralSettings() : 
 	SettingsSection(GetSectionName()),
 	RootPath("Root Path", ""),
-	OpenLastRootEnabled("Open Last Root", false)
+	AutoOpenLastRoot("Open Last Root", false)
 {
 
 }
@@ -12,19 +12,19 @@ GeneralSettings::GeneralSettings() :
 void GeneralSettings::InitFromJson(const nlohmann::ordered_json& GeneralSettings)
 {
 	RootPath.LoadFromJsonOrUseDefault(GeneralSettings);
-	OpenLastRootEnabled.LoadFromJsonOrUseDefault(GeneralSettings);
+	AutoOpenLastRoot.LoadFromJsonOrUseDefault(GeneralSettings);
 }
 
 void GeneralSettings::InitFromDefaults()
 {
 	RootPath.LoadDefaultValue();
-	OpenLastRootEnabled.LoadDefaultValue();
+	AutoOpenLastRoot.LoadDefaultValue();
 }
 
 void GeneralSettings::SaveToJson(nlohmann::ordered_json& GeneralSettings) const
 {
 	RootPath.SaveToJson(GeneralSettings);
-	OpenLastRootEnabled.SaveToJson(GeneralSettings);
+	AutoOpenLastRoot.SaveToJson(GeneralSettings);
 }
 
 std::string GeneralSettings::GetSectionName()
@@ -37,9 +37,9 @@ std::string GeneralSettings::GetRootPath() const
 	return RootPath.GetValue();
 }
 
-bool GeneralSettings::GetOpenLastRootEnabled() const
+bool GeneralSettings::GetAutoOpenLastRoot() const
 {
-	return OpenLastRootEnabled.GetValue();
+	return AutoOpenLastRoot.GetValue();
 }
 
 void GeneralSettings::SetRootPath(const std::string& NewRootPath)
@@ -47,7 +47,7 @@ void GeneralSettings::SetRootPath(const std::string& NewRootPath)
 	RootPath.SetValue(NewRootPath);
 }
 
-void GeneralSettings::SetOpenLastRootEnabled(const bool NewState)
+void GeneralSettings::SetAutoOpenLastRoot(const bool NewState)
 {
-	OpenLastRootEnabled.SetValue(NewState);
+	AutoOpenLastRoot.SetValue(NewState);
 }

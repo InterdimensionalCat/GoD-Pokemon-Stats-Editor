@@ -59,7 +59,7 @@ public:
 	 *
 	 * \return The current bool state from settings.
 	 */
-	bool GetOpenLastRootEnabled() const;
+	bool GetAutoOpenLastRoot() const;
 
 	/**
 	 * Set the current root directory file path in settings.
@@ -73,7 +73,7 @@ public:
 	 *
 	 * \param NewCurrentFont The new bool state to set in settings.
 	 */
-	void SetOpenLastRootEnabled(const bool OpenLastRootEnabled);
+	void SetAutoOpenLastRoot(const bool AutoOpenLastRoot);
 
 private:
 	
@@ -81,6 +81,6 @@ private:
 	AppSetting<std::string> RootPath;
 
 	/** The bool controlling the automatic opening of the last known root on launch */
-	AppSetting<bool> OpenLastRootEnabled;
+	AppSetting<bool> AutoOpenLastRoot;
 	
 };

@@ -12,6 +12,8 @@
 #include "UI/UiTab.h"
 #include "Editors/PokemonStats/PokemonStatsEditor.h"
 #include "Editors/LearnedMoves/LearnedMovesEditor.h"
+#include "Settings/SettingsSection/GeneralSettingsSection.h"
+#include "MainEditor/ProjectRoot.h"
 
 void MainEditorWindow::Init()
 {
@@ -37,6 +39,7 @@ void MainEditorWindow::Init()
 
     // Init settings.
     MainAppSettings = std::make_shared<AppSettings>();
+    auto GeneralSettings = MainAppSettings->GetGeneralSettings();
     MainAppSettings->Init();
 
     // Init font loader, this will find fonts available in the fonts folder.
@@ -56,6 +59,13 @@ void MainEditorWindow::Init()
     MainWindowDockspace->DockingAllowUnclassed = false;
 
 	ICLogger::Debug("Main Editor Window initialized successfully.");
+
+    if (GeneralSettings->GetAutoOpenLastRoot())
+    {
+        ICLogger::Debug("Attempting to automatically open last known root.");
+        std::string SavedRootPath = GeneralSettings->GetRootPath();
+        ProjectRoot::Get()->OpenProjectRootPath(SavedRootPath);
+    }
 }
 
 void MainEditorWindow::Exit()
