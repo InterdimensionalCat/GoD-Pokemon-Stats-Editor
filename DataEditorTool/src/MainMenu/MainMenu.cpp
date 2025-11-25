@@ -5,14 +5,12 @@
 #include "MainMenu/MainMenuSections/MenuFile.h"
 #include "MainMenu/MainMenuSections/MenuEdit.h"
 #include "MainMenu/MainMenuSections/MenuView.h"
-#include "MainMenu/MainMenuSections/MenuSettings.h"
 
 MainMenu::MainMenu()
 {
 	AddSection(std::make_shared<MenuFile>());
 	AddSection(std::make_shared<MenuEdit>());
 	AddSection(std::make_shared<MenuView>());
-	AddSection(std::make_shared<MenuSettings>());
 }
 
 
