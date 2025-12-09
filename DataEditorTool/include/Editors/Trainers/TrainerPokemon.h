@@ -58,6 +58,8 @@ private:
 
 	std::vector<std::shared_ptr<UiCSVElement>> RowElements;
 
+	std::vector<std::shared_ptr<UiCSVElement>> ShadowPokemonElements;
+
 	void InitPokefaceGroup();
 	std::shared_ptr<UiGroup> PokefaceGroup;
 	/** Pokeface image of the current trainer's Pokemon. */

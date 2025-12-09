@@ -5,6 +5,7 @@
 #include "Pokeface/PokefaceData.h"
 #include "CSV/StringTypes/IntHexParenthValue.h"
 #include "CSV/StringTypes/ParenthValueString.h"
+#include "CSV/StringTypes/EntryNameString.h"
 #include "UI/TabCSVState.h"
 #include "UI/UiSize/UiConstrainedSize.h"
 #include "UI/UiElement/UiMultiElement/UiChildWindow.h"
@@ -17,6 +18,7 @@
 #include "UI/UiElement/UiCSVElement/StringElement/CSVIntHexComboBox.h"
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleText.h"
 #include "UI/UiElement/UiMultiElement/UiElementSwitcher.h"
+#include "Editors/Trainers/CurrentShadowPokemonBox.h"
 
 
 TrainerPokemon::TrainerPokemon(
@@ -36,6 +38,11 @@ TrainerPokemon::TrainerPokemon(
 	InitMiscGroup();
 
 	for(auto& CSVElement : RowElements)
+	{
+		CSVElement->SetShouldSyncRowToCSVState(false);
+	}
+
+	for (auto& CSVElement : ShadowPokemonElements)
 	{
 		CSVElement->SetShouldSyncRowToCSVState(false);
 	}
@@ -139,6 +146,26 @@ void TrainerPokemon::SetCurrentRow(const int32_t InRow)
 		{
 			CSVElement->SetCurrentRow(CurrentRow);
 		}
+
+		for (auto& CSVElement : ShadowPokemonElements)
+		{
+			int32_t Row = 0;
+
+			if (IsShadowPokemon)
+			{
+				auto ShadowPokemonCSVFile = GoDCSV::CSVDatabase::Get()->GetCSVFile("Shadow Pokemon");
+				auto ShadowPokemonRow = ShadowPokemonCSVFile->GetRowAtIndex(CurrentShadowPokemonComboBox->GetSelectedEntry());
+				EntryNameString TrainerPokemonID = ShadowPokemonRow->GetStringAtColumn("Entry Name");
+				Row = stoi(TrainerPokemonID.GetEntryNum());
+				CSVElement->SetDisabled(false);
+			}
+			else
+			{
+				CSVElement->SetDisabled(true);
+			}
+
+			CSVElement->SetCurrentRow(Row);
+		}
 	}
 }
 
@@ -173,6 +200,16 @@ void TrainerPokemon::InitPokefaceGroup()
 
 	UpdatePokefaceImageSize();
 
+	auto ShadowPokemonCheckbox = std::make_shared<CSVCheckbox>(
+		std::format("Shadow Pokemon?##{}", PartyIndex),
+		ParentTrainerPokemon,
+		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName(),
+		std::format("Pokemon {} is shadow id", PartyIndex)
+	);
+
+	ShadowPokemonCheckbox->SetIsFixedSize(true);
+	ShadowPokemonCheckbox->SetShouldOverrideSyncedSize(true);
+
 	CurrentPokemonSwitcher = std::make_shared<UiElementSwitcher>(
 		std::format("##CurrentPokemonSwitcher{}", PartyIndex),
 		ParentTrainerPokemon
@@ -187,30 +224,33 @@ void TrainerPokemon::InitPokefaceGroup()
 		"Entry Name"
 	);
 
-	CurrentShadowPokemonComboBox = std::make_shared<CSVIntHexComboBox>(
+	CurrentShadowPokemonComboBox = std::make_shared<CurrentShadowPokemonBox>(
 		std::format("##CurrentShadowPokemon{}", PartyIndex),
 		ParentTrainerPokemon,
 		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName(),
-		std::format("Pokemon {}", PartyIndex),
-		"Shadow Pokemon",
-		"Entry Name"
+		std::format("Pokemon {}", PartyIndex)
 	);
 
 	CurrentPokemonSwitcher->AddElement(CurrentPokemonComboBox);
 	CurrentPokemonSwitcher->AddElement(CurrentShadowPokemonComboBox);
 
-	auto ShadowPokemonCheckbox = std::make_shared<CSVCheckbox>(
-		std::format("Shadow Pokemon?##{}", PartyIndex),
+	auto ShadowPokemonIndex = std::make_shared<CSVComboBox>(
+		std::format("##CurrentShadowPokemonIdInDeck{}", PartyIndex),
 		ParentTrainerPokemon,
-		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName(),
-		std::format("Pokemon {} is shadow id", PartyIndex)
+		"Shadow Pokemon",
+		"Pokemon Index In Story Deck",
+		ParentTrainerPokemon->GetParentEditor()->GetTrainerPokemonCSVFileName(),
+		"Entry Name"
 	);
-	ShadowPokemonCheckbox->SetIsFixedSize(true);
-	ShadowPokemonCheckbox->SetShouldOverrideSyncedSize(true);
+
+	ShadowPokemonIndex->SetEntriesNumWhitespace(2);
+
+	ShadowPokemonElements.push_back(ShadowPokemonIndex);
 
 	PokefaceGroup->AddElement(PokefaceImage);
-	PokefaceGroup->AddElement(CurrentPokemonSwitcher);
 	PokefaceGroup->AddElement(ShadowPokemonCheckbox);
+	PokefaceGroup->AddElement(CurrentPokemonSwitcher);
+	PokefaceGroup->AddElement(ShadowPokemonIndex);
 }
 
 void TrainerPokemon::InitPokemonInfoGroup()
