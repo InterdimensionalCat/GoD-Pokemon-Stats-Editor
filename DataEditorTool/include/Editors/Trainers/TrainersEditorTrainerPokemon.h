@@ -10,6 +10,7 @@
 #include "UI/UiSection.h"
 
 class TrainersEditor;
+class UiSingleLineMultiElement;
 
 class TrainersEditorTrainerPokemon : public UiSection
 {
@@ -23,9 +24,13 @@ public:
 	 */
 	TrainersEditorTrainerPokemon(TrainersEditor* InParent);
 
+	void InitTrainerPokemonForPartyIndex(const int32_t PartyIndex);
+
 	TrainersEditor* GetParentEditor() const;
 
 private:
+
+	std::shared_ptr<UiSingleLineMultiElement> PokemonMultiLineElement;
 
 	TrainersEditor* ParentEditor;
 };

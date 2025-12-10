@@ -33,17 +33,19 @@ void UiChildWindow::Tick()
 
 	// Begin the child window
 	//ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_WindowBg]);
-	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_WindowBg] + ImVec4(0.f, 0.2f, 0.4f, 1.f));
+	//ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_WindowBg] + ImVec4(0.f, 0.2f, 0.4f, 1.f));
 	//ImGui::GetStyle().Colors[ImGuiCol_ChildBg] = ImGui::GetStyle().Colors[ImGuiCol_WindowBg] + ImVec4(0.f, 0.2f, 0.4f, 1.f);
 	auto WindowHeight = ImGui::GetFrameHeightWithSpacing() * GetNumLines();// + ImGui::GetStyle().ScrollbarSize;
-	if (ImGui::BeginChild(GetInvisibleName().c_str(), ImVec2(ConstrainedSize->GetConstrainedSize(), WindowHeight), 0, 0))
+	//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(30, 0));
+	if (ImGui::BeginChild(GetInvisibleName().c_str(), ImVec2(ConstrainedSize->GetConstrainedSize() + ImGui::GetStyle().WindowPadding.x * 2, WindowHeight), ImGuiChildFlags_Border, 0))
 	{
 		// Tick all child elements within the child window
 		UiMultiElement::Tick();
 		// End the child window
 	}
 	ImGui::EndChild();
-	ImGui::PopStyleColor();
+	//ImGui::PopStyleVar();
+	//ImGui::PopStyleColor();
 }
 
 

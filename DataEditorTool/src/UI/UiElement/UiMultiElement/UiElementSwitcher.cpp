@@ -3,6 +3,7 @@
 #include "UI/UiSection.h"
 #include "UI/UiSize/UiSyncedSize.h"
 #include "UI/UiSize/UiConstrainedSize.h"
+#include "UI/UiSize/UiConstrainedSizeWithLabel.h"
 
 
 UiElementSwitcher::UiElementSwitcher(
@@ -41,20 +42,26 @@ void UiElementSwitcher::Refresh()
 
 void UiElementSwitcher::CalculateConstrainedSize(const std::shared_ptr<const UiConstrainedSize>& ParentConstrainedSize, const std::shared_ptr<const UiSize>& ParentSizeConstraints)
 {
-	// Recalculate the synced size between all possible
-	// child elements
-	//SizeConstraints->ClearSizesToConsider();
+	CalculateSyncedSize();
 
-	//for (auto Element : UiElements)
-	//{
-	//	SizeConstraints->AddSizeToConsider(Element->GetSizeConstraints());
-	//}
+	// First calculate this MultiElement's constrained size.
+	ConstrainedSize->CalculateFromSizeConstraints(
+		ParentConstrainedSize->GetConstrainedSize(),
+		ParentSizeConstraints
+	);
+
+	// Calculate the size constraints of each element with its own UiSize, 
+	// rather than this child's UiSize.
+	for (auto UiElement : UiElements)
+	{
+		UiElement->CalculateConstrainedSize(ConstrainedSize, SizeConstraints);
+	}
 
 	// The default UiMultiElement calculations will work here so long as our
 	// synced size is properly updated. It assumes each element is on its own
 	// line and has the entire line's available space to work with, which is
 	// essentially true for an element switcher.
-	UiMultiElement::CalculateConstrainedSize(ParentConstrainedSize, ParentSizeConstraints);
+	//UiMultiElement::CalculateConstrainedSize(ParentConstrainedSize, ParentSizeConstraints);
 }
 
 void UiElementSwitcher::AddElement(const std::shared_ptr<UiElement> NewElement)
@@ -93,5 +100,20 @@ void UiElementSwitcher::SwitchCurrentlyActiveElement(std::shared_ptr<UiElement> 
 	else
 	{
 		ICLogger::Warn("UiElementSwitcher attempted to switch to an element not in the switcher: {}", NewActiveElement->GetName());
+	}
+}
+
+void UiElementSwitcher::CalculateSyncedSize()
+{
+	SizeConstraints->ClearSizesToConsider();
+
+	for (const std::shared_ptr<UiElement>& Element : UiElements)
+	{
+		if (Element->ShouldOverrideSyncedSize())
+		{
+			continue;
+		}
+
+		SizeConstraints->AddSizeToConsider(Element->GetSizeConstraints());
 	}
 }

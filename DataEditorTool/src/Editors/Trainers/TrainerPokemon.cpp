@@ -9,7 +9,6 @@
 #include "UI/TabCSVState.h"
 #include "UI/UiSize/UiConstrainedSize.h"
 #include "UI/UiElement/UiMultiElement/UiChildWindow.h"
-#include "UI/UiElement/UiMultiElement/UiGroup.h"
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleImageBox.h"
 #include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
 #include "UI/UiElement/UiCSVElement/IntElement/CSVIntBox.h"
@@ -18,7 +17,9 @@
 #include "UI/UiElement/UiCSVElement/StringElement/CSVIntHexComboBox.h"
 #include "UI/UiElement/UiSimpleElement/StaticElement/SimpleText.h"
 #include "UI/UiElement/UiMultiElement/UiElementSwitcher.h"
+#include "UI/UiElement/UiSimpleElement/StaticElement/SimpleSectionDivider.h"
 #include "Editors/Trainers/CurrentShadowPokemonBox.h"
+#include "UI/UiElement/UiMultiElement/UiGroup.h"
 
 
 TrainerPokemon::TrainerPokemon(
@@ -26,7 +27,7 @@ TrainerPokemon::TrainerPokemon(
 	TrainersEditorTrainerPokemon* InParent,
 	int32_t InPartyIndex
 ) :
-	UiSingleLineMultiElement(InName, InParent),
+	UiChildWindow(InName, InParent),
 	ParentTrainerPokemon(InParent),
 	PartyIndex(InPartyIndex)
 {
@@ -34,8 +35,8 @@ TrainerPokemon::TrainerPokemon(
 	InitPokemonInfoGroup();
 	InitIVsGroup();
 	InitEVsGroup();
-	InitMovesGroup();
-	InitMiscGroup();
+	//InitMovesGroup();
+	//InitMiscGroup();
 
 	for(auto& CSVElement : RowElements)
 	{
@@ -47,12 +48,18 @@ TrainerPokemon::TrainerPokemon(
 		CSVElement->SetShouldSyncRowToCSVState(false);
 	}
 
-	AddElement(PokefaceGroup);
-	AddElement(PokemonInfoGroup);
+	//AddElement(PokefaceGroup);
+	//AddElement(PokemonInfoGroup);
+
+	// TODO: use an element grid to arrange ivs and evs like this:
+	// Stat: HP    Atk     Def...
+	// IVS:  31    31      31...
+	// EVS:  0     0       0...
+
 	AddElement(IVsGroup);
 	AddElement(EVsGroup);
-	AddElement(MovesGroup);
-	AddElement(MiscGroup);
+	//AddElement(MovesGroup);
+	//AddElement(MiscGroup);
 	//SetCurrentRow(1);
 }
 
@@ -106,14 +113,14 @@ void TrainerPokemon::Refresh()
 		PokefaceImage->SetTexture(PokefaceDataIds.at(stoi(SpeciesID.GetValue())));	
 	}
 
-	UiMultiElement::Refresh();
+	UiChildWindow::Refresh();
 }
 
 void TrainerPokemon::Tick()
 {
 
 	//auto RectMin = ImGui::GetCursorPos();
-	UiMultiElement::Tick();
+	UiChildWindow::Tick();
 	//auto RectMax = ImGui::GetCursorPos();
 
 	//if (IsShadowPokemon)
@@ -133,7 +140,7 @@ void TrainerPokemon::CalculateConstrainedSize(
 )
 {
 	UpdatePokefaceImageSize();
-	UiSingleLineMultiElement::CalculateConstrainedSize(ParentConstrainedSize, ParentSizeConstraints);
+	UiChildWindow::CalculateConstrainedSize(ParentConstrainedSize, ParentSizeConstraints);
 }
 
 void TrainerPokemon::SetCurrentRow(const int32_t InRow)
@@ -186,8 +193,11 @@ void TrainerPokemon::InitPokefaceGroup()
 {
 	// Contains the Pokeface image.
 	// TODO: should contain the current Pokemon combo box as well.
-	PokefaceGroup = std::make_shared<UiGroup>("Pokeface Group", ParentTrainerPokemon);
-	PokefaceGroup->SetIsFixedSize(true);
+	//PokefaceGroup = std::make_shared<UiGroup>("Pokeface Group", ParentTrainerPokemon);
+	//PokefaceGroup->SetIsFixedSize(true);
+
+	auto SectionDividerOne = std::make_shared<SimpleSectionDivider>(std::format("Pokemon {}", PartyIndex), ParentTrainerPokemon);
+	SectionDividerOne->SetNumSpaceLengths(1);
 
 	PokefaceImage = std::make_shared<SimpleImageBox>("##PokefaceImage", ParentTrainerPokemon);
 	PokefaceImage->SetShouldOverrideSyncedSize(true);
@@ -207,8 +217,8 @@ void TrainerPokemon::InitPokefaceGroup()
 		std::format("Pokemon {} is shadow id", PartyIndex)
 	);
 
-	ShadowPokemonCheckbox->SetIsFixedSize(true);
-	ShadowPokemonCheckbox->SetShouldOverrideSyncedSize(true);
+	//ShadowPokemonCheckbox->SetIsFixedSize(true);
+	//ShadowPokemonCheckbox->SetShouldOverrideSyncedSize(true);
 
 	CurrentPokemonSwitcher = std::make_shared<UiElementSwitcher>(
 		std::format("##CurrentPokemonSwitcher{}", PartyIndex),
@@ -216,7 +226,7 @@ void TrainerPokemon::InitPokefaceGroup()
 	);
 
 	CurrentPokemonComboBox = std::make_shared<CSVIntHexComboBox>(
-		std::format("##CurrentPokemon{}", PartyIndex),
+		std::format("Deck Data ID##{}", PartyIndex),
 		ParentTrainerPokemon,
 		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName(),
 		std::format("Pokemon {}", PartyIndex),
@@ -225,7 +235,7 @@ void TrainerPokemon::InitPokefaceGroup()
 	);
 
 	CurrentShadowPokemonComboBox = std::make_shared<CurrentShadowPokemonBox>(
-		std::format("##CurrentShadowPokemon{}", PartyIndex),
+		std::format("Shadow Pokemon ID##{}", PartyIndex),
 		ParentTrainerPokemon,
 		ParentTrainerPokemon->GetParentEditor()->GetTrainerCSVFileName(),
 		std::format("Pokemon {}", PartyIndex)
@@ -234,32 +244,34 @@ void TrainerPokemon::InitPokefaceGroup()
 	CurrentPokemonSwitcher->AddElement(CurrentPokemonComboBox);
 	CurrentPokemonSwitcher->AddElement(CurrentShadowPokemonComboBox);
 
-	auto ShadowPokemonIndex = std::make_shared<CSVComboBox>(
-		std::format("##CurrentShadowPokemonIdInDeck{}", PartyIndex),
-		ParentTrainerPokemon,
-		"Shadow Pokemon",
-		"Pokemon Index In Story Deck",
-		ParentTrainerPokemon->GetParentEditor()->GetTrainerPokemonCSVFileName(),
-		"Entry Name"
-	);
+	//auto ShadowPokemonIndex = std::make_shared<CSVComboBox>(
+	//	std::format("##CurrentShadowPokemonIdInDeck{}", PartyIndex),
+	//	ParentTrainerPokemon,
+	//	"Shadow Pokemon",
+	//	"Pokemon Index In Story Deck",
+	//	ParentTrainerPokemon->GetParentEditor()->GetTrainerPokemonCSVFileName(),
+	//	"Entry Name"
+	//);
 
-	ShadowPokemonIndex->SetEntriesNumWhitespace(2);
+	//ShadowPokemonIndex->SetEntriesNumWhitespace(2);
 
-	ShadowPokemonElements.push_back(ShadowPokemonIndex);
+	//ShadowPokemonElements.push_back(ShadowPokemonIndex);
 
-	PokefaceGroup->AddElement(PokefaceImage);
-	PokefaceGroup->AddElement(ShadowPokemonCheckbox);
-	PokefaceGroup->AddElement(CurrentPokemonSwitcher);
-	PokefaceGroup->AddElement(ShadowPokemonIndex);
+	AddElement(SectionDividerOne);
+	AddElement(PokefaceImage);
+	AddElement(ShadowPokemonCheckbox);
+	AddElement(CurrentPokemonSwitcher);
+	//AddElement(ShadowPokemonIndex);
 }
 
 void TrainerPokemon::InitPokemonInfoGroup()
 {
-	PokemonInfoGroup = std::make_shared<UiGroup>("Pokemon Info", ParentTrainerPokemon);
-	PokemonInfoGroup->SetSameLine(true);
-	PokemonInfoGroup->SetIsFixedSize(true);
+	//PokemonInfoGroup = std::make_shared<UiGroup>("Pokemon Info", ParentTrainerPokemon);
+	//PokemonInfoGroup->SetSameLine(true);
+	//PokemonInfoGroup->SetIsFixedSize(true);
 
-	auto PokemonInfoText = std::make_shared<SimpleText>("Pokemon Info", ParentTrainerPokemon);
+	auto PokemonInfoText = std::make_shared<SimpleSectionDivider>("Pokemon Info", ParentTrainerPokemon);
+	PokemonInfoText->SetNumSpaceLengths(1); 
 
 	auto PokemonComboBox = std::make_shared<CSVComboBox>(
 		std::format("Species##{}", PartyIndex),
@@ -318,7 +330,7 @@ void TrainerPokemon::InitPokemonInfoGroup()
 	RowElements.push_back(AiRoleComboBox);
 
 	auto IsKeyStrategicPokemonIntBox = std::make_shared<CSVIntBox>(
-		std::format("Is Key Poke##{}", PartyIndex),
+		std::format("Is Key Strategic Pokemon?##{}", PartyIndex),
 		ParentTrainerPokemon,
 		ParentTrainerPokemon->GetParentEditor()->GetTrainerPokemonCSVFileName(),
 		"Is Key Strategic Pokemon",
@@ -327,20 +339,20 @@ void TrainerPokemon::InitPokemonInfoGroup()
 	);
 	RowElements.push_back(IsKeyStrategicPokemonIntBox);
 
-	PokemonInfoGroup->AddElement(PokemonInfoText);
-	PokemonInfoGroup->AddElement(PokemonComboBox);
-	PokemonInfoGroup->AddElement(LevelIntBox);
-	PokemonInfoGroup->AddElement(HappinessIntBox);
-	PokemonInfoGroup->AddElement(ItemComboBox);
-	PokemonInfoGroup->AddElement(AiRoleComboBox);
-	PokemonInfoGroup->AddElement(IsKeyStrategicPokemonIntBox);
+	AddElement(PokemonInfoText);
+	AddElement(PokemonComboBox);
+	AddElement(LevelIntBox);
+	AddElement(HappinessIntBox);
+	AddElement(ItemComboBox);
+	AddElement(AiRoleComboBox);
+	AddElement(IsKeyStrategicPokemonIntBox);
 }
 
 void TrainerPokemon::InitIVsGroup()
 {
 	IVsGroup = std::make_shared<UiGroup>("IVs Group", ParentTrainerPokemon);
-	IVsGroup->SetSameLine(true);
-	IVsGroup->SetIsFixedSize(true);
+	//IVsGroup->SetSameLine(true);
+	//IVsGroup->SetIsFixedSize(true);
 
 	auto IVSText = std::make_shared<SimpleText>("IVs", ParentTrainerPokemon);
 	IVsGroup->AddElement(IVSText);
@@ -383,7 +395,7 @@ void TrainerPokemon::InitIVElement(const std::string& ItemName, const std::strin
 	);
 	IvIntBox->SetBounds(0, 31);
 	IvIntBox->SetElementMinSize(3);
-	IvIntBox->SetIsFixedSize(true);
+	//IvIntBox->SetIsFixedSize(true);
 	IvIntBox->SetShouldOverrideSyncedSize(false);
 	RowElements.push_back(IvIntBox);
 	IVsGroup->AddElement(IvIntBox);
@@ -392,8 +404,8 @@ void TrainerPokemon::InitIVElement(const std::string& ItemName, const std::strin
 void TrainerPokemon::InitEVsGroup()
 {
 	EVsGroup = std::make_shared<UiGroup>("EVs Group", ParentTrainerPokemon);
-	EVsGroup->SetSameLine(true);
-	EVsGroup->SetIsFixedSize(true);
+	//EVsGroup->SetSameLine(true);
+	//EVsGroup->SetIsFixedSize(true);
 
 	auto EVSText = std::make_shared<SimpleText>("EVs", ParentTrainerPokemon);
 	EVsGroup->AddElement(EVSText);
@@ -436,7 +448,7 @@ void TrainerPokemon::InitEVElement(const std::string& ItemName, const std::strin
 	);
 	EvIntBox->SetBounds(0, 255);
 	EvIntBox->SetElementMinSize(3);
-	EvIntBox->SetIsFixedSize(true);
+	//EvIntBox->SetIsFixedSize(true);
 	EvIntBox->SetShouldOverrideSyncedSize(false);
 	RowElements.push_back(EvIntBox);
 	EVsGroup->AddElement(EvIntBox);
@@ -444,9 +456,8 @@ void TrainerPokemon::InitEVElement(const std::string& ItemName, const std::strin
 
 void TrainerPokemon::InitMovesGroup()
 {
-
 	MovesGroup = std::make_shared<UiGroup>("Moves Group", ParentTrainerPokemon);
-	MovesGroup->SetSameLine(true);
+	//MovesGroup->SetSameLine(true);
 
 	auto MovesText = std::make_shared<SimpleText>("Moves", ParentTrainerPokemon);
 	MovesGroup->AddElement(MovesText);
@@ -501,8 +512,8 @@ void TrainerPokemon::InitMoveElement(int32_t MoveIndex)
 void TrainerPokemon::InitMiscGroup()
 {
 	MiscGroup = std::make_shared<UiGroup>("Misc Group", ParentTrainerPokemon);
-	MiscGroup->SetSameLine(true);
-	MiscGroup->SetIsFixedSize(true);
+	//MiscGroup->SetSameLine(true);
+	//MiscGroup->SetIsFixedSize(true);
 
 	auto MiscText = std::make_shared<SimpleText>("Misc", ParentTrainerPokemon);
 	MiscGroup->AddElement(MiscText);

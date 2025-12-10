@@ -68,5 +68,5 @@ private:
 	bool bIsSameLine = false;
 	float SameLineOffsetFromStart = 0.f;
 
-	int32_t NumLines = 1;
+	int32_t NumLines = 0;
 };

@@ -7,7 +7,7 @@
  *********************************************************************/
 #pragma once
 
-#include "UI/UiElement/UiMultiElement/UiSingleLineMultiElement.h"
+#include "UI/UiElement/UiMultiElement/UiChildWindow.h"
 
 class TrainersEditorTrainerPokemon;
 class SimpleImageBox;
@@ -17,7 +17,7 @@ class CSVIntBox;
 class CSVIntHexComboBox;
 class UiElementSwitcher;
 
-class TrainerPokemon : public UiSingleLineMultiElement
+class TrainerPokemon : public UiChildWindow
 {
 
 public:

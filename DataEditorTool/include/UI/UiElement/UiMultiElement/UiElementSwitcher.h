@@ -96,6 +96,9 @@ public:
 	 */
 	virtual std::shared_ptr<const UiSize> GetSizeConstraints() const override;
 
+	/** Recalculate the synced size between all child elements. */
+	void CalculateSyncedSize();
+
 protected:
 
 	/** The currently active child UiElement being displayed. */
