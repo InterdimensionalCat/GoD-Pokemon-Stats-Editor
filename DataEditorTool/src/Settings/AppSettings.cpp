@@ -2,13 +2,16 @@
 #include "Settings/AppSettings.h"
 
 #include "Settings/SettingsSection/SettingsSection.h"
+#include "Settings/SettingsSection/GeneralSettingsSection.h"
 #include "Font/FontSettings.h"
 #include "Layout/LayoutSettings.h"
 
 AppSettings::AppSettings()
 {
 	//AddSection(LayoutSettings);
+	AddSection(std::make_shared<GeneralSettings>());
 	AddSection(std::make_shared<FontSettings>());
+	
 }
 
 void AppSettings::Init()
@@ -148,6 +151,11 @@ void AppSettings::SaveSettingsToJson()
 std::shared_ptr<FontSettings> AppSettings::GetFontSettings()
 {
 	return std::dynamic_pointer_cast<FontSettings>(GetSectionByName("Font Settings"));
+}
+
+std::shared_ptr<GeneralSettings> AppSettings::GetGeneralSettings()
+{
+	return std::dynamic_pointer_cast<GeneralSettings>(GetSectionByName("General Settings"));
 }
 
 std::shared_ptr<LayoutSettings> AppSettings::GetLayoutSettingsForTab(const std::string& InTabName)

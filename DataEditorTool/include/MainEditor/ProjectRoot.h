@@ -33,6 +33,16 @@ public:
 	void SetProjectRootPath();
 
 	/**
+	 * Open a file dialog that allows the user
+	 * to select a project root path folder.
+	 *
+	 * If a valid project root path is set, this
+	 * will open a new PokemonStatsEditor tab and
+	 * maximize the window.
+	 */
+	void OpenProjectRootPath(std::string PathStr);
+
+	/**
 	 * Close the current project root path.
 	 * 
 	 * This will clear all currently open tabs.

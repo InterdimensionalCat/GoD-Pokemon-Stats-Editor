@@ -27,15 +27,16 @@ void DataEditorInstance::Init()
 	Running = true;
 	ICLogger::Debug("Starting GoD Data Editor Tool...");
 
+	// Create the ProjectRoot object
+	CurrentProjectRoot = std::make_shared<ProjectRoot>();
+
+	// Create the CSV database object
+	EditorCSVDatabase = std::make_shared<GoDCSV::CSVDatabase>();
+
 	// Initialize a new Editor Window.
 	EditorWindow = std::make_shared<MainEditorWindow>();
 	EditorWindow->Init();
-
-	// Create the ProjectRoot object
-	CurrentProjectRoot = std::make_shared<ProjectRoot>();
 	
-	// Create the CSV database object
-	EditorCSVDatabase = std::make_shared<GoDCSV::CSVDatabase>();
 }
 
 void DataEditorInstance::Stop()
