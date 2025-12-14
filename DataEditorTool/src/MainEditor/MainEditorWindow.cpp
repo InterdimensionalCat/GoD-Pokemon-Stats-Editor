@@ -60,11 +60,18 @@ void MainEditorWindow::Init()
 
 	ICLogger::Debug("Main Editor Window initialized successfully.");
 
+    // Loads last known Root if the General Setting is set
     if (GeneralSettings->GetAutoOpenLastRoot())
     {
-        ICLogger::Debug("Attempting to automatically open last known root.");
-        std::string SavedRootPath = GeneralSettings->GetRootPath();
-        ProjectRoot::Get()->OpenProjectRootPath(SavedRootPath);
+        if(std::string SavedRootPath = GeneralSettings->GetRootPath(); SavedRootPath != "")
+        {
+            ICLogger::Debug("Attempting to automatically open last known root.");
+            ProjectRoot::Get()->OpenProjectRootPath(SavedRootPath);
+        }
+        else
+        {
+            ICLogger::Warn("Attempted the automatically open last known root, but directory is not set.");
+        }
     }
 }
 
