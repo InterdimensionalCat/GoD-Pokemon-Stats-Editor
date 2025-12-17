@@ -116,6 +116,12 @@ public:
 	void ForceRecalculateSizeConstraints();
 
 	/**
+	 * Attempt to load the last known project root
+	 * if the general settings have it enabled.
+	 */
+	void TryLoadLastKnownRoot();
+
+	/**
 	 * Get the GuiContext used by this MainEditorWindow.
 	 * 
 	 * \return Shared pointer to the GuiContext.

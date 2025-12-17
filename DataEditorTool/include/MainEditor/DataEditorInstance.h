@@ -144,4 +144,9 @@ private:
 	 * Is the application loop currently running?
 	 */
 	bool Running = true;
+	
+	/**
+	 * Indicates whether the last known project root was attempted to load.
+	 */
+	bool AttemptLastKnownRootLoaded = false;
 };

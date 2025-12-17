@@ -73,6 +73,25 @@ void DataEditorInstance::Render()
 
 void DataEditorInstance::ApplicationLoop()
 {
+
+	if(IsRunning())
+	{
+		// Update input.
+		PollEvents();
+
+		// Update gui and state, modify CSV data files based on user input.
+		Tick();
+
+		// Draw gui.
+		Render();
+
+		if (!AttemptLastKnownRootLoaded)
+		{
+			AttemptLastKnownRootLoaded = true;
+			EditorWindow->TryLoadLastKnownRoot();
+		}
+	}
+
 	while (IsRunning())
 	{
 		// Update input.
