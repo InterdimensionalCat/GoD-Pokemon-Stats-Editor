@@ -12,13 +12,13 @@ FontSettings::FontSettings() :
 
 }
 
-void FontSettings::InitFromJson(const nlohmann::ordered_json& LayoutSettings)
+void FontSettings::InitFromJson(const nlohmann::ordered_json& FontSettings)
 {
-	ENFont.LoadFromJsonOrUseDefault(LayoutSettings);
-	JPFont.LoadFromJsonOrUseDefault(LayoutSettings);
-	FontSize.LoadFromJsonOrUseDefault(LayoutSettings);
-	JPFontSizeMultiplier.LoadFromJsonOrUseDefault(LayoutSettings);
-	FontColor.LoadFromJsonOrUseDefault(LayoutSettings);
+	ENFont.LoadFromJsonOrUseDefault(FontSettings);
+	JPFont.LoadFromJsonOrUseDefault(FontSettings);
+	FontSize.LoadFromJsonOrUseDefault(FontSettings);
+	JPFontSizeMultiplier.LoadFromJsonOrUseDefault(FontSettings);
+	FontColor.LoadFromJsonOrUseDefault(FontSettings);
 }
 
 void FontSettings::InitFromDefaults()
@@ -30,13 +30,13 @@ void FontSettings::InitFromDefaults()
 	FontColor.LoadDefaultValue();
 }
 
-void FontSettings::SaveToJson(nlohmann::ordered_json& LayoutSettings) const
+void FontSettings::SaveToJson(nlohmann::ordered_json& FontSettings) const
 {
-	ENFont.SaveToJson(LayoutSettings);
-	JPFont.SaveToJson(LayoutSettings);
-	FontSize.SaveToJson(LayoutSettings);
-	JPFontSizeMultiplier.SaveToJson(LayoutSettings);
-	FontColor.SaveToJson(LayoutSettings);
+	ENFont.SaveToJson(FontSettings);
+	JPFont.SaveToJson(FontSettings);
+	FontSize.SaveToJson(FontSettings);
+	JPFontSizeMultiplier.SaveToJson(FontSettings);
+	FontColor.SaveToJson(FontSettings);
 }
 
 std::string FontSettings::GetSectionName()

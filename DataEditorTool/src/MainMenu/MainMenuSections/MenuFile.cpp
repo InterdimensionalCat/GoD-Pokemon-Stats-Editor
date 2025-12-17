@@ -7,6 +7,8 @@
 #include "Modal/Modal.h"
 #include "Modal/BlockUnsavedProgress.h"
 #include "CSV/CSVDatabase.h"
+#include "Settings/AppSettings.h"
+#include "Settings/SettingsSection/GeneralSettingsSection.h"
 
 MenuFile::MenuFile() : MainMenuSection("File", 0)
 {
@@ -22,6 +24,14 @@ void MenuFile::Tick()
 	{
 		SetProjectRootPath();
 	}
+
+	auto GeneralSettings = MainEditorWindow::Get()->GetSettings()->GetGeneralSettings();
+	auto AutoOpenLastRoot = GeneralSettings->GetAutoOpenLastRoot();
+	if (ImGui::MenuItem("Load Previous Root on Startup", "", AutoOpenLastRoot, true))
+	{
+		GeneralSettings->SetAutoOpenLastRoot(!AutoOpenLastRoot);
+	}
+
 	if (ImGui::MenuItem("Save All", ImGui::GetKeyChordName(SaveShortcut), nullptr, IsProjectRootPathSet() && AreCSVFilesModified))
 	{
 		SaveAll();
