@@ -68,6 +68,11 @@ public:
 	virtual float GetMaxWithLabel() const override;
 
 	/**
+	 * 
+	 */
+	float GetLargestMaxWithLabel() const;
+
+	/**
 	 * Get the calculated Maximum bound of this UiSize (excluding the label size).
 	 * NOTE: this will return the Minimum bound if bIsFixedSize is true.
 	 * 
@@ -75,4 +80,6 @@ public:
 	 * \note This will return the Minimum bound if bIsFixedSize is true.
 	 */
 	virtual float GetMaxWithoutLabel() const override;
+
+	virtual void DebugLogSizeBounds() const override;
 };

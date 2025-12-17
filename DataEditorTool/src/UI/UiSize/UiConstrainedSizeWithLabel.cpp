@@ -42,9 +42,9 @@ void UiConstrainedSizeWithLabel::CalculateFromSizeConstraints(
 	// fall back to a fixed size equal to the min, but log a warning.
 	if (MinSize > MaxSize)
 	{
-		ICLogger::Warn(
-			"UiConstrainedSizeWithLabel CalculateFromSizeConstraints was given invalid size constraints (MinSize:{} > MaxSize:{}). Falling back to MinSize.",
-			MinSize, MaxSize);
+		//ICLogger::Warn(
+		//	"UiConstrainedSizeWithLabel CalculateFromSizeConstraints was given invalid size constraints (MinSize:{} > MaxSize:{}). Falling back to MinSize.",
+		//	MinSize, MaxSize);
 		return;
 	}
 

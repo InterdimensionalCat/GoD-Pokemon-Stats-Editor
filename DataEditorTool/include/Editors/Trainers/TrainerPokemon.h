@@ -14,8 +14,10 @@ class SimpleImageBox;
 class UiGroup;
 class CSVComboBox;
 class CSVIntBox;
+class SimpleIntBox;
 class CSVIntHexComboBox;
 class UiElementSwitcher;
+class UiElementGrid;
 
 class TrainerPokemon : public UiChildWindow
 {
@@ -70,23 +72,27 @@ private:
 
 
 	void InitPokemonInfoGroup();
-	std::shared_ptr<UiGroup> PokemonInfoGroup;
 
-	void InitIVsGroup();
+	void InitIvEvGrid();
 	void InitIVElement(const std::string& ItemName, const std::string& ItemColumn);
-	std::shared_ptr<UiGroup> IVsGroup;
-
-	void InitEVsGroup();
 	void InitEVElement(const std::string& ItemName, const std::string& ItemColumn);
-	std::shared_ptr<UiGroup> EVsGroup;
+
+	std::shared_ptr<UiElementGrid> IvEvGrid;
+	std::vector<std::shared_ptr<CSVIntBox>> IvElements;
+	std::vector<std::shared_ptr<CSVIntBox>> EvElements;
+	std::shared_ptr<SimpleIntBox> TotalIvBox;
+	std::shared_ptr<SimpleIntBox> TotalEvBox;
 
 	void InitMovesGroup();
 	void InitMoveElement(int32_t MoveIndex);
-	std::shared_ptr<UiGroup> MovesGroup;
 
 	void InitMiscGroup();
 	void InitComboRoleElement(const std::string& ComboName, int32_t RoleNum);
-	std::shared_ptr<UiGroup> MiscGroup;
 
 	bool IsShadowPokemon = false;
+
+	void InitShadowPokemonInfo();
+	std::shared_ptr<UiElementSwitcher> ShadowPokemonSwitcher;
+	std::shared_ptr<UiGroup> ShadowPokemonGroup;
+	std::shared_ptr<UiGroup> NonShadowPokemonGroup;
 };

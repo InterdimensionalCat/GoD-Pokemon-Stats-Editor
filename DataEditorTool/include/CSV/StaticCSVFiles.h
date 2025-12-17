@@ -62,6 +62,20 @@ namespace GoDCSV
 		 */
 		static LoadedCSVData LoadKeyItemDatabase();
 
+		/**
+		 * Load the hard-coded BattleStyle database.
+		 * 
+		 * \return The loaded BattleStyle database.
+		 */
+		static LoadedCSVData LoadBattleStyleDatabase();
+
+		/**
+		 * Load the hard-coded BGM Music database.
+		 * 
+		 * \return The loaded BGM Music database.
+		 */
+		static LoadedCSVData LoadBGMMusicDatabase();
+
 	private:
 
 		/**

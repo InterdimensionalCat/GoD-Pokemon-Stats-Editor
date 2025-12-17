@@ -9,6 +9,7 @@
 #include "UI/UiElement/UiCSVElement/IntElement/CSVIntHexBox.h"
 #include "UI/UiElement/UiMultiElement/UiChildWindow.h"
 #include "UI/UiElement/UiMultiElement/UiSingleLineMultiElement.h"
+#include "UI/UiElement/UiCSVElement/StringElement/CSVComboBox.h"
 
 TrainersEditorTrainerInfo::TrainersEditorTrainerInfo(TrainersEditor* InParent) : UiSection("Trainer Info", InParent)
 {
@@ -85,7 +86,17 @@ TrainersEditorTrainerInfo::TrainersEditorTrainerInfo(TrainersEditor* InParent) :
 	);
 	//LossTextID->SetMinFromLongestString(TrainerCSV->GetStringColumn("Loss Text Id"));
 
+	auto TrainerClassComboBox = std::make_shared<CSVComboBox>(
+		"Trainer Class",
+		this,
+		TrainerCSVFileName,
+		"Trainer Class ID",
+		"Trainer Class",
+		"Entry Name"
+	);
+
 	AddElement(Trainer);
+	AddElement(TrainerClassComboBox);
 	AddElement(TrainerNameID);
 	AddElement(TrainerModelID);
 	AddElement(CameraEffectID);
