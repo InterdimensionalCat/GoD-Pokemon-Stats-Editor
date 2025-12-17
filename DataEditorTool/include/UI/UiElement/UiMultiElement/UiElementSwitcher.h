@@ -42,6 +42,11 @@ public:
 	void Tick() override;
 
 	/**
+	 * Refresh the currently active child UiElement.
+	 */
+	void Refresh() override;
+
+	/**
 	 * Calculate the constrained size of this UiElementSwitcher,
 	 * and calculate the constrained size of all child UiElements.
 	 * 
@@ -90,6 +95,9 @@ public:
 	 * child elements.
 	 */
 	virtual std::shared_ptr<const UiSize> GetSizeConstraints() const override;
+
+	/** Recalculate the synced size between all child elements. */
+	void CalculateSyncedSize();
 
 protected:
 

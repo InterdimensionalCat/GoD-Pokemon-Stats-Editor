@@ -77,6 +77,13 @@ public:
 	void SetEntriesList(const std::vector<std::string>& InEntriesList);
 
 	/**
+	 * Set whether or not entries should start with a capital letter.
+	 * 
+	 * \param InStartWithCapitalLetter True if entries should start with a capital letter.
+	 */
+	void SetStartWithCapitalLetter(const bool InStartWithCapitalLetter);
+
+	/**
 	 * Get the index of the currently selected entry in the ComboBox.
 	 * 
 	 * \return The index of the currently selected entry in the ComboBox.
@@ -117,4 +124,6 @@ private:
 
 	/* Text filter to filter the entries list. */
 	ImGuiTextFilter EntryFilter;
+
+	bool bStartWithCapitalLetter = false;
 };

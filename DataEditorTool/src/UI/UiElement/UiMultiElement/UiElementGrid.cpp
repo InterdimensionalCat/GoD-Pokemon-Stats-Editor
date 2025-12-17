@@ -179,7 +179,7 @@ void UiElementGrid::RecalculateGridPositions()
 					// This offset is the largest element size * this elements grid position
 					const float GridPos = static_cast<float>(Index % CurrentColumns);
 					const float MaxElementSizeWithItemSpacing =
-						LargestElementSize->GetMaxWithLabel() + ImGui::GetStyle().ItemSpacing.x;
+						LargestElementSize->GetMinWithLabel() + ImGui::GetStyle().ItemSpacing.x;
 					Element->SetSameLine(MaxElementSizeWithItemSpacing * GridPos);
 				}
 				else

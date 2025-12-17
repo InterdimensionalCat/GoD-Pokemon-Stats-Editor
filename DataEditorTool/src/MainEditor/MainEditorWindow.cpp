@@ -12,6 +12,7 @@
 #include "UI/UiTab.h"
 #include "Editors/PokemonStats/PokemonStatsEditor.h"
 #include "Editors/LearnedMoves/LearnedMovesEditor.h"
+#include "Editors/Trainers/TrainersEditor.h"
 #include "Settings/SettingsSection/GeneralSettingsSection.h"
 #include "MainEditor/ProjectRoot.h"
 
@@ -205,6 +206,9 @@ void MainEditorWindow::OnProjectRootPathSet()
 
 	std::shared_ptr<LearnedMovesEditor> MovesEditor = std::make_shared<LearnedMovesEditor>(MainWindowDockspace);
 	OpenNewEditorTab(MovesEditor);
+
+	std::shared_ptr<TrainersEditor> TrainersEditorTab = std::make_shared<TrainersEditor>(MainWindowDockspace);
+	OpenNewEditorTab(TrainersEditorTab);
 
     if (!MainWindowContext->IsWindowMaximized() && EditorTabs.size() != 0)
     {

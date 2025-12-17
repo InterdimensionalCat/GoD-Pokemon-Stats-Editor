@@ -46,9 +46,12 @@ void UiConstrainedSize::CalculateFromSizeConstraints(
 	// fall back to a fixed size equal to the min, but log a warning.
 	if (MinSize > MaxSize)
 	{
-		ICLogger::Warn(
-			"UiConstrainedSize CalculateFromSizeConstraints was given invalid size constraints (MinSize:{} > MaxSize:{}). Falling back to MinSize.",
-			MinSize, MaxSize);
+		//ICLogger::Warn(
+		//	"UiConstrainedSize CalculateFromSizeConstraints was given invalid size constraints (MinSize:{} > MaxSize:{}). Falling back to MinSize.",
+		//	MinSize, MaxSize);
+
+		//SizeConstraints->DebugLogSizeBounds();
+
 		return;
 	}
 

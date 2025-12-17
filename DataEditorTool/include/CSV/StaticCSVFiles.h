@@ -34,6 +34,14 @@ namespace GoDCSV
 		static LoadedCSVData LoadGenderRatioDatabase();
 
 		/**
+		/**
+		 * Load the hard-coded Gender database.
+		 *
+		 * \return The loaded Gender database.
+		 */
+		static LoadedCSVData LoadGenderDatabase();
+
+		/**
 		 * Load the hard-coded EvolutionMethod database.
 		 * 
 		 * \return The loaded EvolutionMethod database.
@@ -53,6 +61,20 @@ namespace GoDCSV
 		 * \return The loaded KeyItem database.
 		 */
 		static LoadedCSVData LoadKeyItemDatabase();
+
+		/**
+		 * Load the hard-coded BattleStyle database.
+		 * 
+		 * \return The loaded BattleStyle database.
+		 */
+		static LoadedCSVData LoadBattleStyleDatabase();
+
+		/**
+		 * Load the hard-coded BGM Music database.
+		 * 
+		 * \return The loaded BGM Music database.
+		 */
+		static LoadedCSVData LoadBGMMusicDatabase();
 
 	private:
 

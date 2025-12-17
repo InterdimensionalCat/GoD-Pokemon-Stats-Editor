@@ -80,6 +80,22 @@ float UiSyncedSize::GetMaxWithLabel() const
 	return SmallestMax;
 }
 
+float UiSyncedSize::GetLargestMaxWithLabel() const
+{
+	float LargestMax = 0.f;
+	const float LargestLabelWithSpacing = GetLabelSizeWithSpacing();
+	// For bounds calculations with labels, we use the largest label size
+	// of all considered sizes, instead of each size's individual label size.
+	for (const auto& SizeToConsider : SizesToConsider)
+	{
+		if (SizeToConsider->GetMaxWithoutLabel() != std::numeric_limits<float>::max())
+		{
+			LargestMax = std::max(LargestMax, SizeToConsider->GetMaxWithoutLabel() + LargestLabelWithSpacing);
+		}
+	}
+	return LargestMax;
+}
+
 float UiSyncedSize::GetMaxWithoutLabel() const
 {
 	float SmallestMax = std::numeric_limits<float>::max();
@@ -90,4 +106,17 @@ float UiSyncedSize::GetMaxWithoutLabel() const
 	}
 
 	return SmallestMax;
+}
+
+void UiSyncedSize::DebugLogSizeBounds() const
+{
+	for(auto& SizeToConsider : SizesToConsider)
+	{
+		ICLogger::Info(
+			"Considered Size - MinWithLabel: {}, MaxWithLabel: {}, IsFixedSize: {}",
+			SizeToConsider->GetMinWithLabel(),
+			SizeToConsider->GetMaxWithLabel(),
+			SizeToConsider->IsFixedSize()
+		);
+	}
 }

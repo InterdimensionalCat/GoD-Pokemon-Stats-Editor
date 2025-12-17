@@ -31,6 +31,7 @@ public:
 	 * \param InColumnName The name of the column in the CSV file to display data from.
 	 * \param InEntriesListCSVFileName The name of the CSV file to get ComboBox entries from, without the ".csv" extension.
 	 * \param InEntriesListColumnName The name of the column in the entries list CSV file to get ComboBox entries from.
+	 * \param InStartWithCapitalLetter Whether or not to start each entry with a capital letter.
 	 */
 	CSVComboBox
 	(
@@ -80,6 +81,23 @@ public:
 	 */
 	virtual void UiComponentUpdated() override;
 
+	void SetSizeConstraintsDisabled(const bool bInDisableSizeConstraints);
+
+	/**
+	 * Set whether or not entries should start with a capital letter.
+	 * 
+	 * \param InStartWithCapitalLetter True if entries should start with a capital letter.
+	 */
+	void SetStartWithCapitalLetter(const bool InStartWithCapitalLetter);
+
+	/**
+	 * Set the number of whitespace characters between the string and value of entries
+	 * in the ParenthValueString format.
+	 * 
+	 * \param InNumWhitespace The number of whitespace characters to add between the string and value.
+	 */
+	void SetEntriesNumWhitespace(const int32_t InNumWhitespace);
+
 	/**
 	 * Get the index of the currently selected entry in the ComboBox.
 	 * 
@@ -107,4 +125,7 @@ private:
 	/* The name of the column in the entries list CSV file to get ComboBox entries from. */
 	std::string EntriesListColumnName;
 
+	bool bDisableSizeConstraints = false;
+
+	int32_t EntriesNumWhitespace = 1;
 };

@@ -194,6 +194,8 @@ public:
 	 */
 	bool IsFixedSize() const;
 
+	virtual void DebugLogSizeBounds() const {}
+
 private:
 
 	/** The minimum size bound for this UiSize. */

@@ -95,12 +95,12 @@ public:
 	 */
 	uint32_t GetSelectedEntry() const;
 
-private:
+protected:
 
 	/**
 	 * Reload the entries list from the specified CSV file and column.
 	 */
-	void UpdateEntriesList();
+	virtual void UpdateEntriesList();
 
 	/* The ComboBox component managed by this element. */
 	std::shared_ptr<ComboBox> ComboBoxComponent;

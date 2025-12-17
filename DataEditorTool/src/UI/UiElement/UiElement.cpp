@@ -26,7 +26,7 @@ void UiElement::CalculateConstrainedSize(const std::shared_ptr<const UiConstrain
 		// is false, as this is likely a mistake.
 		if (!ShouldOverrideSyncedSize() && SizeConstraints->IsFixedSize())
 		{
-			ICLogger::Warn("UiElement {} has a fixed size but does not override synced size. This may be a mistake.", GetName());
+			//ICLogger::Warn("UiElement {} has a fixed size but does not override synced size. This may be a mistake.", GetName());
 		}
 
 		// Always use the parent's constrained size as the space available.

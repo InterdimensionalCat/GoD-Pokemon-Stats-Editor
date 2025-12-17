@@ -76,6 +76,26 @@ LoadedCSVData StaticCSVFiles::LoadGenderRatioDatabase()
 	return CreateLoadedDataFromParenthValueList(GenderRatioEntries, "Ratio");
 }
 
+LoadedCSVData StaticCSVFiles::LoadGenderDatabase()
+{
+	// Gender Documentation:
+	// Male (0)
+	// Female (1)
+	// Genderless (2)
+	// Random (255)
+
+	ICLogger::Debug("Loading static Gender database");
+
+	std::vector<ParenthValueString> GenderEntries;
+
+	GenderEntries.push_back(ParenthValueString("Male (0)"));
+	GenderEntries.push_back(ParenthValueString("Female (1)"));
+	GenderEntries.push_back(ParenthValueString("Genderless (2)"));
+	GenderEntries.push_back(ParenthValueString("Random (255)"));
+
+	return CreateLoadedDataFromParenthValueList(GenderEntries, "Gender");
+}
+
 LoadedCSVData StaticCSVFiles::LoadEvolutionMethodDatabase()
 {
 	// Evolution Method Documentation:
@@ -195,4 +215,116 @@ LoadedCSVData StaticCSVFiles::CreateLoadedDataFromParenthValueList(const std::ve
 	}
 
 	return LoadedData;
+}
+
+LoadedCSVData StaticCSVFiles::LoadBattleStyleDatabase()
+{
+	// Battle Style Documentation:
+
+	// None (0): None,
+	// Single (1): Single Battle,
+	// Double (2): Double Battle,
+	// Other (3): Everything else (is "Multi" in Colo only)
+	ICLogger::Debug("Loading static BattleStyle database");
+	std::vector<ParenthValueString> BattleStyleEntries;
+
+	BattleStyleEntries.push_back(ParenthValueString("None (0)"));
+	BattleStyleEntries.push_back(ParenthValueString("Single (1)"));
+	BattleStyleEntries.push_back(ParenthValueString("Double (2)"));
+	BattleStyleEntries.push_back(ParenthValueString("Other (3)"));
+
+	return CreateLoadedDataFromParenthValueList(BattleStyleEntries, "BattleStyle");
+}
+
+LoadedCSVData StaticCSVFiles::LoadBGMMusicDatabase()
+{
+	// BGM Music Documentation:
+	// BGM Musics are stored as just hex ID's, however documentation
+	// of what what song each ID corresponds to has been compiled.
+	// this matches each ID to its known song name.
+	ICLogger::Debug("Loading static BGM Music database");
+	std::vector<ParenthValueString> BGMMusicEntries;
+
+	BGMMusicEntries.push_back(ParenthValueString("None (0)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Cipher Lab (1067)"));
+	BGMMusicEntries.push_back(ParenthValueString("Mt. Battle (1068)"));
+	BGMMusicEntries.push_back(ParenthValueString("Phenac City [A] (1070)"));
+	BGMMusicEntries.push_back(ParenthValueString("Outskirt Stand (1071)"));
+	BGMMusicEntries.push_back(ParenthValueString("Relic Forest (1072)"));
+	BGMMusicEntries.push_back(ParenthValueString("Pyrite Town (1074)"));
+	BGMMusicEntries.push_back(ParenthValueString("Pokemon Center (1075)"));
+	BGMMusicEntries.push_back(ParenthValueString("Miror B. Theme (1088)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Pokeon Lab (1124)"));
+	BGMMusicEntries.push_back(ParenthValueString("Gateon Port (1125)"));
+	BGMMusicEntries.push_back(ParenthValueString("Krabby Club (1126)"));
+	BGMMusicEntries.push_back(ParenthValueString("Normal Battle XD (1127)"));
+	BGMMusicEntries.push_back(ParenthValueString("Cipher Battle Normal (1128)"));
+	BGMMusicEntries.push_back(ParenthValueString("Purification Chamber (1129)"));
+	BGMMusicEntries.push_back(ParenthValueString("Theme of Suspense (1130)"));
+	BGMMusicEntries.push_back(ParenthValueString("Mecha-Groudon (1132)"));
+	BGMMusicEntries.push_back(ParenthValueString("World Map (1133)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Mt. Battle Break Room (1193)"));
+	BGMMusicEntries.push_back(ParenthValueString("Reception Center (1194)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Colosseum 1 [B] (1241)"));
+	BGMMusicEntries.push_back(ParenthValueString("Colosseum 3 [B] (1242)"));
+	BGMMusicEntries.push_back(ParenthValueString("Colosseum 3 [C] (1243)"));
+	BGMMusicEntries.push_back(ParenthValueString("Greevil Battle (1251)"));
+	BGMMusicEntries.push_back(ParenthValueString("Shadow Lugia Battle (1252)"));
+	BGMMusicEntries.push_back(ParenthValueString("Battle Bingo (1264)"));
+	BGMMusicEntries.push_back(ParenthValueString("Battle CD Simulator [A] (1265)"));
+	BGMMusicEntries.push_back(ParenthValueString("Link Battle [Gym Leader] (1266)"));
+	BGMMusicEntries.push_back(ParenthValueString("Link Battle [Trainer] (1267)"));
+	BGMMusicEntries.push_back(ParenthValueString("Dr. Kaminko's Yard (1291)"));
+	BGMMusicEntries.push_back(ParenthValueString("S.S. Libra (1292)"));
+	BGMMusicEntries.push_back(ParenthValueString("Wild Battle (1293)"));
+	BGMMusicEntries.push_back(ParenthValueString("Puri 4 (1294)"));
+	BGMMusicEntries.push_back(ParenthValueString("Puri 3 (1295)"));
+	BGMMusicEntries.push_back(ParenthValueString("Puri 2 (1296)"));
+	BGMMusicEntries.push_back(ParenthValueString("Mecha-Groudon Cutscene (1297)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Snagem Hideout (1317)"));
+	BGMMusicEntries.push_back(ParenthValueString("Colosseum 1 [A] (1318)"));
+	BGMMusicEntries.push_back(ParenthValueString("Colosseum 2 (1319)"));
+	BGMMusicEntries.push_back(ParenthValueString("Colosseum 3 (A) (1320)"));
+	BGMMusicEntries.push_back(ParenthValueString("Colosseum 4 (1321)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Jovi is Sad (1361)"));
+	BGMMusicEntries.push_back(ParenthValueString("Shadow Lugia Battle [B] (1362)"));
+	BGMMusicEntries.push_back(ParenthValueString("Jovi's Theme (1363)"));
+	BGMMusicEntries.push_back(ParenthValueString("Phenac City [B] (1370)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Kandee (1382)"));
+	BGMMusicEntries.push_back(ParenthValueString("Link Battle [Mode Select] [B] (1383)"));
+	BGMMusicEntries.push_back(ParenthValueString("Link Battle [Mode Select] (1384)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Miror B Battle (1390)"));
+	BGMMusicEntries.push_back(ParenthValueString("Jingle Dissonant - Need Info (1391)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Cipher Admin Battle (1407)"));
+	BGMMusicEntries.push_back(ParenthValueString("Hexagon Brothers (1408)"));
+	BGMMusicEntries.push_back(ParenthValueString("Cipher Key Lair (1409)"));
+	BGMMusicEntries.push_back(ParenthValueString("Willie Battle (1410)"));
+	BGMMusicEntries.push_back(ParenthValueString("Greevil (1412)"));
+	BGMMusicEntries.push_back(ParenthValueString("Battle CD Simulator [B] (1413)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Relieve Ceremony - Need Info (1448)"));
+	BGMMusicEntries.push_back(ParenthValueString("Heroic [A] (1449)"));
+	BGMMusicEntries.push_back(ParenthValueString("Heroic [B] (1450)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Puri 1 (1467)"));
+	BGMMusicEntries.push_back(ParenthValueString("Orre Colosseum (1468)"));
+	BGMMusicEntries.push_back(ParenthValueString("Ending Cutscene [A] (1469)"));
+	BGMMusicEntries.push_back(ParenthValueString("Ending Cutscene [B] (1470)"));
+	BGMMusicEntries.push_back(ParenthValueString("Cipher Admin Gonzap (1471)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Link Battle [Champion] (1485)"));
+	BGMMusicEntries.push_back(ParenthValueString("Mr. Verich (1486)"));
+
+	BGMMusicEntries.push_back(ParenthValueString("Link Battle [Select Screen] (1499)"));
+
+	return CreateLoadedDataFromParenthValueList(BGMMusicEntries, "BGMID");
 }

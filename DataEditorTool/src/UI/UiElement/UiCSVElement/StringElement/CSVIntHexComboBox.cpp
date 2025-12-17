@@ -81,6 +81,13 @@ void CSVIntHexComboBox::Refresh()
 	}
 	else
 	{
+		ICLogger::Warn
+		(
+			"CSVIntHexComboBox::Refresh failed to find the current value of Columm:{} Row:{} CSV:{}.csv in the entries list, value set to the first option",
+			GetColumnName(),
+			GetCurrentRow(),
+			GetCSVFileName()
+		);
 		ComboBoxComponent->SetSelectedEntry(0);
 	}
 }

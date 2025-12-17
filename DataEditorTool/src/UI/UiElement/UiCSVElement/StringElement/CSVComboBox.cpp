@@ -14,7 +14,12 @@ CSVComboBox::CSVComboBox
 	const std::string& InEntriesListCSVFileName,
 	const std::string& InEntriesListColumnName
 ) :
-	UiBasicCSVElement<std::string>(InName, InParent, InCSVFileName, InColumnName),
+	UiBasicCSVElement<std::string>(
+		InName,
+		InParent,
+		InCSVFileName,
+		InColumnName
+	),
 	ComboBoxComponent(std::make_shared<ComboBox>(InName, this)),
 	EntriesListCSVFileName(InEntriesListCSVFileName),
 	EntriesListColumnName(InEntriesListColumnName)
@@ -37,7 +42,8 @@ CSVComboBox::CSVComboBox
 		InCSVFileName,
 		InName,
 		InEntriesListCSVFileName,
-		InEntriesListColumnName)
+		InEntriesListColumnName
+	)
 {
 
 }
@@ -50,24 +56,34 @@ void CSVComboBox::Refresh()
 	// Refresh the current value this combo box manages.
 	UiBasicCSVElement::Refresh();
 	auto ComboBoxStringVal = GetManagedValue();
+	ParenthValueString ComboBoxStringParenthValue(ComboBoxStringVal);
 
 	const auto& EntriesList = ComboBoxComponent->GetEntriesList();
-	// Ensure the Selected entry index is up to date
-	auto SelectedEntryItr = std::find(EntriesList.begin(), EntriesList.end(), ComboBoxStringVal);
 
-	if (SelectedEntryItr != EntriesList.end())
+	std::vector<ParenthValueString> EntriesAsParenthValues;
+
+	for (auto& Entry : EntriesList)
 	{
-		ComboBoxComponent->SetSelectedEntry(std::distance(EntriesList.begin(), SelectedEntryItr));
+		EntriesAsParenthValues.push_back(ParenthValueString(Entry));
+	}
+
+	// Ensure the Selected entry index is up to date
+	auto SelectedEntryItr = std::find_if(EntriesAsParenthValues.begin(), EntriesAsParenthValues.end(), [ComboBoxStringParenthValue](const ParenthValueString& Elt) {
+		return Elt.GetValue() == ComboBoxStringParenthValue.GetValue();
+		});
+
+	if (SelectedEntryItr != EntriesAsParenthValues.end())
+	{
+		ComboBoxComponent->SetSelectedEntry(std::distance(EntriesAsParenthValues.begin(), SelectedEntryItr));
 	}
 	else
 	{
 		ICLogger::Warn
 		(
-			"CSVComboBox Refresh failed to find the current value of Columm:{} Row:{} CSV:{}.csv in the database {}, value set to the first option",
+			"CSVComboBox Refresh failed to find the current value of Columm:{} Row:{} CSV:{}.csv in the entries list, value set to the first option",
 			GetColumnName(),
 			GetCurrentRow(),
-			GetCSVFileName(),
-			std::format("{}-EntriesList", GetCSVFileName())
+			GetCSVFileName()
 		);
 
 		ComboBoxComponent->SetSelectedEntry(0);
@@ -77,6 +93,23 @@ void CSVComboBox::Refresh()
 void CSVComboBox::UiComponentUpdated()
 {
 	SetManagedValue(ComboBoxComponent->GetEntriesList().at(GetSelectedEntry()));
+}
+
+void CSVComboBox::SetSizeConstraintsDisabled(const bool bInDisableSizeConstraints)
+{
+	bDisableSizeConstraints = bInDisableSizeConstraints;
+	UpdateEntriesList();
+}
+
+void CSVComboBox::SetStartWithCapitalLetter(const bool InStartWithCapitalLetter)
+{
+	ComboBoxComponent->SetStartWithCapitalLetter(InStartWithCapitalLetter);
+}
+
+void CSVComboBox::SetEntriesNumWhitespace(const int32_t InNumWhitespace)
+{
+	EntriesNumWhitespace = InNumWhitespace;
+	UpdateEntriesList();
 }
 
 uint32_t CSVComboBox::GetSelectedEntry() const
@@ -99,9 +132,14 @@ void CSVComboBox::UpdateEntriesList()
 		for (auto& Entry : NewEntriesList)
 		{
 			EntryNameString EntryName = EntryNameString(Entry);
-			Entry = EntryName.ToParenthValueString().GetParenthValueString();
+			Entry = EntryName.ToParenthValueString(true, EntriesNumWhitespace).GetParenthValueString();
 		}
 	}
 
 	ComboBoxComponent->SetEntriesList(NewEntriesList);
+
+	if (bDisableSizeConstraints)
+	{
+		ComboBoxComponent->SetMinContentSizeFromStringLength(0);
+	}
 }

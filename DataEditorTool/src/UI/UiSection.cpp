@@ -79,7 +79,7 @@ void UiSection::AddElement(const std::shared_ptr<UiElement> NewElement)
 	UiElements.push_back(NewElement);
 }
 
-void UiSection::CalculateSyncedSize() const
+void UiSection::CalculateSyncedSize()
 {
 	SyncedSize->ClearSizesToConsider();
 

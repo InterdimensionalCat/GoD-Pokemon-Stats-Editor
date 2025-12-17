@@ -121,7 +121,7 @@ using json = nlohmann::json;
 #include "MainEditor/DataEditorInstance.h"
 
 /**
- * Changes to dependancies:
+ * Changes to dependencies:
  * 
  * csv_writer.hpp, line 318:
  * IC_CHANGE: disable quoting when writing to a CSV

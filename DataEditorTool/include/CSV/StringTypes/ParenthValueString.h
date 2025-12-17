@@ -37,8 +37,9 @@ public:
 	 * 
 	 * \param InString The String portion of the ParenthValueString
 	 * \param InValue The Value portion of the ParenthValueString
+	 * \param InNumWhitespace The amount of whitespace between "{String}" and "("
 	 */
-	ParenthValueString(const std::string& InString, const std::string& InValue);
+	ParenthValueString(const std::string& InString, const std::string& InValue, int32_t InNumWhitespace = 1);
 
 	/**
 	 * Set the String portion of this ParenthValueString.
@@ -82,5 +83,8 @@ private:
 
 	/** The value portion of this ParenthValueString. */
 	std::string Value = "";
+
+	/** The amount of whitespace between "{String}" and "(" */
+	int32_t NumWhitespace = 1;
 
 };

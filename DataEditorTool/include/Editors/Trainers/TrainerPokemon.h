@@ -1,0 +1,98 @@
+/*****************************************************************//**
+ * \file   TrainerPokemon.h
+ * \brief
+ *
+ * \author Bennett Thomas
+ * \date   October 2025
+ *********************************************************************/
+#pragma once
+
+#include "UI/UiElement/UiMultiElement/UiChildWindow.h"
+
+class TrainersEditorTrainerPokemon;
+class SimpleImageBox;
+class UiGroup;
+class CSVComboBox;
+class CSVIntBox;
+class SimpleIntBox;
+class CSVIntHexComboBox;
+class UiElementSwitcher;
+class UiElementGrid;
+
+class TrainerPokemon : public UiChildWindow
+{
+
+public:
+	/**
+	 * Construct a TrainerPokemon multi-element
+	 * under the TrainersEditor InParent.
+	 *
+	 * \param InParent Parent TrainersEditor of this multi-element.
+	 */
+	TrainerPokemon(
+		const std::string& InName,
+		TrainersEditorTrainerPokemon* InParent,
+		int32_t InPartyIndex
+	);
+
+	void Refresh() override;
+
+	void Tick() override;
+
+	virtual void CalculateConstrainedSize(
+		const std::shared_ptr<const UiConstrainedSize>& ParentConstrainedSize,
+		const std::shared_ptr<const UiSize>& ParentSizeConstraints
+	) override;
+
+	void SetCurrentRow(const int32_t InRow);
+
+	int32_t GetCurrentRow() const;
+
+private:
+
+	void UpdatePokefaceImageSize();
+
+	TrainersEditorTrainerPokemon* ParentTrainerPokemon;
+
+	int32_t PartyIndex = 0;
+
+	int32_t CurrentRow = -1;
+
+	std::vector<std::shared_ptr<UiCSVElement>> RowElements;
+
+	std::vector<std::shared_ptr<UiCSVElement>> ShadowPokemonElements;
+
+	void InitPokefaceGroup();
+	std::shared_ptr<UiGroup> PokefaceGroup;
+	/** Pokeface image of the current trainer's Pokemon. */
+	std::shared_ptr<SimpleImageBox> PokefaceImage;
+	std::shared_ptr<UiElementSwitcher> CurrentPokemonSwitcher;
+	std::shared_ptr<CSVIntHexComboBox> CurrentPokemonComboBox;
+	std::shared_ptr<CSVIntHexComboBox> CurrentShadowPokemonComboBox;
+
+
+	void InitPokemonInfoGroup();
+
+	void InitIvEvGrid();
+	void InitIVElement(const std::string& ItemName, const std::string& ItemColumn);
+	void InitEVElement(const std::string& ItemName, const std::string& ItemColumn);
+
+	std::shared_ptr<UiElementGrid> IvEvGrid;
+	std::vector<std::shared_ptr<CSVIntBox>> IvElements;
+	std::vector<std::shared_ptr<CSVIntBox>> EvElements;
+	std::shared_ptr<SimpleIntBox> TotalIvBox;
+	std::shared_ptr<SimpleIntBox> TotalEvBox;
+
+	void InitMovesGroup();
+	void InitMoveElement(int32_t MoveIndex);
+
+	void InitMiscGroup();
+	void InitComboRoleElement(const std::string& ComboName, int32_t RoleNum);
+
+	bool IsShadowPokemon = false;
+
+	void InitShadowPokemonInfo();
+	std::shared_ptr<UiElementSwitcher> ShadowPokemonSwitcher;
+	std::shared_ptr<UiGroup> ShadowPokemonGroup;
+	std::shared_ptr<UiGroup> NonShadowPokemonGroup;
+};

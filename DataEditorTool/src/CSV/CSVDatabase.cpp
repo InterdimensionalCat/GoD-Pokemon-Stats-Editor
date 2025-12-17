@@ -51,6 +51,11 @@ void CSVDatabase::LoadStaticDatabases()
 	CSVDatabaseMap.emplace("GenderRatio", std::make_shared<CSVData>("GenderRatio"));
 	CSVDatabaseMap.at("GenderRatio")->InitFromLoadedData(GenderRatioData);
 
+	// Load Gender database.
+	const auto GenderData = StaticCSVFiles::LoadGenderDatabase();
+    CSVDatabaseMap.emplace("Gender", std::make_shared<CSVData>("Gender"));
+    CSVDatabaseMap.at("Gender")->InitFromLoadedData(GenderData);
+
 	// Load EvolutionMethod database.
 	const auto EvolutionMethodData = StaticCSVFiles::LoadEvolutionMethodDatabase();
 	CSVDatabaseMap.emplace("EvolutionMethod", std::make_shared<CSVData>("EvolutionMethod"));
@@ -65,6 +70,16 @@ void CSVDatabase::LoadStaticDatabases()
 	const auto KeyItemData = StaticCSVFiles::LoadKeyItemDatabase();
 	CSVDatabaseMap.emplace("KeyItem", std::make_shared<CSVData>("KeyItem"));
 	CSVDatabaseMap.at("KeyItem")->InitFromLoadedData(KeyItemData);
+
+	// Load BattleStyle database.
+	const auto BattleStyleData = StaticCSVFiles::LoadBattleStyleDatabase();
+	CSVDatabaseMap.emplace("BattleStyle", std::make_shared<CSVData>("BattleStyle"));
+	CSVDatabaseMap.at("BattleStyle")->InitFromLoadedData(BattleStyleData);
+
+	// Load BGM Music database.
+	const auto BGMData = StaticCSVFiles::LoadBGMMusicDatabase();
+	CSVDatabaseMap.emplace("BGMID", std::make_shared<CSVData>("BGMID"));
+	CSVDatabaseMap.at("BGMID")->InitFromLoadedData(BGMData);
 }
 
 std::shared_ptr<GoDCSV::CSVData> CSVDatabase::GetCSVFile(const std::string& CSVFileName)

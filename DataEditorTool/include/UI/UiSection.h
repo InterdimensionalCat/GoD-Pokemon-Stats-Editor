@@ -58,7 +58,7 @@ public:
 	 * the summed size of every element that doesn't ignore
 	 * size syncing.
 	 */
-	void CalculateSyncedSize() const;
+	void CalculateSyncedSize();
 
 	/**
 	 * Get the parent UiTab for this UiSection.
