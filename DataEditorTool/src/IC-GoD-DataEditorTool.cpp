@@ -26,7 +26,7 @@ void OnProgramTerminated()
 		ICLogger::Critical("Uncaught exception: {}", e.what());
 	}
 
-	DataEditorInstance::Get()->DestroyInstance();
+	DataEditorInstance::DestroyInstance();
 
 	// TODO: Attempt to dump any unsaved data to a recovery log here.
 	// TODO: Save a crash log with trace logging information and a call stack here. (std::stacktrace in C++23)
@@ -50,7 +50,7 @@ void RunApplication()
 	// Destroy the application instance, which allows
 	// various contexts to be destroyed, and ends
 	// the logging session.
-	DataEditorInstance::Get()->DestroyInstance();
+	DataEditorInstance::DestroyInstance();
 
 }
 

@@ -28,7 +28,7 @@ public:
 	 * Construct a DataEditorInstance. This will
 	 * not be valid for use until Init() is called.
 	 * 
-	 * This is publice because std::make_shared requires
+	 * This is public because std::make_shared requires
 	 * a public constructor, but this should only ever
 	 * be called by CreateInstance().
 	 */
